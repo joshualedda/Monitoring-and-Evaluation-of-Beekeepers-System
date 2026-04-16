@@ -1,0 +1,113 @@
+/* * file design for inputs */ 
+.styled-download-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  color: #007bff;
+  transition: all 0.3s ease;
+  width: 100%;  /* Ensure it takes up the full width of the parent */
+  box-sizing: border-box;  /* Prevents any overflow */
+}
+
+.styled-download-link i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.styled-download-link:hover {
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Ensure the input file also fills its container */
+input[type="file"] {
+  width: 100%; /* Fill the available space */
+  box-sizing: border-box; /* Prevent overflow */
+}
+  /* End Design */
+
+
+.nav-content {
+    max-height: 0; /* Start with a height of 0 */
+    opacity: 0; /* Start with opacity 0 */
+    overflow: hidden; /* Hide overflow to prevent content from showing */
+    transition: max-height 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+  }
+  .nav-content.show {
+    max-height: 1000px; /* Arbitrary large value to allow content expansion */
+    opacity: 1; /* Fade in the content */
+  }
+  .nav-small-cap-icon {
+    transition: transform 0.3s ease; /* Smooth rotation */
+  }
+  .nav-small-cap-icon.rotate {
+    transform: rotate(180deg); /* Rotate the icon */
+  }
+
+
+
+
+  /* Commented for the meantime */
+  /* SEARCH INPUT */
+  /* .input-group {
+    position: relative;
+}
+
+#searchInput {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    width: 100%;
+    min-width: 200px;
+  Set a minimum width
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+
+    z-index: 1000;
+    max-height: 500px;
+    /* Adjust the maximum height as needed 
+    overflow-y: auto;
+}
+
+.dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown li {
+    padding: 8px;
+    cursor: pointer;
+
+}
+
+.dropdown li:hover {
+    background-color: #f8f9fa;
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+.dropdown-item {
+    padding: 6px 4px;
+
+}
+
+.dropdown-item:hover {
+    background-color: #ced4da;
+
+
+} */
