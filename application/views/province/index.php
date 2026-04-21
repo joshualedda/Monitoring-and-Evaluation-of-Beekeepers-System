@@ -65,7 +65,6 @@
                   <th><?php echo $this->lang->line('Name');?></th>             
                   <th><?php echo $this->lang->line('Region'); ?></th>
                   <th><?php echo $this->lang->line('Code'); ?></th>
-                  <th width="15%"><?php echo $this->lang->line('Active'); ?></th>
                   <?php if(in_array('updateProvince', $user_permission) || in_array('deleteProvince', $user_permission)): ?>
                     <th width="15%"><?php echo $this->lang->line('Action'); ?></th>
                   <?php endif; ?>
@@ -109,39 +108,11 @@
           </div>
 
           <div class="row g-3 mb-3">
-             <div class="col-md-6">
+             <div class="col-md-12">
                 <label for="province_code" class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Code'); ?></label>
                 <input type="text" class="form-control rounded-3" id="province_code" name="province_code" autocomplete="off" placeholder="Enter code">
              </div>
-             
-             <div class="col-md-6">
-                <label for="map_id" class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Map'); ?></label>
-                <input type="text" class="form-control rounded-3" id="map_id" name="map_id" autocomplete="off" placeholder="Enter Map ID">
-            </div>
           </div>      
-
-          <div class="mb-3">
-            <label for="province_name" class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Name'); ?><font color="red"> *</font></label>
-            <input type="text" class="form-control rounded-3 shadow-sm border-light-subtle" id="province_name" name="province_name" autocomplete="off" placeholder="Enter province name">
-          </div>         
-
-          <div class="mb-0">
-             <label class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Status'); ?></label>
-             <div class="radio-group modern-radio-group d-flex gap-2">
-                <div class="modern-radio-item flex-fill">
-                  <input type="radio" name="active" id="active_add" value="1" checked="checked">
-                  <label for="active_add" class="d-flex align-items-center justify-content-center py-2 px-2 rounded-3 border w-100 cursor-pointer transition-all small">
-                    <i class="ph ph-check-circle me-1"></i> <?php echo $this->lang->line('Active'); ?>
-                  </label>
-                </div>
-                <div class="modern-radio-item flex-fill">
-                  <input type="radio" name="active" id="inactive_add" value="2">
-                  <label for="inactive_add" class="d-flex align-items-center justify-content-center py-2 px-2 rounded-3 border w-100 cursor-pointer transition-all small">
-                    <i class="ph ph-x-circle me-1"></i> <?php echo $this->lang->line('Inactive'); ?>
-                  </label>
-                </div>
-              </div>
-          </div>
         </div>
 
         <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-transparent d-flex justify-content-end gap-2">
@@ -184,14 +155,9 @@
           </div>
 
           <div class="row g-3 mb-3">
-             <div class="col-md-6">
+             <div class="col-md-12">
                 <label for="edit_province_code" class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Code'); ?></label>
                 <input type="text" class="form-control rounded-3 shadow-sm border-light-subtle" id="edit_province_code" name="edit_province_code" autocomplete="off" placeholder="Enter code">
-              </div>
-              
-              <div class="col-md-6">
-                <label for="edit_map_id" class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Map'); ?></label>
-                <input type="text" class="form-control rounded-3 shadow-sm border-light-subtle" id="edit_map_id" name="edit_map_id" autocomplete="off" placeholder="Enter Map ID">
               </div>
           </div> 
 
@@ -199,24 +165,6 @@
             <label for="edit_province_name" class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Name'); ?><font color="red"> *</font></label>
             <input type="text" class="form-control rounded-3 shadow-sm border-light-subtle" id="edit_province_name" name="edit_province_name" autocomplete="off" placeholder="Enter province name">
           </div>  
-
-          <div class="mb-0">
-             <label class="form-label fw-semibold text-secondary small text-uppercase l-spacing-1"><?php echo $this->lang->line('Status'); ?></label>
-             <div class="radio-group modern-radio-group d-flex gap-2">
-                <div class="modern-radio-item flex-fill">
-                  <input type="radio" name="edit_active" id="edit_active_1" value="1">
-                  <label for="edit_active_1" class="d-flex align-items-center justify-content-center py-2 px-2 rounded-3 border w-100 cursor-pointer transition-all small">
-                    <i class="ph ph-check-circle me-1"></i> <?php echo $this->lang->line('Active'); ?>
-                  </label>
-                </div>
-                <div class="modern-radio-item flex-fill">
-                  <input type="radio" name="edit_active" id="edit_active_2" value="2">
-                  <label for="edit_active_2" class="d-flex align-items-center justify-content-center py-2 px-2 rounded-3 border w-100 cursor-pointer transition-all small">
-                    <i class="ph ph-x-circle me-1"></i> <?php echo $this->lang->line('Inactive'); ?>
-                  </label>
-                </div>
-              </div>
-          </div>
         </div>
 
         <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-transparent d-flex justify-content-end gap-2">

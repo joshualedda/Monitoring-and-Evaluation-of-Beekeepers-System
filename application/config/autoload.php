@@ -134,7 +134,7 @@ $autoload['language'] = array('english');
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('model_apiary','model_nationality','model_province','model_auth','model_barangay','model_post_category','model_lgu','model_beekeeper','model_inquiry',
+$autoload['model'] = array('model_apiary','model_nationality','model_province','model_auth','model_barangay','model_post_category','model_municipality','model_beekeeper','model_inquiry',
 	'model_inquiry_type','model_colony','model_species','model_phase','model_post','model_profile',
 	'model_association','model_category','model_report','model_source','model_support_type',
 	'model_production','model_user','model_region','model_topography','model_product','model_byproduct','model_fund_source','model_education','model_gender','model_document_type');

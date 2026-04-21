@@ -142,13 +142,12 @@ class Model_colony extends CI_Model
 	}
 
 
-	public function countTotalColonyProvince($map_id)
+	public function countTotalColonyByProvince($province_id)
 	{
 		$sql = "SELECT * FROM colony
 		LEFT JOIN apiary ON colony.apiary_id = apiary.id
-		LEFT JOIN province ON apiary.province_id = province.id
-		WHERE map_id = ?";
-		$query = $this->db->query($sql, array($map_id));
+		WHERE apiary.province_id = ?";
+		$query = $this->db->query($sql, array($province_id));
 		return $query->num_rows();
 	}
 

@@ -30,7 +30,9 @@ class Dashboard extends Admin_Controller
 		$this->data['total_beekeeper'] = $this->model_beekeeper->countTotalBeekeeper();
 		$this->data['total_post'] = $this->model_post->countTotalPost();   
 		$this->data['total_production'] = $this->model_production->countTotalProduction($year_selected); 
-		$this->data['total_colony_province'] = $this->model_colony->countTotalColonyProvince('PHL2561');    
+		$this->data['total_colony_province'] = $this->model_colony->countTotalColonyByProvince(3); // 3 is La Union ID
+		$this->data['apiary_locations'] = $this->model_apiary->getApiaryLocationData();
+		$this->data['apiary_analytics'] = $this->model_apiary->getApiaryAnalyticsData();
 
 		$this->data['select_year'] = $year_selected;
 		$this->render_template('dashboard', $this->data);

@@ -10,13 +10,13 @@ class Model_region extends CI_Model
 	//--> Get the active region data
 	public function getActiveRegion()
 	{
-		$sql = "SELECT * FROM region WHERE active = ? ORDER BY name ASC";
-		$query = $this->db->query($sql, array(1));
+		$sql = "SELECT *, regDesc as name FROM region ORDER BY regDesc ASC";
+		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
 	public function getRegionById($id)
 	{
-		$sql = "SELECT * FROM region where id=?";
+		$sql = "SELECT *, regDesc as name FROM region where region_id=?";
 		$query = $this->db->query($sql, array($id));
 		return $query->result_array();		
 	}
@@ -24,12 +24,12 @@ class Model_region extends CI_Model
 	public function getRegionData($id = null)
 	{
 		if($id) {
-			$sql = "SELECT * FROM region where id = ?";
+			$sql = "SELECT *, regDesc as name FROM region where region_id = ?";
 			$query = $this->db->query($sql, array($id));
 			return $query->row_array();
 		}
 
-		$sql = "SELECT * FROM region";
+		$sql = "SELECT *, regDesc as name FROM region";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -45,7 +45,7 @@ class Model_region extends CI_Model
 	public function update($data, $id)
 	{
 		if($data && $id) {
-			$this->db->where('id', $id);
+			$this->db->where('region_id', $id);
 			$update = $this->db->update('region', $data);
 			return ($update == true) ? true : false;
 		}
@@ -54,7 +54,7 @@ class Model_region extends CI_Model
 	public function remove($id)
 	{
 		if($id) {
-			$this->db->where('id', $id);
+			$this->db->where('region_id', $id);
 			$delete = $this->db->delete('region');
 			return ($delete == true) ? true : false;
 		}
@@ -62,8 +62,8 @@ class Model_region extends CI_Model
 
 	public function countTotalRegion()
 	{
-		$sql = "SELECT * FROM region WHERE active = ?";
-		$query = $this->db->query($sql, array(1));
+		$sql = "SELECT * FROM region";
+		$query = $this->db->query($sql);
 		return $query->num_rows();
 	}
 
@@ -74,9 +74,13 @@ class Model_region extends CI_Model
 		
 		$num_rows = 0;
 
-		$sql = "SELECT * FROM province WHERE region_id = ?";
-		$query = $this->db->query($sql, array($id));
-		$num_rows = $num_rows + $query->num_rows();
+        $region = $this->getRegionData($id);
+        if($region) {
+            $regCode = $region['regCode'];
+            $sql = "SELECT * FROM province WHERE regCode = ?";
+            $query = $this->db->query($sql, array($regCode));
+            $num_rows = $num_rows + $query->num_rows();
+        }
 
 		$sql = "SELECT * FROM user WHERE region_id = ?";
 		$query = $this->db->query($sql, array($id));

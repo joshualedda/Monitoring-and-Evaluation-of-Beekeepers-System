@@ -158,7 +158,7 @@ class Beekeeper extends Admin_Controller
              $this->data['region'] = $this->model_region->getRegionById(end($this->permission)); 
         }
         $this->data['province'] = $this->model_province->getActiveProvince(); 
-        $this->data['lgu'] = $this->model_lgu->getActiveLgu(); 
+        $this->data['lgu'] = $this->model_municipality->getActiveMunicipality(); 
         $this->data['nationality'] = $this->model_nationality->getActiveNationality();
         $this->data['fund_source'] = $this->model_fund_source->getActiveFund_Source();  
         $this->data['association'] = $this->model_association->getActiveAssociation();      
@@ -260,7 +260,7 @@ class Beekeeper extends Admin_Controller
 
         
         $this->data['province'] = $this->model_province->getProvinceDataByRegionId($beekeeper_data['region_id']); 
-        $this->data['lgu'] = $this->model_lgu->getLguDataByProvinceId($beekeeper_data['province_id']); 
+        $this->data['lgu'] = $this->model_municipality->getMunicipalityDataByProvinceId($beekeeper_data['province_id']); 
         $this->data['beekeeper_data'] = $beekeeper_data;
         $this->render_template('beekeeper/edit', $this->data); 
          

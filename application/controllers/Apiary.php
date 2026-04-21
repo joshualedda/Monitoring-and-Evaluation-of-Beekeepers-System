@@ -114,9 +114,9 @@ class Apiary extends Admin_Controller
         $this->form_validation->set_rules('topography[]', $this->lang->line('Topography'), 'trim|required');       
         $this->form_validation->set_rules('beekeeper', $this->lang->line('Beekeeper'), 'trim|required');
         $this->form_validation->set_rules('source[]', $this->lang->line('Source'), 'trim|required'); 
-		$this->form_validation->set_rules('region', $this->lang->line('Region'), 'trim|required'); 
+        $this->form_validation->set_rules('region', $this->lang->line('Region'), 'trim|required'); 
         $this->form_validation->set_rules('province', $this->lang->line('Province'), 'trim|required'); 
-        $this->form_validation->set_rules('lgu', $this->lang->line('Lgu'), 'trim|required');  
+        $this->form_validation->set_rules('municipality', $this->lang->line('Municipality'), 'trim|required');  
 		$this->form_validation->set_rules('barangay', $this->lang->line('Barangay'), 'trim|required');   		
         $this->form_validation->set_error_delimiters('<p class="alert alert-warning">','</p>');
 
@@ -126,8 +126,8 @@ class Apiary extends Admin_Controller
 				'beekeeper_id' => $this->input->post('beekeeper'),
 			    'region_id' => $this->input->post('region'),
                 'province_id' => $this->input->post('province'),
-				'lgu_id' => $this->input->post('lgu'),
-				'barangay_id' => $this->input->post('barangay'),                
+				'municipality_id' => $this->input->post('municipality'),
+				'district_id' => $this->input->post('barangay'),                
                 'coordinate' => $this->input->post('coordinate'),                
                 'location' => $this->input->post('location'),
                 'map' => $this->input->post('map'),                
@@ -170,7 +170,7 @@ class Apiary extends Admin_Controller
              $this->data['region'] = $this->model_region->getRegionById(end($this->permission)); 
         }
 		$this->data['province'] = $this->model_province->getActiveProvince();  
-		$this->data['lgu'] = $this->model_lgu->getActiveLgu();	
+		$this->data['municipality'] = $this->model_municipality->getActiveMunicipality();	
 		$this->data['barangay'] = $this->model_barangay->getActiveBarangay();		
 		$this->data['source'] = $this->model_source->getActiveSource(); 
         $this->data['topography'] = $this->model_topography->getActiveTopography();
@@ -228,7 +228,7 @@ class Apiary extends Admin_Controller
         $this->form_validation->set_rules('source[]', $this->lang->line('Source'), 'trim|required'); 
         $this->form_validation->set_rules('region', $this->lang->line('Region'), 'trim|required'); 
         $this->form_validation->set_rules('province', $this->lang->line('Province'), 'trim|required'); 
-        $this->form_validation->set_rules('lgu', $this->lang->line('Lgu'), 'trim|required');  
+        $this->form_validation->set_rules('municipality', $this->lang->line('Municipality'), 'trim|required');  
         $this->form_validation->set_rules('barangay', $this->lang->line('Barangay'), 'trim|required');    		
         $this->form_validation->set_error_delimiters('<p class="alert alert-warning">','</p>');
 
@@ -239,8 +239,8 @@ class Apiary extends Admin_Controller
                 'beekeeper_id' => $this->input->post('beekeeper'),
 			    'region_id' => $this->input->post('region'),
                 'province_id' => $this->input->post('province'),
-				'lgu_id' => $this->input->post('lgu'),
-				'barangay_id' => $this->input->post('barangay'),                
+				'municipality_id' => $this->input->post('municipality'),
+				'district_id' => $this->input->post('barangay'),                
                 'coordinate' => $this->input->post('coordinate'),                
                 'location' => $this->input->post('location'),
                 'map' => $this->input->post('map'),                
@@ -267,7 +267,7 @@ class Apiary extends Admin_Controller
         //    and reading of the apiary data
         $this->data['document_type'] =$this->model_document_type->getActiveDocumentType();
 		$this->data['province'] = $this->model_province->getActiveProvince();  
-		$this->data['lgu'] = $this->model_lgu->getActiveLgu();	
+		$this->data['municipality'] = $this->model_municipality->getActiveMunicipality();	
 		$this->data['barangay'] = $this->model_barangay->getActiveBarangay();		
 		$this->data['source'] = $this->model_source->getActiveSource(); 
         $this->data['topography'] = $this->model_topography->getActiveTopography();

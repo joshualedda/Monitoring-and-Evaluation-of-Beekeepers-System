@@ -41,7 +41,7 @@ class Province extends Admin_Controller
 	{
 			if($this->input->post('region_id'))
 			{
-				echo $this->model_province->getProvinceDataByRegion($this->input->post('region_id'));
+				echo $this->model_province->getProvinceDataByRegionId($this->input->post('region_id'));
 			}
 	}
 

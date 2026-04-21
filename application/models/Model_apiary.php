@@ -116,15 +116,46 @@ class Model_apiary extends CI_Model
 		return $query->num_rows();
 	}
 
-/*
-	public function countTotalApiaryProvince($map_id)
+	public function countTotalApiaryByProvince($province_id)
 	{
-		$sql = "SELECT * FROM apiary
-		LEFT JOIN province ON apiary.province_id = province.id
-		WHERE map_id = ?";
-		$query = $this->db->query($sql, array($map_id));
+		$sql = "SELECT * FROM apiary WHERE province_id = ?";
+		$query = $this->db->query($sql, array($province_id));
 		return $query->num_rows();
-	}*/
+	}
+
+	public function getApiaryLocationData()
+	{
+		$sql = "SELECT apiary.*,
+				       beekeeper.beekeeper_name,
+				       region.regDesc as region_name,
+				       province.provDesc as province_name,
+				       municipality.citymunDesc as municipality_name,
+				       barangay.brgyDesc as barangay_name,
+				       (SELECT COUNT(*) FROM colony WHERE colony.apiary_id = apiary.id) as total_colonies
+				FROM apiary
+				JOIN beekeeper ON apiary.beekeeper_id = beekeeper.id
+				LEFT JOIN region ON apiary.region_id = region.region_id
+				LEFT JOIN province ON apiary.province_id = province.province_id
+				LEFT JOIN municipality ON apiary.municipality_id = municipality.municipality_id
+				LEFT JOIN barangay ON apiary.district_id = barangay.barangay_id
+				ORDER BY apiary.id DESC";
+		$query = $this->db->query($sql);
+		$rows = $query->result_array();
+		foreach ($rows as &$row) {
+			$sourceIds = json_decode($row['source_id'] ?? '[]', true);
+			$topoIds   = json_decode($row['topography_id'] ?? '[]', true);
+			if (!empty($sourceIds) && is_array($sourceIds)) {
+				$srcQ = $this->db->where_in('id', $sourceIds)->get('source');
+				$row['source_names'] = implode(', ', array_column($srcQ->result_array(), 'name'));
+			} else { $row['source_names'] = ''; }
+			if (!empty($topoIds) && is_array($topoIds)) {
+				$topoQ = $this->db->where_in('id', $topoIds)->get('topography');
+				$row['topography_names'] = implode(', ', array_column($topoQ->result_array(), 'name'));
+			} else { $row['topography_names'] = ''; }
+		}
+		unset($row);
+		return $rows;
+	}
 
 	public function createDocument($data)
 	{
@@ -203,6 +234,48 @@ class Model_apiary extends CI_Model
 		return $num_rows;
 
 		
+	}
+
+
+	public function getApiaryAnalyticsData()
+	{
+		$sql = "SELECT apiary.id,
+				       apiary.location,
+				       apiary.source_id,
+				       apiary.topography_id,
+				       region.regDesc as region_name,
+				       province.provDesc as province_name,
+				       municipality.citymunDesc as municipality_name,
+				       barangay.brgyDesc as barangay_name,
+				       apiary.coordinate,
+				       apiary.map,
+				       (SELECT COALESCE(SUM(c.total_colony), 0) FROM colony c WHERE c.apiary_id = apiary.id) as total_colonies,
+				       (SELECT COALESCE(SUM(p.total_production), 0) FROM production p JOIN colony c ON p.colony_id = c.id WHERE c.apiary_id = apiary.id) as total_production,
+				       (SELECT COALESCE(SUM(p.total_production), 0) FROM production p JOIN colony c ON p.colony_id = c.id WHERE c.apiary_id = apiary.id AND YEAR(p.production_date) = YEAR(CURDATE())) as yearly_production,
+				       (SELECT COALESCE(SUM(c.total_colony),0) FROM colony c WHERE c.apiary_id = apiary.id) as active_colonies,
+				       0 as inactive_colonies
+				FROM apiary
+				LEFT JOIN region ON apiary.region_id = region.region_id
+				LEFT JOIN province ON apiary.province_id = province.province_id
+				LEFT JOIN municipality ON apiary.municipality_id = municipality.municipality_id
+				LEFT JOIN barangay ON apiary.district_id = barangay.barangay_id
+				ORDER BY apiary.id DESC";
+		$query = $this->db->query($sql);
+		$rows = $query->result_array();
+		foreach ($rows as &$row) {
+			$sourceIds = json_decode($row['source_id'] ?? '[]', true);
+			$topoIds   = json_decode($row['topography_id'] ?? '[]', true);
+			if (!empty($sourceIds) && is_array($sourceIds)) {
+				$srcQ = $this->db->where_in('id', $sourceIds)->get('source');
+				$row['source_names'] = implode(', ', array_column($srcQ->result_array(), 'name'));
+			} else { $row['source_names'] = 'None'; }
+			if (!empty($topoIds) && is_array($topoIds)) {
+				$topoQ = $this->db->where_in('id', $topoIds)->get('topography');
+				$row['topography_names'] = implode(', ', array_column($topoQ->result_array(), 'name'));
+			} else { $row['topography_names'] = 'None'; }
+		}
+		unset($row);
+		return $rows;
 	}
 
 }

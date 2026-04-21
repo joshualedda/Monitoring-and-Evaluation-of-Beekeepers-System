@@ -10,41 +10,43 @@ class Model_province extends CI_Model
 	//--> Get the active province data
 	public function getActiveProvince()
 	{
-		$sql = "SELECT province.*, region.name as 'region_name' FROM province join region on province.region_id=region.id WHERE province.active = ? ORDER BY province.name ASC";
-		$query = $this->db->query($sql, array(1));
-		return $query->result_array();
-	}
-	public function getProvinceDataByRegionId($region_id)
-	{
-		$sql = "SELECT * FROM province WHERE region_id = $region_id ORDER BY name ASC";
-		$query = $this->db->query($sql, array(1));
-		return $query->result_array();
-	}
-	//--> Get the data
-	public function getProvinceData($id = null)
-	{
-		if($id) {
-			$sql = "SELECT * FROM province where id = ?";
-			$query = $this->db->query($sql, array($id));
-			return $query->row_array();
-		}
-
-		$sql = "SELECT * FROM province";
+		$sql = "SELECT province.*, province.provDesc as name, region.regDesc as 'region_name' FROM province join region on province.regCode=region.regCode ORDER BY province.provDesc ASC";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	public function getProvinceDataByRegion($region_id)
+
+	public function getProvinceDataByRegionId($region_id)
 	{
-		$this->db->where('region_id',$region_id);
-		$this->db->order_by('name','ASC');
+        // Get regCode from region_id first
+        $this->load->model('model_region');
+        $region = $this->model_region->getRegionData($region_id);
+        $regCode = $region['regCode'] ?? '';
+        
+		$this->db->where('regCode', $regCode);
+		$this->db->order_by('provDesc','ASC');
 		$query=$this->db->get('province');
 		$output='<option value="" hidden selected disabled>Select Province</option>';
 		foreach ($query->result() as $row)
 		{
-			$output .='<option value="'.$row->id.'">'.$row->name.'</option>';
+			$output .='<option value="'.$row->province_id.'">'.$row->provDesc.'</option>';
 		}
 		return $output;
 	}
+
+	//--> Get the data
+	public function getProvinceData($id = null)
+	{
+		if($id) {
+			$sql = "SELECT *, provDesc as name FROM province where province_id = ?";
+			$query = $this->db->query($sql, array($id));
+			return $query->row_array();
+		}
+
+		$sql = "SELECT *, provDesc as name FROM province";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
 	public function create($data)
 	{
 		if($data) {
@@ -56,7 +58,7 @@ class Model_province extends CI_Model
 	public function update($data, $id)
 	{
 		if($data && $id) {
-			$this->db->where('id', $id);
+			$this->db->where('province_id', $id);
 			$update = $this->db->update('province', $data);
 			return ($update == true) ? true : false;
 		}
@@ -65,7 +67,7 @@ class Model_province extends CI_Model
 	public function remove($id)
 	{
 		if($id) {
-			$this->db->where('id', $id);
+			$this->db->where('province_id', $id);
 			$delete = $this->db->delete('province');
 			return ($delete == true) ? true : false;
 		}
@@ -73,8 +75,8 @@ class Model_province extends CI_Model
 
 	public function countTotalProvince()
 	{
-		$sql = "SELECT * FROM province WHERE active = ?";
-		$query = $this->db->query($sql, array(1));
+		$sql = "SELECT * FROM province";
+		$query = $this->db->query($sql);
 		return $query->num_rows();
 	}
 
@@ -84,14 +86,14 @@ class Model_province extends CI_Model
 		
 		$num_rows = 0;
 
-		// select with the wildcard %.  It is possible to have more
-		// than one municipality in colony table.   In this case, the information
-		// will appear between bracket ex:["1"].  The search will be
-		// SELECT * FROM colony WHERE municipality_id LIKE '%["1"]%'  
+        $province = $this->getProvinceData($id);
+        if($province) {
+            $provCode = $province['provCode'];
+            $sql = "SELECT * FROM municipality WHERE provCode = ?";
+            $query = $this->db->query($sql, array($provCode));
+            $num_rows = $num_rows + $query->num_rows();
+        }
 
-		$sql = "SELECT * FROM lgu WHERE province_id = ?";
-		$query = $this->db->query($sql, array($id));
-		$num_rows = $num_rows + $query->num_rows();
 		return $num_rows;
 		
 	}

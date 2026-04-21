@@ -10,41 +10,41 @@ class Model_barangay extends CI_Model
 	//--> Get the active barangay data
 	public function getActiveBarangay()
 	{
-		$sql = "SELECT * FROM barangay WHERE active = ? ORDER BY name ASC";
-		$query = $this->db->query($sql, array(1));
-		return $query->result_array();
-	}
-	public function getBarangayDataByLguId($lgu_id)
-	{
-		$sql = "SELECT * FROM barangay WHERE lgu_id = $lgu_id ORDER BY name ASC";
-		$query = $this->db->query($sql, array(1));
-		return $query->result_array();
-	}
-	//--> Get the data
-	public function getBarangayData($id = null)
-	{
-		if($id) {
-			$sql = "SELECT * FROM barangay where id = ?";
-			$query = $this->db->query($sql, array($id));
-			return $query->row_array();
-		}
-
-		$sql = "SELECT * FROM barangay";
+		$sql = "SELECT *, brgyDesc as name FROM barangay ORDER BY brgyDesc ASC";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
 
-	public function getBarangayDataByLgu($lgu_id)
+	public function getBarangayDataByMunicipalityId($municipality_id)
 	{
-		$this->db->where('lgu_id',$lgu_id);
-		$this->db->order_by('name','ASC');
+        // Get citymunCode from municipality_id first
+        $this->load->model('model_municipality');
+        $municipality = $this->model_municipality->getMunicipalityData($municipality_id);
+        $citymunCode = $municipality['citymunCode'] ?? '';
+
+		$this->db->where('citymunCode', $citymunCode);
+		$this->db->order_by('brgyDesc','ASC');
 		$query=$this->db->get('barangay');
 		$output='<option value="" hidden selected disabled>Select Barangay</option>';
 		foreach ($query->result() as $row)
 		{
-			$output .='<option value="'.$row->id.'">'.$row->name.'</option>';
+			$output .='<option value="'.$row->barangay_id.'">'.$row->brgyDesc.'</option>';
 		}
 		return $output;
+	}
+
+	//--> Get the data
+	public function getBarangayData($id = null)
+	{
+		if($id) {
+			$sql = "SELECT *, brgyDesc as name FROM barangay where barangay_id = ?";
+			$query = $this->db->query($sql, array($id));
+			return $query->row_array();
+		}
+
+		$sql = "SELECT *, brgyDesc as name FROM barangay";
+		$query = $this->db->query($sql);
+		return $query->result_array();
 	}
 
 	public function create($data)
@@ -58,7 +58,7 @@ class Model_barangay extends CI_Model
 	public function update($data, $id)
 	{
 		if($data && $id) {
-			$this->db->where('id', $id);
+			$this->db->where('barangay_id', $id);
 			$update = $this->db->update('barangay', $data);
 			return ($update == true) ? true : false;
 		}
@@ -67,7 +67,7 @@ class Model_barangay extends CI_Model
 	public function remove($id)
 	{
 		if($id) {
-			$this->db->where('id', $id);
+			$this->db->where('barangay_id', $id);
 			$delete = $this->db->delete('barangay');
 			return ($delete == true) ? true : false;
 		}
@@ -75,8 +75,8 @@ class Model_barangay extends CI_Model
 
 	public function countTotalBarangay()
 	{
-		$sql = "SELECT * FROM barangay WHERE active = ?";
-		$query = $this->db->query($sql, array(1));
+		$sql = "SELECT * FROM barangay";
+		$query = $this->db->query($sql);
 		return $query->num_rows();
 	}
 

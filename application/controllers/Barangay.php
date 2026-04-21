@@ -37,11 +37,11 @@ class Barangay extends Admin_Controller
 		}
 	}
 
-	public function fetchBarangayDataByLgu() 
+	public function fetchBarangayDataByMunicipality() 
 	{
-			if($this->input->post('lgu_id'))
+			if($this->input->post('municipality_id'))
 			{
-				echo $this->model_barangay->getBarangayDataByLgu($this->input->post('lgu_id'));
+				echo $this->model_barangay->getBarangayDataByMunicipalityId($this->input->post('municipality_id'));
 			}
 	}
 
