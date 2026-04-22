@@ -1,4 +1,3 @@
-
 <?php 
 
 class Model_beekeeper extends CI_Model
@@ -149,7 +148,19 @@ class Model_beekeeper extends CI_Model
 		$query = $this->db->query($sql, array($id));
 		return $query->row_array();
 
-	}
+	}	
 
+
+	
+	public function countBeekeepersByRegion()
+	{
+		$sql = "SELECT region.regDesc as name, count(beekeeper.id) as total 
+				FROM beekeeper 
+				JOIN region ON beekeeper.region_id = region.region_id 
+				WHERE beekeeper.active = 1 
+				GROUP BY beekeeper.region_id, region.regDesc";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
 
 }

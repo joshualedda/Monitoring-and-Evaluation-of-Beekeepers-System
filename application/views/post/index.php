@@ -121,7 +121,7 @@ $(document).ready(function() {
     'columnDefs': [
       {
         // Web Visibility badge
-        targets: 5,
+        targets: 4,
         render: function(data) {
           if(data == 1 || data == 'Yes' || data == 'yes') {
             return '<span class="dt-badge dt-badge-success"><i class="ph ph-eye"></i> Visible</span>';
@@ -131,13 +131,19 @@ $(document).ready(function() {
       },
       {
         // Active badge
-        targets: 6,
+        targets: 5,
         render: function(data) {
           if(data == 1 || data == 'Yes' || data == 'yes' || data == 'Active') {
             return '<span class="dt-badge dt-badge-success"><i class="ph ph-check-circle"></i> Active</span>';
           }
           return '<span class="dt-badge dt-badge-danger"><i class="ph ph-x-circle"></i> Inactive</span>';
         }
+      },
+      {
+        // Action column
+        targets: 6,
+        orderable: false,
+        searchable: false
       }
     ]
   });

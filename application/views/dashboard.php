@@ -184,6 +184,43 @@
       </div>
     </div>
 
+    <!-- Regional Distribution Row -->
+    <div class="row mb-4">
+      <div class="col-lg-6 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+          <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
+            <div>
+              <h5 class="fw-bold mb-0">Regional Distribution</h5>
+              <p class="text-muted small mb-0">Beekeeper reach across regions</p>
+            </div>
+            <div class="premium-stat-badge" style="background:#e8f1ff; color:#1a4b9c;">
+              <i class="ph ph-map-trifold me-1"></i> Reach
+            </div>
+          </div>
+          <div class="card-body p-4">
+            <div id="regionChart" style="min-height: 400px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+          <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
+            <div>
+              <h5 class="fw-bold mb-0">Monthly Production Trends</h5>
+              <p class="text-muted small mb-0">Honey yield per month (kg)</p>
+            </div>
+            <div class="premium-stat-badge" style="background:#fff9e6; color:#f0932b;">
+              <i class="ph ph-chart-line me-1"></i> Trends
+            </div>
+          </div>
+          <div class="card-body p-4">
+            <div id="monthlyProductionChart" style="min-height: 400px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -742,6 +779,15 @@
 /* ── PHP Data → JS ──────────────────────────────────────────── */
 var apiaries = [];
 var analyticsData = [];
+var regionLabels = [<?php echo '"' . implode('","', array_column($beekeepers_by_region, 'name')) . '"'; ?>];
+var regionSeries = [<?php echo implode(',', array_column($beekeepers_by_region, 'total')); ?>];
+
+var monthlyLabels = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var monthlySeries = new Array(12).fill(0);
+<?php foreach($monthly_production as $m): ?>
+    var mIdx = monthlyLabels.indexOf("<?php echo $m['month'] ?>");
+    if(mIdx !== -1) monthlySeries[mIdx] = <?php echo floatval($m['total']) ?>;
+<?php endforeach; ?>
 
 <?php
 /* Resolve coordinates for all apiaries */
@@ -1385,6 +1431,109 @@ document.addEventListener("DOMContentLoaded", function() {
   if (document.querySelector("#apiaryChart")) {
     var apiaryChart = new ApexCharts(document.querySelector("#apiaryChart"), apiaryOptions);
     apiaryChart.render();
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     APEXCHARTS: Regional Distribution (Pie)
+     ══════════════════════════════════════════════════════════════ */
+  var regionOptions = {
+    series: regionSeries,
+    chart: {
+      type: 'donut',
+      height: 400,
+      fontFamily: 'inherit'
+    },
+    labels: regionLabels,
+    colors: ['#1a4b9c', '#f0932b', '#1a8a4b', '#dc3545', '#e1b12c', '#ee5a24', '#006fa6'],
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '70%',
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: 'Total Beekeepers',
+              formatter: function (w) {
+                return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+              }
+            }
+          }
+        }
+      }
+    },
+    legend: {
+      position: 'bottom'
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val, opts) {
+        return opts.w.globals.series[opts.seriesIndex]
+      }
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val + " beekeepers"
+        }
+      }
+    },
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: { width: 300 },
+        legend: { position: 'bottom' }
+      }
+    }]
+  };
+
+  if (document.querySelector("#regionChart")) {
+    var regionChart = new ApexCharts(document.querySelector("#regionChart"), regionOptions);
+    regionChart.render();
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     APEXCHARTS: Monthly Production (Area)
+     ══════════════════════════════════════════════════════════════ */
+  var monthlyOptions = {
+    series: [{
+      name: 'Production (kg)',
+      data: monthlySeries
+    }],
+    chart: {
+      type: 'area',
+      height: 400,
+      fontFamily: 'inherit',
+      toolbar: { show: false }
+    },
+    colors: ['#f0932b'],
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.3,
+        stops: [0, 90, 100]
+      }
+    },
+    dataLabels: { enabled: false },
+    stroke: { curve: 'smooth', width: 3 },
+    xaxis: {
+      categories: monthlyLabels,
+      labels: { style: { colors: '#64748b' } }
+    },
+    yaxis: {
+      labels: { style: { colors: '#64748b' } },
+      title: { text: 'Honey Yield (kg)' }
+    },
+    tooltip: {
+      y: { formatter: function (val) { return val + " kg" } }
+    }
+  };
+
+  if (document.querySelector("#monthlyProductionChart")) {
+    var monthlyChart = new ApexCharts(document.querySelector("#monthlyProductionChart"), monthlyOptions);
+    monthlyChart.render();
   }
 
   /* ══════════════════════════════════════════════════════════════

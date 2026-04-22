@@ -611,3 +611,153 @@ body.auth-page,
 	box-shadow: 0 0 0 3.5px rgba(26, 75, 156, 0.1);
 	outline: none;
 }
+/* ================================================================
+   NEW CENTERED GLASSMORPISM LAYOUT
+   ================================================================ */
+
+.auth-full-page {
+	min-height: 100vh;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	position: relative;
+	overflow-x: hidden;
+}
+
+/* Background Overlay */
+.auth-full-page::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		135deg,
+		rgba(0, 0, 0, 0.45) 0%,
+		rgba(0, 0, 0, 0.65) 100%
+	);
+	z-index: 1;
+}
+
+.auth-centered-content {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	max-width: 480px;
+	animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fadeInScale {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.glass-card {
+	background: rgba(255, 255, 255, 0.72);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border-radius: 32px;
+	padding: 48px;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	box-shadow:
+		0 25px 50px -12px rgba(0, 0, 0, 0.25),
+		inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.auth-title-modern {
+	font-size: 1.85rem;
+	font-weight: 800;
+	color: #1e293b;
+	line-height: 1.25;
+	margin-bottom: 8px;
+	letter-spacing: -0.02em;
+}
+
+.auth-subtitle-modern {
+	font-size: 0.95rem;
+	color: #64748b;
+	margin-bottom: 32px;
+	line-height: 1.6;
+}
+
+.highlight-gold {
+	color: #d97706;
+}
+
+/* Enhanced Inputs for Glass UI */
+.auth-input-group-glass {
+	margin-bottom: 24px;
+}
+
+.auth-input-group-glass .input-group {
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 16px;
+	overflow: hidden;
+	border: 1px solid rgba(203, 213, 225, 0.5);
+	transition: all 0.2s ease;
+}
+
+.auth-input-group-glass .input-group:focus-within {
+	background: #ffffff;
+	border-color: #d97706;
+	box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.15);
+}
+
+.auth-input-group-glass .input-group-text {
+	background: transparent;
+	border: none;
+	color: #94a3b8;
+	padding-left: 18px;
+}
+
+.auth-input-group-glass .form-control {
+	background: transparent;
+	border: none;
+	padding: 14px 18px 14px 5px;
+	font-size: 0.95rem;
+	color: #0f172a;
+}
+
+.auth-input-group-glass .form-control:focus {
+	box-shadow: none;
+	background: transparent;
+}
+
+.auth-btn-premium {
+	background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+	color: white;
+	border: none;
+	border-radius: 16px;
+	padding: 16px;
+	font-weight: 700;
+	font-size: 1rem;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	transition: all 0.3s ease;
+	box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.4);
+}
+
+.auth-btn-premium:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 20px 25px -5px rgba(217, 119, 6, 0.5);
+	opacity: 0.95;
+}
+
+.auth-logo-modern {
+	width: 72px;
+	height: 72px;
+	margin-bottom: 24px;
+	filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}

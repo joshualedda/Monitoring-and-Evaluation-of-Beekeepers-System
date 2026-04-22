@@ -144,36 +144,51 @@
                         <div class="col-md-4">
                           <label class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Region'); ?> <font color="red">*</font></label>
                           <select class="form-select select_group" id="region" name="region">
-                            <option value="">Select Region</option>
+                            <option value="">Select Region</option> 
                             <?php foreach ($region as $k => $v): ?>
-                            <option value="<?php echo $v['region_id'] ?>" <?php if(set_value('region', $beekeeper_data['region_id']) == $v['region_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                              <option value="<?php echo $v['region_id'] ?>" <?php echo set_select('region', $v['region_id'], ($beekeeper_data['region_id'] == $v['region_id'])); ?>><?php echo $v['name'] ?></option>
                             <?php endforeach ?>
                           </select>
                         </div>
                         <div class="col-md-4">
                           <label class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Province'); ?> <font color="red">*</font></label>
                           <select class="form-select select_group" id="province" name="province">
-                            <option value="">Select Province</option>
+                            <option value="">Select Province</option> 
                             <?php foreach ($province as $k => $v): ?>
-                                <option value="<?php echo $v['province_id'] ?>" <?php if(set_value('province', $beekeeper_data['province_id']) == $v['province_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                              <?php 
+                                $selected_region = set_value('region', $beekeeper_data['region_id']);
+                                if($selected_region && $v['regCode'] == $this->model_region->getRegionData($selected_region)['regCode']): 
+                              ?>
+                                <option value="<?php echo $v['province_id'] ?>" <?php echo set_select('province', $v['province_id'], ($beekeeper_data['province_id'] == $v['province_id'])); ?>><?php echo $v['name'] ?></option>
+                              <?php endif; ?>
                             <?php endforeach ?>
                           </select>
                         </div>
                         <div class="col-md-4">
                           <label class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Municipality'); ?> <font color="red">*</font></label>
                           <select class="form-select select_group" id="municipality" name="municipality">
-                            <option value="">Select Municipality</option>
+                            <option value="">Select Municipality</option> 
                             <?php foreach ($municipality as $k => $v): ?>
-                                <option value="<?php echo $v['municipality_id'] ?>" <?php if(set_value('municipality', $beekeeper_data['municipality_id']) == $v['municipality_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                              <?php 
+                                $selected_province = set_value('province', $beekeeper_data['province_id']);
+                                if($selected_province && $v['provCode'] == $this->model_province->getProvinceData($selected_province)['provCode']): 
+                              ?>
+                                <option value="<?php echo $v['municipality_id'] ?>" <?php echo set_select('municipality', $v['municipality_id'], ($beekeeper_data['municipality_id'] == $v['municipality_id'])); ?>><?php echo $v['name'] ?></option>
+                              <?php endif; ?>
                             <?php endforeach ?>
                           </select>
                         </div>
                         <div class="col-md-12">
                           <label class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Barangay'); ?> <font color="red">*</font></label>
                           <select class="form-select select_group" id="barangay" name="barangay">
-                            <option value="">Select Barangay</option>
+                            <option value="">Select Barangay</option> 
                             <?php foreach ($barangay as $k => $v): ?>
-                                <option value="<?php echo $v['barangay_id'] ?>" <?php if(set_value('barangay', $beekeeper_data['barangay_id']) == $v['barangay_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                              <?php 
+                                $selected_municipality = set_value('municipality', $beekeeper_data['municipality_id']);
+                                if($selected_municipality && $v['citymunCode'] == $this->model_municipality->getMunicipalityData($selected_municipality)['citymunCode']): 
+                              ?>
+                                <option value="<?php echo $v['barangay_id'] ?>" <?php echo set_select('barangay', $v['barangay_id'], ($beekeeper_data['barangay_id'] == $v['barangay_id'])); ?>><?php echo $v['name'] ?></option>
+                              <?php endif; ?>
                             <?php endforeach ?>
                           </select>
                         </div>
@@ -551,7 +566,7 @@
 
     // Dependent Dropdowns Logic
     $('#region').change(function(){
-      var region_id = $(this).val();
+      var region_id = $('#region').val();
       if(region_id != '') {
         $.ajax({
           url: base_url + 'province/fetchProvinceDataByRegion',
@@ -561,14 +576,16 @@
             $('#province').html('<option value="" hidden selected disabled>Select Province</option>');
             $('#municipality').html('<option value="" hidden selected disabled>Select Municipality</option>');
             $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
-            $('#province').html(data).trigger('change');
+            $('#province').html(data); 
+            // Trigger select2 update
+            $('#province, #municipality, #barangay').trigger('change');
           }
         });
       }
     });
 
     $('#province').change(function(){
-      var province_id = $(this).val();
+      var province_id = $('#province').val();
       if(province_id != '') {
         $.ajax({
           url: base_url + 'municipality/fetchMunicipalityDataByProvince',
@@ -577,14 +594,15 @@
           success:function(data) {
             $('#municipality').html('<option value="" hidden selected disabled>Select Municipality</option>');
             $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
-            $('#municipality').html(data).trigger('change');
+            $('#municipality').html(data); 
+            $('#municipality, #barangay').trigger('change');
           }
         });
       }
     });
 
     $('#municipality').change(function(){
-      var municipality_id = $(this).val();
+      var municipality_id = $('#municipality').val();
       if(municipality_id != '') {
         $.ajax({
           url: base_url + 'barangay/fetchBarangayDataByMunicipality',
@@ -592,7 +610,8 @@
           data:{municipality_id:municipality_id},
           success:function(data) {
             $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
-            $('#barangay').html(data).trigger('change');
+            $('#barangay').html(data); 
+            $('#barangay').trigger('change');
           }
         });
       }

@@ -75,4 +75,15 @@ class Model_production extends CI_Model
 		$query = $this->db->query($sql, array($colony_id));
 		return $query->result_array();
 	}
+
+    public function getMonthlyProduction($year)
+    {
+        $sql = "SELECT month, SUM(total_production) as total 
+                FROM production 
+                WHERE year = ? 
+                GROUP BY month 
+                ORDER BY FIELD(month, 'January','February','March','April','May','June','July','August','September','October','November','December')";
+        $query = $this->db->query($sql, array($year));
+        return $query->result_array();
+    }
 }

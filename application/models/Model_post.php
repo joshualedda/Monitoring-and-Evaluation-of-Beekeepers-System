@@ -33,9 +33,10 @@ class Model_post extends CI_Model
 			$this->db->limit($limit, $offset);
 		}
 		if($post_slug === FALSE){
-			$this->db->select('post.*,post.id AS post_id,name');
+			$this->db->select('post.*, post.id AS post_id, post_category.name AS name, user.name AS posted_by');
 			$this->db->order_by('post.id', 'DESC');
-			$this->db->join('post_category','post_category.id = post.post_category_id');
+			$this->db->join('post_category', 'post_category.id = post.post_category_id');
+			$this->db->join('user', 'user.id = post.updated_by', 'left');
 			$this->db->where('post.active',1);
 			$this->db->where('date_from <=', date('Y-m-d'));
 			$this->db->where('date_to >=', date('Y-m-d'));

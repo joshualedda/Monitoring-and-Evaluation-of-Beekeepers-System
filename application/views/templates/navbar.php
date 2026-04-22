@@ -75,7 +75,7 @@
                 <span>My Profile</span>
               </a>
               <hr style="border-color:#e5e7eb; margin: 8px 0;">
-              <a href="<?= base_url('login/logout'); ?>" class="btn-logout">
+              <a href="<?= base_url('auth/logout'); ?>" class="btn-logout">
                 <i class="ph ph-sign-out"></i>
                 Log Out
               </a>

@@ -13,10 +13,13 @@ class Website extends Admin_Controller {
 
 
 
-	public function index($offset = 0){
+	public function index(){
+            $this->data['total_beekeeper'] = $this->model_beekeeper->countTotalBeekeeper();
+            $this->data['total_news'] = $this->model_post->countTotalPost();
+            // Fetch 3 latest active posts for the landing page
+            $this->data['latest_news'] = $this->model_post->get_posts(FALSE, 3, 0, 1);
             
             $this->load->view('website/index', $this->data);
-
         }
 
 

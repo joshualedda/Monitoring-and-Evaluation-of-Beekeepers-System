@@ -72,6 +72,7 @@ class Beekeeper extends Admin_Controller
 
 		} // /foreach
 
+        header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
@@ -276,9 +277,15 @@ class Beekeeper extends Admin_Controller
         //$beekeeper_data = $this->model_beekeeper->getBeekeeperData($beekeeper_id);
 
         
-        $this->data['province'] = $this->model_province->getProvinceByRegionId($beekeeper_data['region_id']); 
-        $this->data['municipality'] = $this->model_municipality->getMunicipalityByProvinceId($beekeeper_data['province_id']); 
-        $this->data['barangay'] = $this->model_barangay->getBarangayByMunicipalityId($beekeeper_data['municipality_id']); 
+        if($this->input->post()) {
+            $this->data['province'] = $this->model_province->getProvinceByRegionId($this->input->post('region')); 
+            $this->data['municipality'] = $this->model_municipality->getMunicipalityByProvinceId($this->input->post('province')); 
+            $this->data['barangay'] = $this->model_barangay->getBarangayByMunicipalityId($this->input->post('municipality'));
+        } else {
+            $this->data['province'] = $this->model_province->getProvinceByRegionId($beekeeper_data['region_id']); 
+            $this->data['municipality'] = $this->model_municipality->getMunicipalityByProvinceId($beekeeper_data['province_id']); 
+            $this->data['barangay'] = $this->model_barangay->getBarangayByMunicipalityId($beekeeper_data['municipality_id']); 
+        }
         $this->data['beekeeper_data'] = $beekeeper_data;
         $this->render_template('beekeeper/edit', $this->data); 
          

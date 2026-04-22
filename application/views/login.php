@@ -3,90 +3,26 @@
 <!-- Shared Auth Stylesheet -->
 <link rel="stylesheet" href="<?= base_url('assets/css/auth.css'); ?>">
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var wrapper = document.getElementById('main-wrapper');
-    if (wrapper) {
-      wrapper.classList.add('auth-wrapper');
-      wrapper.style.cssText = 'display:flex;min-height:100vh;margin:0;padding:0;overflow:hidden;';
-    }
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.style.background = 'linear-gradient(135deg, #d97706 0%, #78350f 100%)';
-  });
-</script>
+<style>
+  /* Page specific background logic */
+  .auth-full-page {
+    background-image: url("<?= base_url('beekeeping_bg_1776865892735.png'); ?>");
+  }
+</style>
 
-<div class="row g-0 w-100 min-vh-100" style="margin:0;">
-
-  <!-- ====== LEFT PANEL ====== -->
-  <div class="col-md-6 auth-left">
-
-
-    <!-- Brand -->
-    <div class="auth-brand">
-      <div class="auth-logo-wrap">
-        <img src="<?= base_url('assets/images/meb.png'); ?>" alt="MEB Logo">
-      </div>
-      <div>
-        <span class="auth-brand-name">NARTDI</span>
-        <span class="auth-brand-tagline">National Apiculture Research, Training Development Institute</span>
-      </div>
-    </div>
-
-    <!-- Hero -->
-    <div class="auth-hero">
-   
-  
-     
-      <h1 class="auth-hero-title">
-       Monitoring & Evaluation<br><span> of Beekeepers</span>
-      </h1>
-      <p class="auth-tagline">Monitoring and evaluating beekeeping activities across the Philippines.</p>
-
-      <ul class="auth-feature-list">
-        <li>
-          <div class="feat-icon"><i class="bi bi-hexagon-fill"></i></div>
-          <div>
-            <strong>Activity Monitoring</strong>
-            <span>Track and evaluate beekeeping activities</span>
-          </div>
-        </li>
-        <li>
-          <div class="feat-icon"><i class="bi bi-shield-lock-fill"></i></div>
-          <div>
-            <strong>Secure Access</strong>
-            <span>Role-based authentication system</span>
-          </div>
-        </li>
-        <li>
-          <div class="feat-icon"><i class="bi bi-bar-chart-steps"></i></div>
-          <div>
-            <strong>Evaluation Reports</strong>
-            <span>Comprehensive analytics and insights</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Footer -->
-    <div class="auth-left-footer">
-      &copy; <?= date('Y') ?> National Apiculture Research, Training Development Institute<br>
-      <!-- <span style="opacity:0.55;">Developed by <span style="font-weight:600;">John Doe</span></span> -->
-    </div>
-  </div>
-
-  <!-- ====== RIGHT PANEL ====== -->
-  <div class="col-md-6 auth-right">
-    <div class="auth-card">
-
-      <!-- Card Top Logo (mobile) -->
-      <div class="auth-card-logo d-md-none">
-        <img src="<?= base_url('assets/images/meb.png'); ?>" alt="MEB">
+<div class="auth-full-page">
+  <div class="auth-centered-content">
+    <div class="glass-card">
+      
+      <!-- Logo -->
+      <div class="text-center">
+        <img src="<?= base_url('assets/images/meb.png'); ?>" alt="MEB Logo" class="auth-logo-modern">
       </div>
 
-      <div class="auth-card-header">
-        <h2 class="auth-card-title">Welcome Back</h2>
-        <p class="auth-card-subtitle">Sign in to your institutional account</p>
+      <!-- Header -->
+      <div class="text-center mb-4">
+        <h1 class="auth-title-modern">Monitoring and Evaluation <span class="highlight-gold">of Beekeepers</span></h1>
+        <p class="auth-subtitle-modern">Sign in to access your administrative dashboard</p>
       </div>
 
       <!-- Error -->
@@ -98,15 +34,15 @@
       <?php endif; ?>
 
       <form id="loginForm" method="post" action="<?= base_url('auth/login') ?>" novalidate>
-<?php if (isset($this->security)): ?>
-<input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
-<?php endif; ?>
+        <?php if (isset($this->security)): ?>
+          <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
+        <?php endif; ?>
 
         <!-- Username -->
-        <div class="mb-4">
+        <div class="auth-input-group-glass">
           <label for="loginUsername" class="auth-label">Username</label>
-          <div class="input-group auth-input-group">
-            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
             <input
               name="username"
               type="text"
@@ -121,10 +57,10 @@
         </div>
 
         <!-- Password -->
-        <div class="mb-3">
+        <div class="auth-input-group-glass">
           <label for="loginPassword" class="auth-label">Password</label>
-          <div class="input-group auth-input-group has-toggle">
-            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
             <input
               name="password"
               type="password"
@@ -140,30 +76,33 @@
           <?= form_error('password', '<div class="text-danger mt-1" style="font-size:0.8rem;">', '</div>') ?>
         </div>
 
-        <!-- Forgot + Remember -->
+        <!-- Remember Me -->
         <div class="d-flex align-items-center justify-content-between mb-4">
           <div class="form-check mb-0">
-            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me" style="border-radius:5px;" <?= !empty($remembered_username) ? 'checked' : '' ?>>
-            <label class="form-check-label" for="rememberMe" style="font-size:0.85rem; color:#5a6a85;">Remember me</label>
+            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me" style="border-radius:6px; cursor:pointer;" <?= !empty($remembered_username) ? 'checked' : '' ?>>
+            <label class="form-check-label" for="rememberMe" style="font-size:0.85rem; color:#64748b; cursor:pointer;">Keep me signed in</label>
           </div>
-          <!-- <a href="<?= base_url('login/forgot_password') ?>" class="auth-forgot">Forgot Password?</a> -->
         </div>
 
         <!-- Sign In -->
-        <button type="submit" class="btn btn-auth mb-3" id="loginBtn">
-          <span class="btn-auth-text"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</span>
-          <span class="btn-auth-loader d-none"><span class="spinner-border spinner-border-sm me-2"></span>Signing in...</span>
+        <button type="submit" class="btn auth-btn-premium mb-4" id="loginBtn">
+          <span class="btn-auth-text"><i class="bi bi-door-open-fill me-2"></i>Sign In</span>
+          <span class="btn-auth-loader d-none"><span class="spinner-border spinner-border-sm me-2"></span>Authenticating...</span>
         </button>
 
-        <p class="auth-footer-text">
-          Don't have an account?
-          <a href="<?= base_url('register') ?>" class="link-green">Create Account</a>
+        <p class="auth-footer-text m-0">
+          Not yet a member?
+          <a href="<?= base_url('register') ?>" class="link-green">Request Access</a>
         </p>
 
       </form>
     </div>
-  </div>
 
+    <!-- Small Footer -->
+    <div class="text-center mt-4">
+      <p class="small text-white-50 m-0">&copy; <?= date('Y') ?> NARTDI - National Apiculture Research, Training Development Institute</p>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -180,33 +119,32 @@
     }
   }
 
-  // Loader only activates after simple client-side check
   document.getElementById('loginForm').addEventListener('submit', function (e) {
     var username = document.getElementById('loginUsername').value.trim();
     var pass  = document.getElementById('loginPassword').value.trim();
 
-    // Clear previous inline errors
     document.querySelectorAll('.js-field-err').forEach(function(el){ el.remove(); });
     document.querySelectorAll('.is-invalid-js').forEach(function(el){ el.classList.remove('is-invalid-js','border-danger'); });
 
     var ok = true;
     function fieldErr(inputId, msg) {
       var inp = document.getElementById(inputId);
-      inp.classList.add('is-invalid-js', 'border-danger');
+      var group = inp.closest('.input-group');
+      group.classList.add('border-danger');
       var d = document.createElement('div');
-      d.className = 'js-field-err text-danger mt-1';
+      d.className = 'js-field-err text-danger mt-2 ps-2';
       d.style.fontSize = '0.8rem';
+      d.style.fontWeight = '600';
       d.textContent = msg;
-      inp.closest('.input-group').insertAdjacentElement('afterend', d);
+      group.insertAdjacentElement('afterend', d);
       ok = false;
     }
 
-    if (!username)   fieldErr('loginUsername',    'Username is required.');
-    if (!pass)    fieldErr('loginPassword',  'Password is required.');
+    if (!username) fieldErr('loginUsername', 'Username is required.');
+    if (!pass) fieldErr('loginPassword', 'Password is required.');
 
     if (!ok) { e.preventDefault(); return; }
 
-    // Valid — show loader
     var btn = document.getElementById('loginBtn');
     if (btn) {
       btn.querySelector('.btn-auth-text').classList.add('d-none');

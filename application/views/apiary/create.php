@@ -19,19 +19,7 @@
     <div class="row g-4 mb-4">
       <div class="col-md-12 col-xs-12">
 
-        <div id="messages"></div>
 
-        <?php if($this->session->flashdata('success')): ?>
-          <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <?php echo $this->session->flashdata('success'); ?>
-          </div>
-        <?php elseif($this->session->flashdata('error')): ?>
-          <div class="alert alert-error alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <?php echo $this->session->flashdata('error'); ?>
-          </div>
-        <?php endif; ?>
 
         
         <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -339,3 +327,4 @@ beekeeper_holder.onchange=function()
 
   });
 </script>
+<?php $this->load->view('templates/alert'); ?>

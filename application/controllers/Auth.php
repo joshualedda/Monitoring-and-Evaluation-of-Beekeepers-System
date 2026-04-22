@@ -35,11 +35,15 @@ class Auth extends Admin_Controller
 
            			$logged_in_sess = array(
            				'user_id' => $login['id'],
-				        'profile'  => $login['profile_id'],
+				        'profile_id' => $login['profile_id'],
 				        'username' => $login['username'],
-				        'name'=>$login['name'],
-				        'language' => $login['language'],
-				        'logged_in' => TRUE
+				        'logged_in' => TRUE,
+                        'user_data' => [
+                            'first_name' => $login['firstname'] ?? '',
+                            'last_name'  => $login['lastname'] ?? '',
+                            'email'      => $login['email'] ?? '',
+                            'role_id'    => $login['profile_id'] ?? 0
+                        ]
 					);
 
 					$this->session->set_userdata($logged_in_sess);

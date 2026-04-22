@@ -44,53 +44,82 @@
         <?php if(!empty($post_data)): ?>
       	    <?php foreach($post_data as $post) : ?>
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white hover-lift transition-all">
-                    <div class="row g-0 h-100">
-                        <div class="col-md-3 bg-light d-flex align-items-center justify-content-center p-4 border-end border-light position-relative">	
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white hover-lift transition-all mb-3">
+                    <div class="row g-0">
+                        <!-- Post Image -->
+                        <div class="col-md-4 position-relative p-0 overflow-hidden border-end">
                             <?php 
                                 $doc_type = isset($post['doc_type']) ? $post['doc_type'] : '';
                                 if(strpos($doc_type,'application/vnd') !== false): 
-                            ?>  
-                            <img class="img-fluid rounded-3 shadow-sm border border-2 border-white" src="<?php echo site_url(); ?>upload/posts/msoffice.jpg" style="max-height: 180px; object-fit: contain;">
-                            <?php elseif(strpos($doc_type,'application/pdf') !== false): ?>  
-                            <img class="img-fluid rounded-3 shadow-sm border border-2 border-white" src="<?php echo site_url(); ?>upload/posts/pdf.png" style="max-height: 180px; object-fit: contain;">   
-                            <?php else: ?>  
-                            <img class="img-fluid rounded-3 shadow-sm border border-2 border-white" src="<?php echo site_url(); ?>upload/posts/<?php echo $post['post_image']; ?>" style="max-height: 200px; object-fit: cover; width: 100%;">
-                            <?php endif; ?>   
+                                    $img_src = site_url()."upload/posts/msoffice.jpg";
+                                elseif(strpos($doc_type,'application/pdf') !== false): 
+                                    $img_src = site_url()."upload/posts/pdf.png";
+                                else: 
+                                    $img_src = site_url()."upload/posts/".$post['post_image'];
+                                endif; 
+                            ?>
+                            <div class="h-100 bg-light" style="min-height: 240px;">
+                                <img class="img-fluid h-100 w-100" src="<?php echo $img_src; ?>" style="object-fit: cover;">
+                            </div>
                             
-                            <a href="<?php echo site_url(); ?>upload/posts/<?php echo $post['post_image']; ?>" target="_blank" class="btn btn-light position-absolute top-0 start-0 m-3 rounded-circle shadow border-0" style="width: 36px; height: 36px; padding: 0; display:flex; align-items:center; justify-content:center; opacity: 0.9;">
+                            <a href="<?php echo $img_src; ?>" target="_blank" class="btn btn-white bg-white position-absolute top-0 end-0 m-3 rounded-circle shadow-sm border-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; z-index: 2;">
                                 <i class="ph ph-magnifying-glass-plus text-primary fs-5"></i>
                             </a>
                         </div>
 
-                        <div class="col-md-9">
+                        <!-- Post Content -->
+                        <div class="col-md-8">
                             <div class="card-body p-4 d-flex flex-column h-100">
                                 
                                 <div class="mb-3">
-                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-2 rounded-pill px-3 py-1"><?php echo $post['name']; ?></span>
-                                    <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1"><?php echo $post['name']; ?></span>
+                                        <span class="text-muted small d-flex align-items-center gap-1">
+                                            <i class="ph ph-clock"></i> <?php echo date('g:i A', strtotime($post['updated_date'])); ?>
+                                        </span>
+                                    </div>
+                                    
+                                    <h4 class="fw-bold text-dark mb-2">
                                         <?php echo $post['post_title']; ?>
-                                    </h4>	
-                                    <p class="text-muted small mb-0 d-flex align-items-center gap-1">
-                                        <i class="ph ph-clock"></i> <?php echo $this->lang->line('Posted on'); ?> <?php echo date('M d, Y g:i A', strtotime($post['updated_date'])); ?>
-                                    </p>
+                                    </h4>
+                                    
+                                    <!-- Metadata: Author and Slug -->
+                                    <div class="d-flex flex-wrap gap-3 text-muted small mt-2">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <i class="ph ph-calendar text-primary"></i> 
+                                            <span class="fw-medium"><?php echo date('M d, Y', strtotime($post['updated_date'])); ?></span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1 border-start ps-3">
+                                            <i class="ph ph-user-circle text-primary"></i> 
+                                            <span>By <span class="text-dark fw-medium"><?php echo $post['posted_by'] ?? 'Administrator'; ?></span></span>
+                                        </div>
+                                        <?php if(!empty($post['post_slug'])): ?>
+                                        <div class="d-flex align-items-center gap-1 border-start ps-3">
+                                            <i class="ph ph-link-simple text-primary"></i> 
+                                            <span class="text-primary opacity-75"><?php echo $post['post_slug']; ?></span>
+                                        </div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                                 
-                                <div class="text-secondary flex-grow-1 doc-content" style="font-size: 0.95rem; line-height: 1.6;">
+                                <div class="text-secondary flex-grow-1 doc-content mb-3" style="font-size: 0.95rem; line-height: 1.6;">
                                     <?php 
                                         $news_content = html_entity_decode($post['post_text']); 
                                         $news_content = strip_tags($news_content);
-                                        echo (strlen($news_content) > 200) ? substr($news_content, 0, 200) . '...' : $news_content;
+                                        echo (strlen($news_content) > 180) ? substr($news_content, 0, 180) . '...' : $news_content;
                                     ?>		
                                 </div>
                                 
-                                <?php if(in_array('viewPost', $user_permission)): ?>
-                                    <div class="mt-4 pt-3 border-top border-light text-end">
-                                        <a href="<?php echo base_url('post/view_post/'.$post['post_id']) ?>" class="btn btn-outline-primary rounded-3 px-4 fw-medium d-inline-flex align-items-center gap-2 ui-btn">
-                                            <?php echo $this->lang->line('View Post'); ?> <i class="ph ph-arrow-right"></i>
-                                        </a>
+                                <div class="mt-auto pt-3 border-top border-light d-flex justify-content-between align-items-center">
+                                    <div class="small text-muted">
+                                        ID: <span class="fw-mono text-dark">#<?php echo $post['post_id']; ?></span>
                                     </div>
-                                <?php endif; ?>
+                                    <?php if(in_array('viewPost', $user_permission)): ?>
+                                        <a href="<?php echo base_url('post/view_post/'.$post['post_id']) ?>" class="btn btn-outline-primary rounded-pill px-4 btn-sm fw-medium d-inline-flex align-items-center gap-2 ui-btn">
+                                            Full Article <i class="ph ph-arrow-right"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>

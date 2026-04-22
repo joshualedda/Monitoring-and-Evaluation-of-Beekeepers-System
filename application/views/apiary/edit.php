@@ -20,19 +20,7 @@
     <div class="row g-4">
       <div class="col-md-12">
 
-        <div id="messages"></div>
 
-        <?php if($this->session->flashdata('success')): ?>
-          <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <?php echo $this->session->flashdata('success'); ?>
-          </div>
-        <?php elseif($this->session->flashdata('error')): ?>
-          <div class="alert alert-error alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <?php echo $this->session->flashdata('error'); ?>
-          </div>
-        <?php endif; ?>
 
         <!-- =====================================================================
              S E C T I O N   1 :   A P I A R Y   D E T A I L S
@@ -501,8 +489,9 @@ function removeColony(id) {
           manageTableColony.ajax.reload(null, false);
           if(response.success === true) {
             $("#removeColonyModal").modal('hide');
+            toastr.success(response.messages, "Success");
           } else {
-            $("#messages").html('<div class="alert alert-warning"><strong>'+response.messages+'</strong></div>');
+            toastr.warning(response.messages, "Warning");
           }
         }
       });
@@ -522,8 +511,9 @@ function removeDocument(id) {
             renderDocuments();
           if(response.success === true) {
             $("#removeDocumentModal").modal('hide');
+            toastr.success(response.messages, "Success");
           } else {
-            $("#messages").html('<div class="alert alert-warning"><strong>'+response.messages+'</strong></div>');
+            toastr.warning(response.messages, "Warning");
           }
         }
       });

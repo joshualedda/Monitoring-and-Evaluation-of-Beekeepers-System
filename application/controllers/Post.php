@@ -42,26 +42,28 @@ class Post extends Admin_Controller
             $category_data = $this->model_post_category->getPostCategoryData($value['post_category_id']);
 	
             $buttons = '';
+            $name = $value['post_title'];
 
             if(in_array('updatePost', $this->permission)) {
                 $buttons .= '<a href="'.base_url('post/update/'.$value['id']).'" class="btn-dt btn-dt-edit" title="Edit"><i class="ph ph-pencil-simple"></i></a>';
-                $name='  <a data-target="#editModal" onclick="editFunc('.$value['id'].')" data-toggle="modal" href="#editModal">'.$value['post_title'].'</a>';
-
+                $name = '<a href="'.base_url('post/update/'.$value['id']).'" class="text-decoration-none fw-bold">'.$value['post_title'].'</a>';
             }  
 
             if(in_array('deletePost', $this->permission)) { 
-                $buttons .= ' <button type="button" class="btn-dt btn-dt-delete" title="Delete" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="ph ph-trash"></i></button>';}
+                $buttons .= ' <button type="button" class="btn-dt btn-dt-delete" title="Delete" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="ph ph-trash"></i></button>';
+            }
 
-            $web_visibility = ($value['web_visibility'] == 1) ? '<span class="label label-success">'.$this->lang->line('Visible').'</span>' : '<span class="label label-warning">'.$this->lang->line('Non visible').'</span>';                
-			$active = ($value['active'] == 1) ? '<span class="label label-success">'.$this->lang->line('Active').'</span>' : '<span class="label label-warning">'.$this->lang->line('Inactive').'</span>';
+            // Format dates for readability
+            $date_from = ($value['date_from']) ? date('M d, Y', strtotime($value['date_from'])) : '-';
+            $date_to = ($value['date_to']) ? date('M d, Y', strtotime($value['date_to'])) : '-';
 			
 			$result['data'][$key] = array(	
 			    $category_data['name'], 		
 				$name,				
-				$value['date_from'],
-				$value['date_to'],	
-                $web_visibility,			
-				$active,
+				$date_from,
+				$date_to,	
+                $value['web_visibility'],			
+				$value['active'],
 				$buttons
 			);
 		} // /foreach
