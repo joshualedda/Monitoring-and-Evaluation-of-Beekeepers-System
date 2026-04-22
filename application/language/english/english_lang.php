@@ -359,6 +359,7 @@ $lang['Sign in to start your session'] = 'Sign in to start your session';
 $lang['Sites'] = 'Sites';
 $lang['Size'] = 'Size';
 $lang['Barangay'] = 'Barangay';
+$lang['Municipality'] = 'Municipality';
 $lang['Topography'] = 'Topography';
 $lang['Topography Colony'] = 'Topography Colony';
 $lang['Submit'] = 'Submit';

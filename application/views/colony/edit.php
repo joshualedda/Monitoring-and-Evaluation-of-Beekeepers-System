@@ -1,17 +1,18 @@
 <!-- Content Wrapper. Contains page content -->
 <div id="main">
   <div class="main-container">
-  <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1><?php echo $this->lang->line('Edit Colony'); ?> <?php echo $colony_data['location']; ?></h1>
-    <ol class="breadcrumb">
-      <li><a href="<?php echo base_url('colony') ?>"><i class="fa fa-dashboard"></i> <?php echo $this->lang->line('Home'); ?></a></li>
-      <li class="active"><?php echo $this->lang->line('Colony'); ?> </li>
-    </ol>
-  </section>
-
-
-  <!-- Main content -->
+  <div class="main-container">
+  <div class="page-header-card">
+    <div>
+      <h4><i class="ph ph-pencil-simple me-2 text-primary"></i><?php echo $this->lang->line('Edit Colony'); ?> - <?php echo $colony_data['location']; ?></h4>
+    </div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="<?php echo base_url('colony') ?>" class="text-decoration-none small text-secondary">Home</a></li>
+        <li class="breadcrumb-item active small text-primary fw-medium"><?php echo $this->lang->line('Colony'); ?></li>
+      </ol>
+    </nav>
+  </div>
   <section class="content">
 
 
@@ -45,17 +46,17 @@
 
         <?php if($this->session->flashdata('success')): ?>
           <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <?php echo $this->session->flashdata('success'); ?>
           </div>
         <?php elseif($this->session->flashdata('error')): ?>
-          <div class="alert alert-error alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <?php echo $this->session->flashdata('error'); ?>
           </div>
         <?php elseif($this->session->flashdata('warning')): ?>
           <div class="alert alert-warning alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <?php echo $this->session->flashdata('warning'); ?>
           </div>    
         <?php endif; ?>
@@ -100,89 +101,105 @@
 <!--                                                                                                 -->  
 <!----------------------------------------------------------------------------------------------------->
 
-   <div id="colony" class="tab-pane fade <?php echo (($active_tab === 'colony') ? 'in active' : '') ?>"> 
+   <div id="colony" class="tab-pane fade <?php echo (($active_tab === 'colony') ? 'in active show' : '') ?>"> 
 
-            <div class="box">
-              <form role="form" action="<?php base_url('colony/update') ?>" method="post" enctype="multipart/form-data">
-              <div class="box-body">
-             
-                <?php echo validation_errors(); ?>
-
-                <!-- /row divide by 2 -->
-                <div class="row">  
-
-                  <div class="col-md-3 col-xs-3">
-                    <div class="form-group">
-                    <label for="species"><?php echo $this->lang->line('Species'); ?> <font color="red">*</font></label>
-                    <select class="form-control select_group" id="species" name="species">
-                     <option value="" hidden selected disabled>Select Species</option>
-                      <?php foreach ($species as $k => $v): ?>
-                        <option value="<?php echo $v['id'] ?>" 
-                        <?php if(set_value('species', isset($colony_data['species_id']) ? $colony_data['species_id'] : '') == $v['id']) { echo "selected='selected'"; } ?> ><?php echo $v['name'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                  </div>  
-                 </div>   
-                  <div class="col-md-3 col-xs-3">
-                    <div class="form-group">
-                      <label for="total_colony"><?php echo $this->lang->line('Total'); ?><font color="red">*</font></label>
-                      <input type="text" class="form-control" id="total_colony" name="total_colony" autocomplete="off" 
-                      value="<?php echo set_value('total_colony', isset($colony_data['total_colony']) ? $colony_data['total_colony'] : ''); ?>" />
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+              <div class="card-header bg-transparent border-bottom border-light pt-4 px-4 pb-3">
+                <h5 class="fw-bold mb-0 text-dark"><i class="ph ph-list-dashes me-2 text-primary"></i>Colony Information</h5>
+              </div>
+              <form role="form" action="<?php echo base_url('colony/update') ?>" method="post" enctype="multipart/form-data">
+                <div class="card-body px-4 py-4">
+              
+                  <?php if(validation_errors()): ?>
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      <?php echo validation_errors(); ?>
                     </div>
-                  </div>
- 
-                  <div class="col-md-3 col-xs-3">
-                    <div class="form-group">
-                      <label for="property"><?php echo $this->lang->line('Phase'); ?> <font color="red">*</font></label>
-                      <select class="form-control select_group" id="phase" name="phase">
-                          <option value="" hidden selected disabled>Select Phase</option>
-                          <?php foreach ($phase as $k => $v): ?>
+                  <?php endif; ?>
+
+                  <div class="row g-4 mb-4">  
+                    <div class="col-md-3 col-sm-6">
+                      <div class="form-group">
+                        <label for="species" class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Species'); ?> <font color="red">*</font></label>
+                        <select class="form-control select_group" id="species" name="species" required>
+                          <option value="" hidden selected disabled>Select Species</option>
+                          <?php foreach ($species as $k => $v): ?>
                             <option value="<?php echo $v['id'] ?>" 
-                        <?php if(set_value('phase', isset($colony_data['phase_id']) ? $colony_data['phase_id'] : '') == $v['id']) { echo "selected='selected'"; } ?> ><?php echo $v['name'] ?></option>
+                            <?php if(set_value('species', isset($colony_data['species_id']) ? $colony_data['species_id'] : '') == $v['id']) { echo "selected='selected'"; } ?> ><?php echo $v['name'] ?></option>
                           <?php endforeach ?>
                         </select>
+                      </div>  
+                    </div>   
+                    
+                    <div class="col-md-3 col-sm-6">
+                      <div class="form-group">
+                        <label for="total_colony" class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Total'); ?> <font color="red">*</font></label>
+                        <input type="number" class="form-control" id="total_colony" name="total_colony" autocomplete="off" required
+                        value="<?php echo set_value('total_colony', isset($colony_data['total_colony']) ? $colony_data['total_colony'] : ''); ?>" />
+                      </div>
                     </div>
-                  </div>               
-                </div> 
-
-
-                <!-- /row divide by 2-->
-                <div class="row">
-                  <div class="col-md-12 col-xs-12">
-                    <div class="form-group">
-                      <?php echo '<a href="'.base_url('apiary/update/'.$colony_data['apiary_id']).'" class="btn btn-default"><i class="fa fa-pencil"></i></a>'; ?>
-                      <label for="apiary"><?php echo $this->lang->line('Apiary'); ?> <font color="red">*</font></label>
-                      <select class="form-control select_group" id="apiary" name="apiary">
-                           <option value="" hidden selected disabled>Select Apiary</option>
-                            <?php foreach ($apiary as $k => $v): ?>
+  
+                    <div class="col-md-3 col-sm-6">
+                      <div class="form-group">
+                        <label for="phase" class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Phase'); ?> <font color="red">*</font></label>
+                        <select class="form-control select_group" id="phase" name="phase" required>
+                            <option value="" hidden selected disabled>Select Phase</option>
+                            <?php foreach ($phase as $k => $v): ?>
                               <option value="<?php echo $v['id'] ?>" 
-                                <?php if(set_value('apiary', isset($colony_data['apiary_id']) ? $colony_data['apiary_id'] : '') == $v['id']) { echo "selected='selected'"; } ?> >
-                                <?php echo $v['location'] ?>/
-                                <?php echo $v['beekeeper_name'] ?></option>
+                          <?php if(set_value('phase', isset($colony_data['phase_id']) ? $colony_data['phase_id'] : '') == $v['id']) { echo "selected='selected'"; } ?> ><?php echo $v['name'] ?></option>
                             <?php endforeach ?>
-                      </select>
+                          </select>
+                      </div>
+                    </div>               
+                  </div> 
+
+                  <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class="d-flex justify-content-between align-items-end mb-2">
+                          <label for="apiary" class="form-label fw-semibold text-secondary small text-uppercase mb-0"><?php echo $this->lang->line('Apiary'); ?> <font color="red">*</font></label>
+                          <a href="<?php echo base_url('apiary/update/'.$colony_data['apiary_id']) ?>" class="btn btn-sm btn-light text-primary rounded-3 px-3 shadow-none">
+                            <i class="ph ph-arrow-square-out me-1"></i> Edit Apiary
+                          </a>
+                        </div>
+                        <select class="form-control select_group" id="apiary" name="apiary" required>
+                             <option value="" hidden selected disabled>Select Apiary</option>
+                              <?php foreach ($apiary as $k => $v): ?>
+                                <option value="<?php echo $v['id'] ?>" 
+                                  <?php if(set_value('apiary', isset($colony_data['apiary_id']) ? $colony_data['apiary_id'] : '') == $v['id']) { echo "selected='selected'"; } ?> >
+                                  <?php echo $v['location'] ?> - <?php echo $v['beekeeper_name'] ?></option>
+                              <?php endforeach ?>
+                        </select>
+                      </div>
+                    </div>                    
+                  </div>
+                  
+                  <div class="row g-4">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="remark" class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Remark'); ?></label>
+                        <textarea class="form-control" id="remark" name="remark" rows="3" autocomplete="off"><?php echo set_value('remark', isset($colony_data['remark']) ? trim($colony_data['remark']) : ''); ?></textarea>
+                      </div>  
                     </div>
-                  </div>                    
+                  </div>
+                </div> <!-- /.card-body -->
+
+                <div class="card-footer bg-transparent border-top border-light py-3 px-4 d-flex justify-content-between align-items-center">
+                  <a href="<?php echo base_url('colony/') ?>" class="btn btn-light rounded-3 px-4">
+                    <i class="ph ph-arrow-left me-2"></i> <?php echo $this->lang->line('Close'); ?>
+                  </a>
+                  <div class="d-flex gap-2">
+                    <a href="<?php echo base_url('report0C/REP0C/'.$colony_data['id']) ?>" target="_blank" class="btn btn-light text-success rounded-3 px-4 shadow-none">
+                      <i class="ph ph-printer me-2"></i> Print
+                    </a>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 shadow-none">
+                      <i class="ph ph-floppy-disk me-2"></i> <?php echo $this->lang->line('Save'); ?>
+                    </button>
+                  </div>
                 </div>
-                
-                <div class="form-group">
-                  <label for="remark"><?php echo $this->lang->line('Remark'); ?></label>
-                  <textarea type="text" class="form-control" id="remark" name="remark" autocomplete="off">
-                    <?php echo set_value('remark', isset($colony_data['remark']) ? $colony_data['remark'] : ''); ?>
-                  </textarea>
-                </div>                         
-       
-              
-              </div> <!-- /end box -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary"><?php echo $this->lang->line('Save'); ?></button>
-                <?php echo '<a href="'.base_url('report0C/REP0C/'.$colony_data['id']).'" target="_blank"  class="btn btn-success"><i class="fa fa-print"></i></a>'; ?>
-                <a href="<?php echo base_url('colony/') ?>" class="btn btn-warning"><?php echo $this->lang->line('Close'); ?></a>
-              </div>
-
-            </form>
-          </div>
+              </form>
+            </div>
         </div>
 
 
@@ -670,7 +687,7 @@ function removeProduction(id)
             <div class="col-md-12 col-xs-12">        
 
 
-<?php echo form_open_multipart('colony/uploadDocument/') ?>
+<?php echo form_open_multipart('colony/uploadDocument/' . $colony_data['id']) ?>
             <?php echo "<table width='100%'>" ?>
             <?php echo "<tr>" ?>           
 
@@ -694,20 +711,14 @@ function removeProduction(id)
             <?php echo "</form>"?>
 
 
-              <br>
-
-              <div class="col-md-12 col-xs-12">
-                <table id="manageTableDocument" class="table table-bordered table-striped" style="width:100%">
-                  <thead>
-                    <tr>
-                      <th><?php echo $this->lang->line('Type'); ?></th>
-                      <th><?php echo $this->lang->line('Document'); ?></th>
-                      <th><?php echo $this->lang->line('Size'); ?></th>                   
-                      <th><?php echo $this->lang->line('Action'); ?></th>                                 
-                    </tr>
-                  </thead>
-                </table>  
-            </div> 
+              <!-- Modern Card Gallery -->
+              <div id="documentGallery" class="row g-3 mt-1 px-2">
+                  <!-- Cards will be rendered here by JS -->
+                  <div class="col-12 text-center py-5 text-muted small">
+                      <div class="ph-duotone ph-file-dashed fs-1 mb-2 opacity-50"></div>
+                      <p>No documents found</p>
+                  </div>
+              </div>
 
           </div>
         </div> 
@@ -773,11 +784,68 @@ var base_url = "<?php echo base_url(); ?>";
   $("#DocumentColonyNav").addClass('active');
 
   // initialize the datatable 
-  manageTableDocument = $('#manageTableDocument').DataTable({
-    'ajax': base_url+'colony/fetchColonyDocument/'+'<?php echo $colony_data['id']; ?>',
-    'language': {'url': "<?php echo $this->session->link_language; ?>"}, 
-    'order': [[0, "asc"]]
-  });
+  // Replaced DataTable with Card Gallery
+  function renderDocuments() {
+    $.ajax({
+      url: base_url + 'colony/fetchColonyDocument/'+'<?php echo $colony_data['id']; ?>',
+      type: 'POST',
+      dataType: 'json',
+      success: function(response) {
+        var gallery = $('#documentGallery');
+        gallery.empty();
+        
+        if(response.data.length === 0) {
+          gallery.append('<div class="col-12 text-center py-5 text-muted small"><div class="ph-duotone ph-file-dashed fs-1 mb-2 opacity-50"></div><p>No documents found</p></div>');
+          return;
+        }
+
+        response.data.forEach(function(doc) {
+          var iconClass = 'ph-file';
+          var colorClass = 'text-primary';
+          var ext = doc.doc_name.split('.').pop().toLowerCase();
+          
+          if(['pdf'].includes(ext)) { iconClass = 'ph-file-pdf'; colorClass = 'text-danger'; }
+          else if(['doc', 'docx'].includes(ext)) { iconClass = 'ph-file-doc'; colorClass = 'text-primary'; }
+          else if(['xls', 'xlsx'].includes(ext)) { iconClass = 'ph-file-xls'; colorClass = 'text-success'; }
+          else if(['jpg', 'jpeg', 'png', 'gif'].includes(ext)) { iconClass = 'ph-file-image'; colorClass = 'text-warning'; }
+          else if(['pptx', 'ppt'].includes(ext)) { iconClass = 'ph-file-ppt'; colorClass = 'text-orange'; }
+
+          var card = `
+            <div class="col-md-4 col-lg-3">
+              <div class="card h-100 border border-light shadow-sm hover-shadow transition-all rounded-4 overflow-hidden" style="border-radius: 1rem !important; border: 1px solid #eee !important;">
+                <div class="card-body p-3">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 bg-light rounded-3 me-3" style="background: #f8f9fa !important; border-radius: 0.75rem !important;">
+                      <i class="ph-duotone ${iconClass} fs-3 ${colorClass}"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                      <h6 class="mb-0 text-dark fw-bold text-truncate small" title="${doc.doc_name}">${doc.doc_name}</h6>
+                      <span class="badge bg-primary bg-opacity-10 text-primary fw-normal py-1 px-2 rounded-2 mt-1" style="font-size: 0.65rem; background-color: rgba(13, 110, 253, 0.1) !important; color: #0d6efd !important;">
+                        ${doc.type_name}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top border-light" style="border-top: 1px solid #eee !important;">
+                    <span class="text-muted small">${doc.doc_size} KB</span>
+                    <div class="d-flex gap-1">
+                      <a href="${doc.doc_link}" target="_blank" class="btn btn-sm btn-light border-0 rounded-3 text-primary shadow-none" style="background: #f8f9fa !important;" title="View">
+                        <i class="ph ph-eye"></i>
+                      </a>
+                      <button type="button" class="btn btn-sm btn-light border-0 rounded-3 text-danger shadow-none" style="background: #f8f9fa !important;" title="Delete" onclick="removeDocument(${doc.id})" data-toggle="modal" data-target="#removeDocumentModal">
+                        <i class="ph ph-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          gallery.append(card);
+        });
+      }
+    });
+  }
+
+  renderDocuments();
 
 
 
@@ -799,7 +867,7 @@ function removeDocument(id)
         dataType: 'json',
         success:function(response) {
 
-          manageTableDocument.ajax.reload(null, false); 
+            renderDocuments();
 
           if(response.success === true) {
             // hide the modal

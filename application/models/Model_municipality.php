@@ -33,6 +33,17 @@ class Model_municipality extends CI_Model
 		return $output;
 	}
 
+	public function getMunicipalityByProvinceId($province_id)
+	{
+        $this->load->model('model_province');
+        $province = $this->model_province->getProvinceData($province_id);
+        $provCode = $province['provCode'] ?? '';
+        
+		$sql = "SELECT *, citymunDesc as name FROM municipality WHERE provCode = ? ORDER BY citymunDesc ASC";
+		$query = $this->db->query($sql, array($provCode));
+		return $query->result_array();
+	}
+
 	//--> Get the data
 	public function getMunicipalityData($id = null)
 	{

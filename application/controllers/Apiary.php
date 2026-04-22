@@ -222,6 +222,11 @@ class Apiary extends Admin_Controller
 
         if(!$apiary_id) {redirect('dashboard', 'refresh');}
 
+        // Set session variables for document upload
+        $this->session->set_userdata('apiary_id', $apiary_id);
+        $this->session->set_userdata('beekeeper_id', $apiary_data['beekeeper_id']);
+        $this->session->set_userdata('directory', "upload/documents/".$apiary_data['beekeeper_id']."/");
+
         $this->form_validation->set_rules('location', $this->lang->line('Location'), 'trim|required'); 
         $this->form_validation->set_rules('topography[]', $this->lang->line('Topography'), 'trim|required');       
         $this->form_validation->set_rules('beekeeper', $this->lang->line('Beekeeper'), 'trim|required');
@@ -407,10 +412,19 @@ class Apiary extends Admin_Controller
             $document_type = $this->lang->line($value['name']);
   
             $result['data'][$key] = array(
-                $document_type,
-                $doc_link,
-                $value['doc_size'],
-                $buttons
+                'id' => $value['id'],
+                'type_name' => $document_type,
+                'doc_name' => $value['doc_name'],
+                'doc_size' => $value['doc_size'],
+                'doc_type' => $value['doc_type'],
+                'doc_link' => $link,
+                'view_link' => $doc_link,
+                'buttons' => $buttons,
+                // Backward compatibility
+                0 => $document_type,
+                1 => $doc_link,
+                2 => $value['doc_size'],
+                3 => $buttons
             );
         } // /foreach
 
@@ -422,32 +436,53 @@ class Apiary extends Admin_Controller
     //    This function is invoked from another function to upload the documents into the assets folder
     //    of the beekeeper
     
-    public function uploadDocument()
+    public function uploadDocument($apiary_id = null)
     {
+        if(!$apiary_id) {
+            $apiary_id = $this->session->apiary_id;
+        }
+
+        if(!$apiary_id) {
+            redirect('apiary/', 'refresh');
+        }
+
+        // Fetch apiary data early for directory path building
+        $apiary_data = $this->model_apiary->getApiaryData($apiary_id);
+        if(!$apiary_data) {
+            redirect('apiary/', 'refresh');
+        }
+        $beekeeper_id = $apiary_data['beekeeper_id'];
 
         if(!in_array('updateDocument', $this->permission)) {
             redirect('dashboard', 'refresh');
         }
 
-        $directory = $this->session->directory;
+        $directory = "upload/documents/".$beekeeper_id;
         $config['upload_path'] = './'.$directory;
         $config['allowed_types'] = 'gif|jpg|png|pdf|xls|xlsx|docx|doc|pptx';
-        $config['max_size'] = '4000';        
+        $config['max_size'] = '4000';
+
+        if(!is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0755, TRUE);
+        }
 
         $this->load->library('upload', $config);
 
         if ( ! $this->upload->do_upload('apiary_document')){
-            $msg_error = $this->lang->line('This type of document is not allowed or the document is too large.'); 
+            $msg_error = $this->upload->display_errors('', ''); 
             $this->session->set_flashdata('warning', $msg_error);
-            redirect('apiary/update/'.$this->session->apiary_id."?tab=document", 'refresh');
+            redirect('apiary/update/'.$apiary_id."?tab=document", 'refresh');
             }
         else
             {
             //---> Create the document in the table document
 
+            // IDs already fetched above
+
             $data = array(
-                'beekeeper_id' => $this->session->beekeeper_id, 
-                'apiary_id' => $this->session->apiary_id, 
+                'beekeeper_id' => $beekeeper_id, 
+                'apiary_id' => $apiary_id, 
+                'colony_id' => null,
                 'doc_size' => $this->upload->data('file_size'),
                 'doc_type' => $this->upload->data('file_type'),
                 'doc_name' => $this->upload->data('file_name'),
@@ -460,7 +495,9 @@ class Apiary extends Admin_Controller
             if($create == true) {
                 //--->  Upload the document
                 $data = array('upload_data' => $this->upload->data());
-                redirect('apiary/update/'.$this->session->apiary_id."?tab=document", 'refresh');
+                $msg_success = $this->lang->line('Successfully uploaded'); 
+                $this->session->set_flashdata('success', $msg_success);
+                redirect('apiary/update/'.$apiary_id."?tab=document", 'refresh');
             } else {
                 $msg_error = $this->lang->line('Error occurred'); 
                 $this->session->set_flashdata('error', $msg_error);

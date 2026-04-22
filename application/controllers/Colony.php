@@ -134,18 +134,16 @@ class Colony extends Admin_Controller
         	if($create == false) {
                 $msg_error = $this->lang->line('Error occurred'); 
                 $this->session->set_flashdata('error', $msg_error);
-                redirect('colony/create', 'refresh');}
-            else {
-                 //The create return the colony_id created if it's 
-                              if($id==null)
-              {
-                $apiary_id = $create;
-                redirect('colony/update/'.$apiary_id, 'refresh');
-              }
-              else {
-                redirect('apiary/update/'.$id."?tab=colony",'refresh');
-              }
-          }
+                redirect('colony/create', 'refresh');
+            } else {
+                $this->session->set_flashdata('success', 'Successfully created');
+                 //The create return the colony_id created
+                if($id==null) {
+                    redirect('colony/update/'.$create, 'refresh');
+                } else {
+                    redirect('apiary/update/'.$id."?tab=colony",'refresh');
+                }
+            }
         }
 
         //--> We are in the preparation of the form and we prepare 
@@ -173,6 +171,11 @@ class Colony extends Admin_Controller
 
         if(!$colony_id) {redirect('dashboard', 'refresh');}
 
+        $colony_data = $this->model_colony->getColonyData($colony_id);
+        // Set session variables for document upload
+        $this->session->set_userdata('colony_id', $colony_id);
+        $this->session->set_userdata('directory', "upload/documents/".$colony_data['directory']."/");
+
         $this->form_validation->set_rules('species', $this->lang->line('Species'), 'trim|required');
         $this->form_validation->set_rules('apiary', $this->lang->line('Apiary'), 'trim|required');
         $this->form_validation->set_rules('phase', $this->lang->line('Phase'), 'trim|required');   
@@ -194,13 +197,13 @@ class Colony extends Admin_Controller
             $update = $this->model_colony->update($data, $colony_id);
 
             if($update == true) {
-                //$msg_error = $this->lang->line('Successfully updated'); 
-                //$this->session->set_flashdata('success', $msg_error);
+                $this->session->set_flashdata('success', 'Successfully updated');
                 redirect('colony/update/'.$colony_id."?tab=colony", 'refresh');
             } else {
                 $msg_error = $this->lang->line('Error occurred'); 
                 $this->session->set_flashdata('error', $msg_error);
-                redirect('colony/update/'.$colony_id, 'refresh');}
+                redirect('colony/update/'.$colony_id, 'refresh');
+            }
         }
 
         //--> We are in edit of the form, preparation of the drop down list
@@ -331,10 +334,19 @@ class Colony extends Admin_Controller
             $document_type = $this->lang->line($value['name']);
   
             $result['data'][$key] = array(
-                $document_type,
-                $doc_link,
-                $value['doc_size'],
-                $buttons
+                'id' => $value['id'],
+                'type_name' => $document_type,
+                'doc_name' => $value['doc_name'],
+                'doc_size' => $value['doc_size'],
+                'doc_type' => $value['doc_type'],
+                'doc_link' => $link,
+                'view_link' => $doc_link,
+                'buttons' => $buttons,
+                // Backward compatibility
+                0 => $document_type,
+                1 => $doc_link,
+                2 => $value['doc_size'],
+                3 => $buttons
             );
         } // /foreach
 
@@ -346,32 +358,60 @@ class Colony extends Admin_Controller
     //    This function is invoked from another function to upload the documents into the assets folder
     //    of the apiary
     
-      public function uploadDocument()
+    public function uploadDocument($colony_id = null)
     {
+        if(!$colony_id) {
+            $colony_id = $this->session->colony_id;
+        }
+
+        if(!$colony_id) {
+            redirect('colony/', 'refresh');
+        }
+
+        // Fetch colony and associated IDs early
+        $colony_data = $this->model_colony->getColonyData($colony_id);
+        if(!$colony_data) {
+            redirect('colony/', 'refresh');
+        }
+        $apiary_id = $colony_data['apiary_id'];
+        $beekeeper_id = $colony_data['beekeeper_id'] ?? null;
+        
+        if(!$beekeeper_id && $apiary_id) {
+            $apiary_data = $this->model_apiary->getApiaryData($apiary_id);
+            $beekeeper_id = $apiary_data['beekeeper_id'] ?? null;
+        }
 
         if(!in_array('updateDocument', $this->permission)) {
             redirect('dashboard', 'refresh');
         }
 
-        $directory = $this->session->directory;
+        $directory = "upload/documents/".$beekeeper_id;
         $config['upload_path'] = './'.$directory;
         $config['allowed_types'] = 'gif|jpg|png|pdf|xls|xlsx|docx|doc|pptx';
-        $config['max_size'] = '4000';        
+        $config['max_size'] = '4000';
+
+        if($beekeeper_id && !is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0755, TRUE);
+        }
 
         $this->load->library('upload', $config);
 
         if ( ! $this->upload->do_upload('colony_document')){
-            $msg_error = $this->lang->line('This type of document is not allowed or the document is too large.'); 
+            $msg_error = $this->upload->display_errors('', ''); 
             $this->session->set_flashdata('warning', $msg_error);
-            redirect('colony/update/'.$this->session->colony_id."?tab=document", 'refresh');
+            redirect('colony/update/'.$colony_id."?tab=document", 'refresh');
             }
         else
             {
             //---> Create the document in the table document
 
+            // IDs already fetched above
+
             $data = array(
-                'beekeeper_id' => $this->session->beekeeper_id, 
-                'colony_id' => $this->session->colony_id, 
+                'beekeeper_id' => $beekeeper_id, 
+                'apiary_id' => $apiary_id,
+                'colony_id' => $colony_id, 
+                'post_id' => null,
                 'doc_size' => $this->upload->data('file_size'),
                 'doc_type' => $this->upload->data('file_type'),
                 'doc_name' => $this->upload->data('file_name'),
@@ -384,7 +424,9 @@ class Colony extends Admin_Controller
             if($create == true) {
                 //--->  Upload the document
                 $data = array('upload_data' => $this->upload->data());
-                redirect('colony/update/'.$this->session->colony_id."?tab=document", 'refresh');
+                $msg_success = $this->lang->line('Successfully uploaded'); 
+                $this->session->set_flashdata('success', $msg_success);
+                redirect('colony/update/'.$colony_id."?tab=document", 'refresh');
             } else {
                 $msg_error = $this->lang->line('Error occurred'); 
                 $this->session->set_flashdata('error', $msg_error);

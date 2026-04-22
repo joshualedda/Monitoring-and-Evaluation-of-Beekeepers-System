@@ -23,102 +23,162 @@
     </div>
 
     <!-- Stats Row -->
-    <div class="row g-4">
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-start justify-content-between mb-4">
-              <div class="bg-light-danger p-3 rounded-4"><i class="ph ph-newspaper text-danger" style="font-size:1.8rem;"></i></div>
-              <span class="badge bg-light-danger text-danger rounded-pill px-3 py-2 fw-semibold">Daily Updates</span>
+    <div class="row g-4 mb-2">
+
+      <!-- Card 1: Latest News -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="premium-stat-card" style="--card-accent: #ee5a24; --card-bg: #fff5f5; --card-shadow: rgba(238,90,36,.15);">
+          <div class="premium-stat-header">
+            <div class="premium-stat-icon">
+              <i class="ph ph-newspaper"></i>
             </div>
-            <h2 class="mb-2 fw-bold"><?php echo $total_post ?></h2>
-            <p class="text-muted mb-4 fw-medium"><?php echo $this->lang->line('Latest News'); ?></p>
-            <a href="<?php echo base_url('post/view') ?>" class="text-danger fw-semibold d-flex align-items-center gap-1 text-decoration-none hover-link">View All <i class="ph ph-arrow-right"></i></a>
+            <span class="premium-stat-badge">News</span>
+          </div>
+          <div class="mt-3">
+            <div class="premium-stat-value"><?php echo $total_post ?></div>
+            <div class="premium-stat-label"><?php echo $this->lang->line('Latest News'); ?></div>
+          </div>
+          <div class="premium-stat-footer">
+            <a href="<?php echo base_url('post/view') ?>" class="premium-stat-link">
+              View All Posts <i class="ph ph-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-start justify-content-between mb-4">
-              <div class="bg-light-info p-3 rounded-4"><i class="ph ph-cube text-info" style="font-size:1.8rem;"></i></div>
-              <span class="badge bg-light-info text-info rounded-pill px-3 py-2 fw-semibold">Global count</span>
+
+      <!-- Card 2: Total Colonies -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="premium-stat-card" style="--card-accent: #006fa6; --card-bg: #e6f7ff; --card-shadow: rgba(0,111,166,.15);">
+          <div class="premium-stat-header">
+            <div class="premium-stat-icon">
+              <i class="ph ph-cube"></i>
             </div>
-            <h2 class="mb-2 fw-bold"><?php echo $total_colony ?></h2>
-            <p class="text-muted mb-4 fw-medium"><?php echo $this->lang->line('Total Colonies'); ?></p>
-            <a href="<?php echo base_url('colony/') ?>" class="text-info fw-semibold d-flex align-items-center gap-1 text-decoration-none hover-link">Details <i class="ph ph-arrow-right"></i></a>
+            <span class="premium-stat-badge">Global</span>
+          </div>
+          <div class="mt-3">
+            <div class="premium-stat-value"><?php echo $total_colony ?></div>
+            <div class="premium-stat-label"><?php echo $this->lang->line('Total Colonies'); ?></div>
+          </div>
+          <div class="premium-stat-footer">
+            <a href="<?php echo base_url('colony/') ?>" class="premium-stat-link">
+              View Details <i class="ph ph-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-start justify-content-between mb-4">
-              <div class="bg-light-warning p-3 rounded-4"><i class="ph ph-users-three text-warning" style="font-size:1.8rem;"></i></div>
-              <span class="badge bg-light-warning text-warning rounded-pill px-3 py-2 fw-semibold">Active Members</span>
+
+      <!-- Card 3: Total Beekeepers -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="premium-stat-card" style="--card-accent: #f0932b; --card-bg: #fffbe6; --card-shadow: rgba(240,147,43,.15);">
+          <div class="premium-stat-header">
+            <div class="premium-stat-icon">
+              <i class="ph ph-users-three"></i>
             </div>
-            <h2 class="mb-2 fw-bold"><?php echo $total_beekeeper; ?></h2>
-            <p class="text-muted mb-4 fw-medium"><?php echo $this->lang->line('Total Beekeepers'); ?></p>
-            <a href="<?php echo base_url('beekeeper/') ?>" class="text-warning fw-semibold d-flex align-items-center gap-1 text-decoration-none hover-link">Manage <i class="ph ph-arrow-right"></i></a>
+            <span class="premium-stat-badge">Members</span>
+          </div>
+          <div class="mt-3">
+            <div class="premium-stat-value"><?php echo $total_beekeeper; ?></div>
+            <div class="premium-stat-label"><?php echo $this->lang->line('Total Beekeepers'); ?></div>
+          </div>
+          <div class="premium-stat-footer">
+            <a href="<?php echo base_url('beekeeper/') ?>" class="premium-stat-link">
+              Manage Beekeepers <i class="ph ph-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift" style="background:#1a4b9c;">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-start justify-content-between mb-4">
-              <div class="p-3 rounded-4" style="background:rgba(255,255,255,.15);"><i class="ph ph-drop text-white" style="font-size:1.8rem;"></i></div>
-              <span class="badge text-white rounded-pill px-3 py-2 fw-semibold" style="background:rgba(255,255,255,.2);">Year: <?php echo $select_year; ?></span>
+
+      <!-- Card 4: Total Colonies (Replacing Honey Production) -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="premium-stat-card" style="--card-accent: #6c5ce7; --card-bg: #f0ebff; --card-shadow: rgba(108,92,231,.15);">
+          <div class="premium-stat-header">
+            <div class="premium-stat-icon">
+              <i class="ph ph-hexagon"></i>
             </div>
-            <h2 class="mb-2 fw-bold text-white"><?php echo number_format($total_production['total_production'] ?? 0, 2) ?> <small class="fs-6 fw-normal" style="opacity:.7">KG</small></h2>
-            <p class="mb-4 fw-medium" style="color:rgba(255,255,255,.7)">Honey Production</p>
-            <a href="<?php echo base_url('production/') ?>" class="text-white fw-semibold d-flex align-items-center gap-1 text-decoration-none hover-link">Reports <i class="ph ph-arrow-right"></i></a>
+            <span class="premium-stat-badge">Local</span>
+          </div>
+          <div class="mt-3">
+            <div class="premium-stat-value"><?php echo $total_colony_province ?></div>
+            <div class="premium-stat-label">Provincial Colonies</div>
+          </div>
+          <div class="premium-stat-footer">
+            <a href="<?php echo base_url('colony/') ?>" class="premium-stat-link">
+              View Regional Data <i class="ph ph-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- Map + Regional Focus -->
     <div class="row mt-4">
       <div class="col-lg-8 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
+        <div class="premium-map-card">
+          <div class="premium-map-header">
             <div>
-              <h5 class="fw-bold mb-1">🗺️ Apiary Locations Map</h5>
-              <p class="text-muted small mb-0">Click any pin for details &amp; live weather.</p>
+              <div class="premium-map-title">🗺️ Apiary Locations Map</div>
+              <p class="premium-map-subtitle">Click any pin for details &amp; live weather.</p>
             </div>
-            <div class="d-flex align-items-center gap-2">
-              <span class="badge bg-light-success text-success rounded-pill px-3 py-2 fw-semibold">
-                <i class="ph ph-map-pin"></i> <?php echo count($apiary_locations); ?> Sites
+            <div class="d-flex align-items-center gap-3">
+              <span class="premium-stat-badge" style="background:#e8f8f0; color:#1a8a4b;">
+                <i class="ph ph-map-pin me-1"></i> <?php echo count($apiary_locations); ?> Sites
               </span>
               <!-- Full Map Button -->
-              <button id="openFullMapBtn" class="btn btn-sm px-3 rounded-3 fw-semibold" style="background:#f0f4ff;color:#1a4b9c;border:1px solid #d0dcf8;" onclick="openFullMap()">
+              <button id="openFullMapBtn" class="btn-premium-outline" onclick="openFullMap()">
                 <i class="ph ph-arrows-out me-1"></i> Full Map
               </button>
             </div>
           </div>
-          <div class="card-body p-0 overflow-hidden rounded-bottom-4">
-            <div id="apiaryMap" style="height:400px;width:100%;"></div>
+          <div class="premium-map-body">
+            <div id="apiaryMap" style="height:400px;width:100%; border-radius: 0 0 24px 24px; z-index: 1;"></div>
           </div>
         </div>
       </div>
       <div class="col-lg-4 mb-4">
+        <div class="ai-summary-card">
+          <div class="ai-summary-header">
+            <div class="ai-summary-icon">
+              <i class="ph ph-sparkle"></i>
+            </div>
+            <div>
+              <div class="ai-summary-title">AI Insight</div>
+              <div class="ai-summary-subtitle">Gemini Analysis</div>
+            </div>
+          </div>
+          <div class="ai-summary-body" id="aiSummaryContent">
+            <div class="ai-summary-loading">
+              <i class="ph ph-spinner-gap"></i>
+              <span>Generating insight...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Charts Row -->
+    <div class="row mb-4">
+      <!-- Beekeepers Overview -->
+      <div class="col-lg-6 mb-4">
         <div class="card border-0 shadow-sm rounded-4 h-100">
           <div class="card-header bg-white border-0 py-4 px-4">
-            <h5 class="fw-bold mb-0">Regional Focus</h5>
-            <p class="text-muted small mb-0">La Union Provincial Colonies</p>
+            <h5 class="fw-bold mb-0">👨‍🌾 Beekeepers Overview</h5>
+            <p class="text-muted small mb-0">Colonies managed per beekeeper</p>
           </div>
           <div class="card-body p-4">
-            <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded-4 bg-light">
-              <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary fw-bold small">Province: La Union</div>
-            </div>
-            <div class="p-4 rounded-4 border-dashed text-center">
-              <h2 class="fw-bold text-primary mb-1"><?php echo $total_colony_province ?></h2>
-              <p class="text-muted mb-0 small fw-bold text-uppercase">Total Colonies</p>
-            </div>
-            <div class="mt-4">
-              <a href="<?php echo base_url('colony/') ?>" class="btn btn-light-primary w-100 py-2 fw-semibold rounded-3">Explore Province View</a>
-            </div>
+            <div id="beekeeperChart" style="min-height: 350px;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Colonies per Apiary -->
+      <div class="col-lg-6 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+          <div class="card-header bg-white border-0 py-4 px-4">
+            <h5 class="fw-bold mb-0">🐝 Colonies per Apiary</h5>
+            <p class="text-muted small mb-0">Active vs Inactive breakdown</p>
+          </div>
+          <div class="card-body p-4">
+            <div id="apiaryChart" style="min-height: 350px;"></div>
           </div>
         </div>
       </div>
@@ -153,7 +213,7 @@
           <button class="fullmap-analytics-toggle" id="analyticsToggleBtn" onclick="toggleAnalyticsPanel()">
             <i class="ph ph-chart-bar me-1"></i> Analytics Panel
           </button>
-          <button type="button" class="btn-close btn-close-white" data-dismiss="modal" style="opacity:.6;"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="opacity:.6;"></button>
         </div>
       </div>
 
@@ -317,54 +377,57 @@
      ============================================================ -->
 <!-- APIARY DETAIL + WEATHER MODAL -->
 <div class="modal fade" id="apiaryWeatherModal" tabindex="-1" role="dialog" style="z-index:1060;">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document" style="max-width:800px;">
-    <div class="modal-content border-0 rounded-4 overflow-hidden" style="box-shadow:0 24px 64px rgba(0,0,0,.22);">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document" style="max-width:1020px;">
+    <div class="modal-content border-0 rounded-4 overflow-hidden" style="box-shadow:0 32px 80px rgba(0,0,0,.28);">
 
-      <!-- Modal Header -->
-      <div class="px-4 pt-4 pb-0 bg-white">
-        <div class="d-flex align-items-start justify-content-between mb-3">
-          <div class="d-flex align-items-center gap-3">
-            <div class="awm-icon-box">🏡</div>
-            <div>
-              <h5 class="fw-bold mb-0 text-dark" id="awm-name" style="font-size:1.1rem;">Apiary Name</h5>
-              <p class="text-muted mb-0" id="awm-address" style="font-size:.82rem;">Loading...</p>
+      <!-- ── Apiary Modal Hero Header ── -->
+      <div class="awm-hero">
+        <div class="awm-hero-bg"></div>
+        <div class="awm-hero-content">
+          <div class="d-flex align-items-start justify-content-between w-100">
+            <div class="d-flex align-items-center gap-4">
+              <div class="awm-hero-icon">🏡</div>
+              <div>
+                <h4 class="fw-bold mb-1 text-white" id="awm-name" style="font-size:1.35rem;letter-spacing:-.02em;">Apiary Name</h4>
+                <p class="mb-2" id="awm-address" style="font-size:.85rem;color:rgba(255,255,255,.7);">Loading location...</p>
+                <span id="awm-accuracy-badge" class="badge rounded-pill px-3 py-1" style="font-size:.72rem;"></span>
+              </div>
             </div>
+            <button type="button" class="btn-close btn-close-white ms-3" data-bs-dismiss="modal" style="opacity:.8;"></button>
           </div>
-          <div class="d-flex align-items-center gap-2">
-            <span id="awm-accuracy-badge" class="badge rounded-pill px-3 py-2" style="font-size:.72rem;"></span>
-            <button type="button" class="btn-close" data-dismiss="modal"></button>
-          </div>
-        </div>
 
-        <!-- Weather Hero Strip -->
-        <div class="awm-weather-strip">
-          <div class="d-flex align-items-center gap-3">
-            <div id="awm-weather-icon" style="font-size:3rem;line-height:1;">⏳</div>
-            <div>
-              <div class="fw-black text-dark" style="font-size:2.2rem;line-height:1;font-weight:800;" id="awm-temp">--°C</div>
-              <div class="text-muted" style="font-size:.82rem;" id="awm-desc">Fetching weather...</div>
+          <!-- Weather Block -->
+          <div class="awm-hero-weather mt-4">
+            <div class="awm-hero-temp-block">
+              <div id="awm-weather-icon" style="font-size:2.8rem;line-height:1;">⏳</div>
+              <div class="ms-3">
+                <div class="awm-hero-temp" id="awm-temp">--°C</div>
+                <div id="awm-desc" style="font-size:.85rem;color:rgba(255,255,255,.8);margin-top:2px;">Fetching weather...</div>
+              </div>
             </div>
+            <div class="awm-hero-stats">
+              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Feels Like</div><div class="awm-hero-stat-val" id="awm-feels">--</div></div>
+              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Humidity</div><div class="awm-hero-stat-val" id="awm-humidity">--</div></div>
+              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Wind</div><div class="awm-hero-stat-val" id="awm-wind">--</div></div>
+              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Rainfall</div><div class="awm-hero-stat-val" id="awm-rain">--</div></div>
+              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Cloud Cover</div><div class="awm-hero-stat-val" id="awm-cloud">--</div></div>
+            </div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.55);white-space:nowrap;margin-top:4px;" id="awm-timestamp"></div>
           </div>
-          <div class="awm-weather-stats">
-            <div class="awm-stat"><div class="awm-stat-label">Feels Like</div><div class="awm-stat-val" id="awm-feels">--</div></div>
-            <div class="awm-stat"><div class="awm-stat-label">Humidity</div><div class="awm-stat-val" id="awm-humidity">--</div></div>
-            <div class="awm-stat"><div class="awm-stat-label">Wind</div><div class="awm-stat-val" id="awm-wind">--</div></div>
-            <div class="awm-stat"><div class="awm-stat-label">Rain</div><div class="awm-stat-val" id="awm-rain">--</div></div>
-            <div class="awm-stat"><div class="awm-stat-label">Cloud</div><div class="awm-stat-val" id="awm-cloud">--</div></div>
-          </div>
-          <div class="ms-auto" style="font-size:.68rem;color:#94a3b8;white-space:nowrap;" id="awm-timestamp"></div>
         </div>
       </div>
 
-      <div class="modal-body px-4 py-3">
-        <div class="row g-3">
-          <!-- Left: Apiary Info -->
-          <div class="col-md-6">
+      <!-- ── Modal Body ── -->
+      <div class="modal-body px-4 py-4" style="background:#f8faff;">
+        <div class="row g-4">
+
+          <!-- Left: Apiary Details -->
+          <div class="col-lg-5">
             <div class="awm-info-card h-100">
-              <div class="awm-info-header"><i class="ph ph-house me-1"></i>Apiary Details</div>
+              <div class="awm-info-header"><i class="ph ph-house me-2"></i>Apiary Details</div>
               <?php foreach([
                 ['awm-beekeeper','👤 Beekeeper'],['awm-barangay','📍 Barangay'],['awm-municipality','🏛️ Municipality'],
-                ['awm-province','🗺️ Province'],['awm-area','📐 Area Size'],['awm-topo','🏔️ Topography'],['awm-source','🌸 Sources']
+                ['awm-province','🗺️ Province'],['awm-area','📐 Area Size'],['awm-topo','🏔️ Topography'],['awm-source','🌸 Honey Sources']
               ] as [$id,$label]): ?>
               <div class="awm-info-row">
                 <span class="awm-info-lbl"><?php echo $label ?></span>
@@ -372,43 +435,54 @@
               </div>
               <?php endforeach; ?>
               <div class="awm-info-row" style="border-bottom:none;">
-                <span class="awm-info-lbl">🐝 Colonies</span>
-                <span class="badge text-white rounded-pill px-3" id="awm-colonies" style="background:#1a4b9c;">--</span>
+                <span class="awm-info-lbl">🐝 Total Colonies</span>
+                <span class="badge text-white rounded-pill px-3 py-1" id="awm-colonies" style="background:#1a4b9c;font-size:.82rem;">--</span>
               </div>
-              <div class="mt-2 pt-2" style="border-top:1px dashed #dfe3e8;">
-                <div style="font-size:.7rem;color:#94a3b8;"><i class="ph ph-map-pin me-1"></i><span id="awm-coords">--</span></div>
+              <div class="mt-3 pt-3" style="border-top:1px dashed #dfe3e8;">
+                <div style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;"><i class="ph ph-map-pin"></i><span id="awm-coords">--</span></div>
               </div>
             </div>
           </div>
 
           <!-- Right: Outlook + Plants -->
-          <div class="col-md-6 d-flex flex-column gap-3">
+          <div class="col-lg-7 d-flex flex-column gap-4">
+
+            <!-- Bee Activity Outlook -->
             <div class="awm-info-card">
-              <div class="awm-info-header"><i class="ph ph-sun me-1"></i>Bee Activity Outlook</div>
-              <div class="d-flex align-items-start gap-2 mt-1">
-                <div id="awm-rec-icon" style="font-size:1.6rem;flex-shrink:0;">⏳</div>
-                <div id="awm-recommendation" style="font-size:.83rem;color:#475569;line-height:1.5;">Analyzing conditions...</div>
+              <div class="awm-info-header"><i class="ph ph-sun me-2"></i>Bee Activity Outlook</div>
+              <div class="d-flex align-items-center gap-3 mt-2 p-3 rounded-3" id="awm-outlook-wrap" style="background:#f0f4ff;border:1.5px solid #d8e4ff;">
+                <div id="awm-rec-icon" style="font-size:2rem;flex-shrink:0;">⏳</div>
+                <div id="awm-recommendation" style="font-size:.88rem;color:#1e293b;line-height:1.6;font-weight:500;">Analyzing conditions...</div>
               </div>
             </div>
+
+            <!-- Nearby Plants -->
             <div class="awm-info-card flex-grow-1">
               <div class="awm-info-header">
-                <i class="ph ph-plant me-1"></i>Nearby Flowering Plants
-                <span style="font-size:.65rem;font-weight:400;color:#94a3b8;text-transform:none;margin-left:4px;">within 10km · iNaturalist</span>
+                <i class="ph ph-plant me-2"></i>Nearby Flowering Plants
+                <span style="font-size:.68rem;font-weight:400;color:#94a3b8;text-transform:none;margin-left:6px;">within 10 km · iNaturalist</span>
               </div>
-              <div id="awm-plants-loading" style="font-size:.8rem;color:#94a3b8;margin-top:6px;"><i class="ph ph-circle-notch me-1"></i>Fetching nearby flora...</div>
-              <div id="awm-plants-list" class="d-flex flex-column gap-2 mt-1"></div>
-              <div id="awm-plants-empty" style="display:none;font-size:.8rem;color:#94a3b8;">No observations found nearby.</div>
+              <div id="awm-plants-loading" style="font-size:.82rem;color:#94a3b8;margin-top:8px;display:flex;align-items:center;gap:6px;">
+                <i class="ph ph-circle-notch"></i> Fetching nearby flora...
+              </div>
+              <div id="awm-plants-list" class="d-flex flex-column gap-2 mt-2"></div>
+              <div id="awm-plants-empty" style="display:none;font-size:.82rem;color:#94a3b8;">No plant observations found nearby.</div>
             </div>
+
           </div>
         </div>
       </div>
 
-      <div class="modal-footer border-0" style="background:#f8faff;padding:10px 20px;">
-        <div class="text-muted" style="font-size:.7rem;">
-          Weather: <a href="https://open-meteo.com" target="_blank" class="text-primary text-decoration-none">Open-Meteo</a> &nbsp;·&nbsp;
-          Plants: <a href="https://www.inaturalist.org" target="_blank" class="text-primary text-decoration-none">iNaturalist</a>
+      <!-- ── Footer ── -->
+      <div class="modal-footer border-0" style="background:#fff;padding:14px 24px;">
+        <div class="text-muted me-auto" style="font-size:.72rem;">
+          🌤 Weather: <a href="https://open-meteo.com" target="_blank" class="text-primary text-decoration-none">Open-Meteo</a>
+          &nbsp;·&nbsp;
+          🌿 Plants: <a href="https://www.inaturalist.org" target="_blank" class="text-primary text-decoration-none">iNaturalist</a>
         </div>
-        <button type="button" class="btn btn-sm px-4 rounded-3 fw-semibold" style="background:#1a4b9c;color:#fff;" data-dismiss="modal">Close</button>
+        <button type="button" class="btn px-5 py-2 fw-semibold rounded-3" style="background:#1a4b9c;color:#fff;font-size:.88rem;" data-bs-dismiss="modal">
+          <i class="ph ph-x me-1"></i> Close
+        </button>
       </div>
     </div>
   </div>
@@ -418,7 +492,7 @@
      STYLES
      ============================================================ -->
 <style>
-  /* ── Base ── */
+  /* ── Base Utilities ── */
   .bg-light-primary  { background:#e8f1ff; }
   .bg-light-danger   { background:#fff0f0; }
   .bg-light-info     { background:#e6f7ff; }
@@ -431,124 +505,225 @@
   .btn-light-primary       { background:#e8f1ff;color:#1a4b9c; }
   .btn-light-primary:hover { background:#1a4b9c;color:#fff; }
   .border-dashed { border:2px dashed #dfe3e8; }
-  .hover-lift { transition:transform .2s,box-shadow .2s; }
-  .hover-lift:hover { transform:translateY(-4px);box-shadow:0 10px 24px rgba(0,0,0,.07)!important; }
+  .hover-lift { transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s; }
+  .hover-lift:hover { transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.10)!important; }
   .hover-link:hover { text-decoration:underline!important; }
   .hover-link i { transition:transform .2s; }
   .hover-link:hover i { transform:translateX(3px); }
 
+  /* ══════════════════════════════════
+     PREMIUM STAT CARDS
+  ══════════════════════════════════ */
+  .stat-card {
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 4px 24px rgba(0,0,0,.06);
+    border:1px solid rgba(0,0,0,.045);
+    overflow:hidden;
+    position:relative;
+    height:100%;
+  }
+  .stat-card-dark {
+    background:#1a4b9c;
+  }
+  .stat-card-accent {
+    height:5px;
+    width:100%;
+    flex-shrink:0;
+  }
+  .stat-card-body {
+    padding:22px 24px 20px;
+  }
+  .stat-icon {
+    width:54px;height:54px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .stat-badge {
+    font-size:.72rem;font-weight:700;padding:4px 12px;
+    border-radius:20px;white-space:nowrap;
+    border:1px solid transparent;
+  }
+  .stat-value {
+    font-size:2.4rem;font-weight:800;line-height:1;
+    color:#1a2a40;letter-spacing:-.03em;
+    margin:16px 0 4px;
+  }
+  .stat-label {
+    font-size:.85rem;font-weight:500;color:#64748b;
+    margin-bottom:0;
+  }
+  .stat-divider {
+    height:1px;background:#f0f4f8;
+    margin:16px 0 14px;
+  }
+  .stat-link {
+    font-size:.82rem;font-weight:700;
+    text-decoration:none;
+    display:inline-flex;align-items:center;
+    transition:gap .15s;
+  }
+  .stat-link:hover { gap:6px; }
+  .stat-link i { transition:transform .18s; }
+  .stat-link:hover i { transform:translateX(3px); }
+
   /* ── Maps ── */
   #apiaryMap, #fullMap { z-index:0; border-radius:0 0 1rem 1rem; }
   #fullMap { border-radius:0; }
-  .leaflet-popup-content-wrapper { border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.15);font-family:inherit; }
-  .apiary-popup-title { font-weight:700;font-size:.92rem;color:#1a4b9c;margin-bottom:4px; }
-  .apiary-popup-meta  { font-size:.78rem;color:#6c757d;line-height:1.6; }
+  .leaflet-popup-content-wrapper { border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.16);font-family:inherit; }
+  .apiary-popup-title { font-weight:700;font-size:.95rem;color:#1a4b9c;margin-bottom:4px; }
+  .apiary-popup-meta  { font-size:.8rem;color:#6c757d;line-height:1.7; }
   .apiary-popup-badge { display:inline-block;border-radius:20px;padding:2px 10px;font-size:.72rem;font-weight:600;margin-top:4px; }
   .apiary-popup-btn   {
-    display:block;margin-top:8px;padding:7px 0;
-    background:#1a4b9c;color:#fff;border:none;border-radius:8px;
-    font-size:.78rem;font-weight:600;cursor:pointer;width:100%;text-align:center;
-    transition:background .2s;
+    display:block;margin-top:10px;padding:9px 0;
+    background:#1a4b9c;color:#fff;border:none;border-radius:10px;
+    font-size:.8rem;font-weight:600;cursor:pointer;width:100%;text-align:center;
+    transition:opacity .2s,transform .15s;
   }
-  .apiary-popup-btn:hover { background:#143b7a; }
+  .apiary-popup-btn:hover { opacity:.9;transform:translateY(-1px); }
 
   /* ── Full Map Modal ── */
   #fullMapModal { padding:0!important; }
   #fullMapModal .modal-dialog { pointer-events:all; }
 
-  /* Top bar layer buttons (dark theme) */
+  /* Top bar layer buttons */
   .fullmap-layer-btn {
-    padding:5px 13px;font-size:.74rem;font-weight:600;border-radius:20px;white-space:nowrap;
-    border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);
+    padding:6px 14px;font-size:.76rem;font-weight:600;border-radius:20px;white-space:nowrap;
+    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);
     cursor:pointer;transition:all .15s;
   }
-  .fullmap-layer-btn:hover { background:rgba(255,255,255,.18);color:#fff; }
-  .fullmap-layer-btn.active { background:#fff;color:#12243a;font-weight:700;border-color:#fff; }
+  .fullmap-layer-btn:hover { background:rgba(255,255,255,.2);color:#fff; }
+  .fullmap-layer-btn.active { background:#fff;color:#12243a;font-weight:700;border-color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15); }
 
-  /* Analytics toggle button */
+  /* Analytics toggle */
   .fullmap-analytics-toggle {
-    padding:6px 16px;font-size:.78rem;font-weight:600;border-radius:20px;white-space:nowrap;
-    border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff;
-    cursor:pointer;transition:all .2s;
-    display:flex;align-items:center;gap:4px;
+    padding:7px 18px;font-size:.8rem;font-weight:600;border-radius:20px;white-space:nowrap;
+    border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.13);color:#fff;
+    cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;
   }
-  .fullmap-analytics-toggle:hover { background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4); }
+  .fullmap-analytics-toggle:hover { background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.5); }
   .fullmap-analytics-toggle.open { background:#fff;color:#1a4b9c;border-color:#fff; }
 
-  /* Analytics panel tabs */
+  /* Panel tabs */
   .ap-tab {
-    flex:1;padding:6px 10px;font-size:.75rem;font-weight:600;border-radius:8px;cursor:pointer;
-    border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);
+    flex:1;padding:7px 10px;font-size:.77rem;font-weight:600;border-radius:8px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.09);color:rgba(255,255,255,.75);
     transition:all .15s;text-align:center;
   }
-  .ap-tab:hover { background:rgba(255,255,255,.15);color:#fff; }
-  .ap-tab.active { background:#fff;color:#1a4b9c;font-weight:700;border-color:#fff; }
+  .ap-tab:hover { background:rgba(255,255,255,.18);color:#fff; }
+  .ap-tab.active { background:#fff;color:#1a4b9c;font-weight:700;border-color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.12); }
 
   /* Analytics section labels */
   .fm-section-label {
-    font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
-    color:#94a3b8;margin:12px 0 8px;display:flex;align-items:center;gap:6px;
+    font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+    color:#94a3b8;margin:14px 0 9px;display:flex;align-items:center;gap:7px;
   }
   .fm-section-label::after { content:'';flex:1;height:1px;background:#e0e6f0; }
 
-  /* Layer clickable cards */
+  /* Layer cards */
   .fm-layer-card {
-    display:flex;align-items:center;gap:10px;padding:10px 12px;
-    background:#fff;border-radius:12px;border:1.5px solid #e0e6f0;
+    display:flex;align-items:center;gap:12px;padding:12px 14px;
+    background:#fff;border-radius:14px;border:1.5px solid #e0e6f0;
     cursor:pointer;transition:all .15s;
-    border-left:3px solid var(--accent, #1a4b9c);
+    border-left:4px solid var(--accent, #1a4b9c);
   }
-  .fm-layer-card:hover { border-color:var(--accent, #1a4b9c);box-shadow:0 4px 14px rgba(0,0,0,.07);transform:translateY(-1px); }
-  .fm-layer-icon { width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
-  .fm-layer-pill { font-size:.65rem;font-weight:700;border-radius:20px;padding:2px 8px;white-space:nowrap; }
+  .fm-layer-card:hover { border-color:var(--accent, #1a4b9c);box-shadow:0 6px 18px rgba(0,0,0,.08);transform:translateY(-2px); }
+  .fm-layer-icon { width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0; }
+  .fm-layer-pill { font-size:.66rem;font-weight:700;border-radius:20px;padding:3px 10px;white-space:nowrap; }
 
   /* Analytics table */
-  .fm-table-wrap { background:#fff;border-radius:10px;border:1px solid #e0e6f0;overflow:hidden; }
-  .fm-table-wrap .table thead th { background:#f0f4ff;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#475569;border:none;padding:8px 10px; }
-  .fm-table-wrap .table tbody td { font-size:.75rem;padding:7px 10px;border-color:#f0f4ff;vertical-align:middle; }
+  .fm-table-wrap { background:#fff;border-radius:12px;border:1px solid #e0e6f0;overflow:hidden; }
+  .fm-table-wrap .table thead th { background:#f0f4ff;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#475569;border:none;padding:9px 12px; }
+  .fm-table-wrap .table tbody td { font-size:.76rem;padding:8px 12px;border-color:#f0f4ff;vertical-align:middle; }
   .fm-table-wrap .table tbody tr:hover { background:#f8faff; }
 
   /* KPI cards */
-  .fm-kpi-card { background:#fff;border-radius:12px;padding:14px 12px;border:1px solid #e0e6f0;text-align:center; }
-  .fm-kpi-icon { width:36px;height:36px;border-radius:8px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem; }
-  .fm-kpi-label { font-size:.65rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.05em; }
-  .fm-kpi-value { font-size:1.1rem;font-weight:800;margin-top:3px; }
+  .fm-kpi-card { background:#fff;border-radius:14px;padding:16px 14px;border:1px solid #e0e6f0;text-align:center; }
+  .fm-kpi-icon { width:38px;height:38px;border-radius:10px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:1.3rem; }
+  .fm-kpi-label { font-size:.66rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.05em; }
+  .fm-kpi-value { font-size:1.15rem;font-weight:800;margin-top:4px; }
   .text-warning { color:#f39c12!important; }
 
   /* Chart cards */
-  .fm-chart-card { background:#fff;border-radius:12px;padding:14px;border:1px solid #e0e6f0; }
-  .fm-chart-title { font-size:.82rem;font-weight:700;color:#1e293b;margin-bottom:2px; }
-  .fm-chart-sub { font-size:.68rem;color:#94a3b8;margin-bottom:10px; }
+  .fm-chart-card { background:#fff;border-radius:14px;padding:16px;border:1px solid #e0e6f0; }
+  .fm-chart-title { font-size:.84rem;font-weight:700;color:#1e293b;margin-bottom:2px; }
+  .fm-chart-sub { font-size:.7rem;color:#94a3b8;margin-bottom:12px; }
 
   /* Top producer bars */
-  .producer-bar { background:#f8faff;border-radius:10px;padding:10px 12px;border:1px solid #e0e6f0; }
+  .producer-bar { background:#f8faff;border-radius:12px;padding:12px 14px;border:1px solid #e0e6f0; }
 
-  /* ── Apiary Detail / Weather Modal ── */
-  .awm-icon-box { width:46px;height:46px;background:#f0f4ff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0; }
+  /* ══════════════════════════════════
+     APIARY DETAIL MODAL (Hero Style)
+  ══════════════════════════════════ */
 
-  .awm-weather-strip {
-    display:flex;align-items:center;gap:24px;flex-wrap:wrap;
-    background:linear-gradient(135deg,#f0f4ff 0%,#e8f1ff 100%);
-    border-radius:12px;padding:16px 20px;margin-bottom:4px;
-    border:1px solid #d8e4ff;
+  /* Hero header */
+  .awm-hero {
+    position:relative;overflow:hidden;
+    padding:30px 28px 24px;
+    background:#1a4b9c;
   }
-  .awm-weather-stats { display:flex;gap:20px;flex-wrap:wrap; }
-  .awm-stat { text-align:center; }
-  .awm-stat-label { font-size:.68rem;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.04em; }
-  .awm-stat-val { font-size:.9rem;font-weight:700;color:#1e293b;margin-top:2px; }
+  .awm-hero-bg {
+    display:none;
+  }
+  .awm-hero-content { position:relative;z-index:1; }
+  .awm-hero-icon {
+    width:64px;height:64px;border-radius:18px;
+    background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;font-size:2rem;
+    flex-shrink:0;backdrop-filter:blur(8px);
+  }
+  .awm-hero-weather {
+    display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;
+    background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.15);
+    border-radius:14px;padding:16px 20px;
+  }
+  .awm-hero-temp-block { display:flex;align-items:center;flex-shrink:0;min-width:130px; }
+  .awm-hero-temp {
+    font-size:2.4rem;font-weight:800;color:#fff;
+    line-height:1;letter-spacing:-.03em;
+  }
+  .awm-hero-stats { display:flex;gap:16px;flex-wrap:wrap;flex:1;min-width:0; }
+  .awm-hero-stat { text-align:center;min-width:56px; }
+  .awm-hero-stat-label {
+    font-size:.62rem;color:rgba(255,255,255,.65);
+    font-weight:600;text-transform:uppercase;letter-spacing:.06em;
+    white-space:nowrap;
+  }
+  .awm-hero-stat-val {
+    font-size:.9rem;font-weight:700;color:#fff;margin-top:3px;
+    white-space:nowrap;
+  }
 
-  .awm-info-card { background:#f8f9fa;border-radius:14px;padding:14px;border:1px solid #e9ecef; }
-  .awm-info-header { font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:10px;display:flex;align-items:center;gap:4px; }
-  .awm-info-row { display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f4f8; }
-  .awm-info-lbl { font-size:.78rem;color:#64748b; }
-  .awm-info-val { font-size:.78rem;font-weight:600;color:#1e293b;text-align:right;max-width:55%; }
+  /* Modal body cards */
+  .awm-info-card {
+    background:#fff;border-radius:16px;
+    padding:18px 20px;border:1px solid #e9ecef;
+    box-shadow:0 2px 12px rgba(0,0,0,.04);
+  }
+  .awm-info-header {
+    font-size:.72rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;color:#94a3b8;
+    margin-bottom:14px;display:flex;align-items:center;gap:5px;
+  }
+  .awm-info-row {
+    display:flex;justify-content:space-between;align-items:center;
+    padding:9px 0;border-bottom:1px solid #f3f4f6;
+  }
+  .awm-info-lbl { font-size:.82rem;color:#64748b; }
+  .awm-info-val { font-size:.82rem;font-weight:600;color:#1e293b;text-align:right;max-width:58%; }
 
   /* Plant items */
-  .plant-item { display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fff;border-radius:10px;border:1px solid #eef0f4; }
-  .plant-item img { width:40px;height:40px;object-fit:cover;border-radius:8px;flex-shrink:0; }
-  .plant-item .plant-no-img { width:40px;height:40px;border-radius:8px;background:#e8f1ff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
-  .plant-item .plant-name { font-size:.8rem;font-weight:600;color:#1a2a40;line-height:1.3; }
-  .plant-item .plant-common { font-size:.72rem;color:#6c757d; }
+  .plant-item {
+    display:flex;align-items:center;gap:12px;padding:10px 12px;
+    background:#f8faff;border-radius:12px;border:1px solid #e8eef8;
+  }
+  .plant-item img { width:44px;height:44px;object-fit:cover;border-radius:10px;flex-shrink:0; }
+  .plant-item .plant-no-img {
+    width:44px;height:44px;border-radius:10px;background:#e8f1ff;
+    display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;
+  }
+  .plant-item .plant-name { font-size:.83rem;font-weight:600;color:#1a2a40;line-height:1.35; }
+  .plant-item .plant-common { font-size:.74rem;color:#6c757d; }
 
   .weather-loading { animation:pulse 1.1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
@@ -1091,4 +1266,142 @@ function getBeeRec(temp,hum,wind,rain,code) {
   if(temp>=18&&temp<=32&&hum<=70&&wind<=20&&code<=3) return {icon:'✅',text:'Excellent! Great for inspection and harvesting.',color:'#1a8a4b'};
   return {icon:'🐝',text:'Moderate conditions. Standard management is fine.',color:'#1a4b9c'};
 }
+
+/* ══════════════════════════════════════════════════════════════
+   APEXCHARTS: Beekeepers Overview
+   ══════════════════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", function() {
+  // Group apiaries by beekeeper and sum colonies
+  var beekeeperData = {};
+  apiaries.forEach(function(a) {
+    if (!a.beekeeper) return;
+    if (!beekeeperData[a.beekeeper]) beekeeperData[a.beekeeper] = 0;
+    beekeeperData[a.beekeeper] += a.colonies;
+  });
+
+  var beekeeperLabels = Object.keys(beekeeperData);
+  var beekeeperSeries = Object.values(beekeeperData);
+
+  var beekeeperOptions = {
+    series: [{
+      name: 'Total Colonies',
+      data: beekeeperSeries
+    }],
+    chart: {
+      type: 'bar',
+      height: Math.max(350, beekeeperLabels.length * 40), // Auto-adjust height based on number of beekeepers
+      toolbar: { show: false },
+      fontFamily: 'inherit'
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        horizontal: true,
+        barHeight: '60%',
+      }
+    },
+    dataLabels: { 
+      enabled: true,
+      textAnchor: 'start',
+      style: { colors: ['#fff'] },
+      offsetX: 0
+    },
+    stroke: { show: true, width: 1, colors: ['#fff'] },
+    xaxis: {
+      categories: beekeeperLabels,
+      title: { text: 'Number of Colonies' },
+      labels: { style: { colors: '#64748b' } }
+    },
+    yaxis: {
+      labels: { style: { colors: '#1e293b', fontWeight: 600 } }
+    },
+    fill: { opacity: 1, colors: ['#f0932b'] },
+    tooltip: {
+      y: { formatter: function (val) { return val + " colonies" } }
+    }
+  };
+
+  if (document.querySelector("#beekeeperChart")) {
+    var beekeeperChart = new ApexCharts(document.querySelector("#beekeeperChart"), beekeeperOptions);
+    beekeeperChart.render();
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     APEXCHARTS: Colonies per Apiary (Stacked)
+     ══════════════════════════════════════════════════════════════ */
+  var apiaryLabels = [];
+  var activeSeries = [];
+  var inactiveSeries = [];
+
+  analyticsData.forEach(function(a) {
+    apiaryLabels.push(a.name);
+    activeSeries.push(a.active_colonies);
+    inactiveSeries.push(a.inactive_colonies);
+  });
+
+  var apiaryOptions = {
+    series: [{
+      name: 'Active Colonies',
+      data: activeSeries
+    }, {
+      name: 'Inactive/Weak Colonies',
+      data: inactiveSeries
+    }],
+    chart: {
+      type: 'bar',
+      height: Math.max(350, apiaryLabels.length * 40), // Auto-adjust height based on number of apiaries
+      stacked: true,
+      toolbar: { show: false },
+      fontFamily: 'inherit'
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        horizontal: true,
+        barHeight: '60%',
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      style: { colors: ['#fff'] }
+    },
+    stroke: { show: true, width: 1, colors: ['#fff'] },
+    xaxis: {
+      title: { text: 'Number of Colonies' },
+      labels: { style: { colors: '#64748b' } }
+    },
+    yaxis: {
+      categories: apiaryLabels,
+      labels: { style: { colors: '#1e293b', fontWeight: 600 } }
+    },
+    fill: { opacity: 1 },
+    colors: ['#1a8a4b', '#dc3545'],
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left'
+    }
+  };
+
+  if (document.querySelector("#apiaryChart")) {
+    var apiaryChart = new ApexCharts(document.querySelector("#apiaryChart"), apiaryOptions);
+    apiaryChart.render();
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     AI SUMMARY FETCH
+     ══════════════════════════════════════════════════════════════ */
+  fetch('<?php echo base_url("chatbot/get_dashboard_summary") ?>')
+    .then(response => response.json())
+    .then(data => {
+      if (data.summary) {
+        let summaryHtml = data.summary.replace(/\n/g, '<br><br>');
+        document.getElementById('aiSummaryContent').innerHTML = '<div>' + summaryHtml + '</div>';
+      } else {
+        document.getElementById('aiSummaryContent').innerHTML = '<div class="text-danger"><i class="ph ph-warning"></i> Could not load insight.</div>';
+      }
+    })
+    .catch(err => {
+      document.getElementById('aiSummaryContent').innerHTML = '<div class="text-danger"><i class="ph ph-warning"></i> Error loading AI insight.</div>';
+    });
+});
 </script>

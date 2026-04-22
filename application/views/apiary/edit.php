@@ -248,7 +248,7 @@
             <?php if(in_array('createDocument', $user_permission)): ?>
               <div class="mb-4 bg-light p-4 rounded-4 border border-light">
                 <h6 class="fw-bold mb-3 small text-uppercase text-secondary"><?php echo $this->lang->line('Add Document'); ?></h6>
-                <?php echo form_open_multipart('apiary/uploadDocument/'); ?>
+                <?php echo form_open_multipart('apiary/uploadDocument/' . $apiary_data['id']); ?>
                   <div class="row g-3 align-items-end">
                     <div class="col-md-4">
                       <label class="form-label fw-semibold text-secondary small text-uppercase">Type of Document</label>
@@ -273,17 +273,13 @@
               </div>
             <?php endif; ?>
 
-            <div class="table-responsive">
-              <table id="manageTableDocument" class="table table-bordered table-hover" style="width:100%">
-                <thead>
-                  <tr>
-                    <th><?php echo $this->lang->line('Type'); ?></th>
-                    <th><?php echo $this->lang->line('Document'); ?></th>
-                    <th><?php echo $this->lang->line('Size'); ?></th>
-                    <th><?php echo $this->lang->line('Action'); ?></th>
-                  </tr>
-                </thead>
-              </table>
+            <!-- Modern Card Gallery -->
+            <div id="documentGallery" class="row g-3 mt-1">
+                <!-- Cards will be rendered here by JS -->
+                <div class="col-12 text-center py-5 text-muted small">
+                    <div class="ph-duotone ph-file-dashed fs-1 mb-2 opacity-50"></div>
+                    <p>No documents found</p>
+                </div>
             </div>
           </div>
         </div>
@@ -428,11 +424,68 @@ $(document).ready(function() {
     'order': [[0, 'asc']]
   });
 
-  manageTableDocument = $('#manageTableDocument').DataTable({
-    'ajax': base_url + 'apiary/fetchApiaryDocument/' + '<?php echo $apiary_data['id']; ?>',
-    'language': {'url': "<?php echo $this->session->link_language; ?>"},
-    'order': [[0, 'asc']]
-  });
+  // Replaced DataTable with Card Gallery
+  function renderDocuments() {
+    $.ajax({
+      url: base_url + 'apiary/fetchApiaryDocument/' + '<?php echo $apiary_data['id']; ?>',
+      type: 'POST',
+      dataType: 'json',
+      success: function(response) {
+        var gallery = $('#documentGallery');
+        gallery.empty();
+        
+        if(response.data.length === 0) {
+          gallery.append('<div class="col-12 text-center py-5 text-muted small"><div class="ph-duotone ph-file-dashed fs-1 mb-2 opacity-50"></div><p>No documents found</p></div>');
+          return;
+        }
+
+        response.data.forEach(function(doc) {
+          var iconClass = 'ph-file';
+          var colorClass = 'text-primary';
+          var ext = doc.doc_name.split('.').pop().toLowerCase();
+          
+          if(['pdf'].includes(ext)) { iconClass = 'ph-file-pdf'; colorClass = 'text-danger'; }
+          else if(['doc', 'docx'].includes(ext)) { iconClass = 'ph-file-doc'; colorClass = 'text-primary'; }
+          else if(['xls', 'xlsx'].includes(ext)) { iconClass = 'ph-file-xls'; colorClass = 'text-success'; }
+          else if(['jpg', 'jpeg', 'png', 'gif'].includes(ext)) { iconClass = 'ph-file-image'; colorClass = 'text-warning'; }
+          else if(['pptx', 'ppt'].includes(ext)) { iconClass = 'ph-file-ppt'; colorClass = 'text-orange'; }
+
+          var card = `
+            <div class="col-md-4 col-lg-3">
+              <div class="card h-100 border border-light shadow-sm hover-shadow transition-all rounded-4 overflow-hidden">
+                <div class="card-body p-3">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 bg-light rounded-3 me-3">
+                      <i class="ph-duotone ${iconClass} fs-3 ${colorClass}"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                      <h6 class="mb-0 text-dark fw-bold text-truncate small" title="${doc.doc_name}">${doc.doc_name}</h6>
+                      <span class="badge bg-primary bg-opacity-10 text-primary fw-normal py-1 px-2 rounded-2 mt-1" style="font-size: 0.65rem;">
+                        ${doc.type_name}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top border-light">
+                    <span class="text-muted small">${doc.doc_size} KB</span>
+                    <div class="d-flex gap-1">
+                      <a href="${doc.doc_link}" target="_blank" class="btn btn-sm btn-light border-0 rounded-3 text-primary shadow-none" title="View">
+                        <i class="ph ph-eye"></i>
+                      </a>
+                      <button type="button" class="btn btn-sm btn-light border-0 rounded-3 text-danger shadow-none" title="Delete" onclick="removeDocument(${doc.id})" data-bs-toggle="modal" data-bs-target="#removeDocumentModal">
+                        <i class="ph ph-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          gallery.append(card);
+        });
+      }
+    });
+  }
+
+  renderDocuments();
 
   $("#mainApiaryNav").addClass('active');
 });
@@ -466,7 +519,7 @@ function removeDocument(id) {
         url: form.attr('action'), type: form.attr('method'),
         data: { document_id: id }, dataType: 'json',
         success: function(response) {
-          manageTableDocument.ajax.reload(null, false);
+            renderDocuments();
           if(response.success === true) {
             $("#removeDocumentModal").modal('hide');
           } else {

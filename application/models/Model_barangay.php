@@ -33,6 +33,17 @@ class Model_barangay extends CI_Model
 		return $output;
 	}
 
+	public function getBarangayByMunicipalityId($municipality_id)
+	{
+        $this->load->model('model_municipality');
+        $municipality = $this->model_municipality->getMunicipalityData($municipality_id);
+        $citymunCode = $municipality['citymunCode'] ?? '';
+        
+		$sql = "SELECT *, brgyDesc as name FROM barangay WHERE citymunCode = ? ORDER BY brgyDesc ASC";
+		$query = $this->db->query($sql, array($citymunCode));
+		return $query->result_array();
+	}
+
 	//--> Get the data
 	public function getBarangayData($id = null)
 	{

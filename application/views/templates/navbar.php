@@ -6,7 +6,7 @@
     'first_name' => 'Admin',
     'last_name'  => 'User',
     'role_id'    => 1,
-    'email'      => 'admin@sjbcnli.edu.ph'
+    'email'      => 'admin@gmail.com'
   ];
   $initials   = strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1));
   $role_label = ($user['role_id'] == 1) ? 'Administrator' : 'Officer';
@@ -31,7 +31,7 @@
           </div>
           <div>
             <p class="nb-title-text">Admin Panel</p>
-            <p class="nb-title-sub">SJBCNL Inventory System</p>
+            <p class="nb-title-sub">MEB Dashboard</p>
           </div>
         </div>
       </div>

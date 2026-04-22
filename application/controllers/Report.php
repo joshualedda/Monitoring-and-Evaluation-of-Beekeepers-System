@@ -66,7 +66,7 @@ class Report extends Admin_Controller
 
 		$this->data['region'] = $this->model_region->getActiveRegion();   				
 		$this->data['province'] = $this->model_province->getActiveProvince();  
-		$this->data['lgu'] = $this->model_lgu->getActiveLgu();  
+		// $this->data['lgu'] = $this->model_lgu->getActiveLgu();  
 		$this->data['barangay'] = $this->model_barangay->getActiveBarangay();             
 		$this->data['beekeeper'] = $this->model_beekeeper->getActiveBeekeeperData(); 
 		$this->data['inquiry_type'] = $this->model_inquiry_type->getActiveInquiryType();

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="<?= base_url('assets/css/dashboard.css'); ?>" />
   <!-- Reusable dashboard card components -->
   <link rel="stylesheet" href="<?= base_url('assets/css/cards.css'); ?>" />
+  <link rel="stylesheet" href="<?= base_url('assets/css/premium_cards.css'); ?>" />
   <!-- Reusable DataTable styles -->
   <link rel="stylesheet" href="<?= base_url('assets/css/datatable.css'); ?>" />
   <!-- Reusable Form widget styles -->

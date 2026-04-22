@@ -95,7 +95,8 @@ class Beekeeper extends Admin_Controller
         $this->form_validation->set_rules('address', $this->lang->line('Address'), 'trim|required');
         $this->form_validation->set_rules('region', $this->lang->line('Region'), 'trim|required'); 
         $this->form_validation->set_rules('province', $this->lang->line('Province'), 'trim|required');  
-        $this->form_validation->set_rules('lgu', $this->lang->line('Lgu'), 'trim|required'); 
+        $this->form_validation->set_rules('municipality', $this->lang->line('Municipality'), 'trim|required'); 
+        $this->form_validation->set_rules('barangay', $this->lang->line('Barangay'), 'trim|required'); 
         $this->form_validation->set_rules('birth_date', $this->lang->line('Birth Date'), 'trim|required|valid_date');
         $this->form_validation->set_rules('education', $this->lang->line('Highest Educational Attainment'), 'trim|required');  
         $this->form_validation->set_rules('fund_source[]', $this->lang->line('Fund Source'), 'trim|required');       
@@ -108,7 +109,8 @@ class Beekeeper extends Admin_Controller
                 'address' => $this->input->post('address'),
                 'region_id' => $this->input->post('region'),
                 'province_id' => $this->input->post('province'),
-                'municipality_id' => $this->input->post('lgu'),
+                'municipality_id' => $this->input->post('municipality'),
+                'barangay_id' => $this->input->post('barangay'),
                 'beekeeper_name' => $this->input->post('beekeeper_name'),
                 'beekeeper_register_id' => $this->input->post('beekeeper_register_id'),
                 'directory' => $this->input->post('beekeeper_register_id'),
@@ -143,6 +145,8 @@ class Beekeeper extends Admin_Controller
                 //---> Create the folder if it does not exists
                 if(!is_dir($path))  {mkdir($path,0755,TRUE);} 
                 //The create return the beekeeper_id created if it's successful
+                $msg_success = $this->lang->line('Successfully created'); 
+                $this->session->set_flashdata('success', $msg_success);
                 redirect('beekeeper/update/'.$beekeeper_id, 'refresh');}
              
         }
@@ -157,8 +161,15 @@ class Beekeeper extends Admin_Controller
         {
              $this->data['region'] = $this->model_region->getRegionById(end($this->permission)); 
         }
-        $this->data['province'] = $this->model_province->getActiveProvince(); 
-        $this->data['lgu'] = $this->model_municipality->getActiveMunicipality(); 
+        if($_POST) {
+            $this->data['province'] = $this->model_province->getProvinceByRegionId($this->input->post('region')); 
+            $this->data['municipality'] = $this->model_municipality->getMunicipalityByProvinceId($this->input->post('province')); 
+            $this->data['barangay'] = $this->model_barangay->getBarangayByMunicipalityId($this->input->post('municipality'));
+        } else {
+            $this->data['province'] = array(); 
+            $this->data['municipality'] = array(); 
+            $this->data['barangay'] = array();
+        }
         $this->data['nationality'] = $this->model_nationality->getActiveNationality();
         $this->data['fund_source'] = $this->model_fund_source->getActiveFund_Source();  
         $this->data['association'] = $this->model_association->getActiveAssociation();      
@@ -195,6 +206,10 @@ class Beekeeper extends Admin_Controller
             }
         if(!$beekeeper_id) {redirect('dashboard', 'refresh');}
 
+        // Set session variables for document upload
+        $this->session->set_userdata('beekeeper_id', $beekeeper_id);
+        $this->session->set_userdata('directory', "upload/documents/".$beekeeper_id."/");
+
         $this->form_validation->set_rules('beekeeper_name', $this->lang->line('Beekeeper Name'), 'trim|required');
         $this->form_validation->set_rules('category', $this->lang->line('Category'), 'trim|required');
         $this->form_validation->set_rules('association', $this->lang->line('Association'), 'trim|required');
@@ -203,7 +218,8 @@ class Beekeeper extends Admin_Controller
         $this->form_validation->set_rules('address', $this->lang->line('Address'), 'trim|required');
         $this->form_validation->set_rules('region', $this->lang->line('Region'), 'trim|required'); 
         $this->form_validation->set_rules('province', $this->lang->line('Province'), 'trim|required');  
-        $this->form_validation->set_rules('lgu', $this->lang->line('Lgu'), 'trim|required');
+        $this->form_validation->set_rules('municipality', $this->lang->line('Municipality'), 'trim|required');
+        $this->form_validation->set_rules('barangay', $this->lang->line('Barangay'), 'trim|required');
         $this->form_validation->set_rules('birth_date', $this->lang->line('Birth Date'), 'trim|required|valid_date');
         $this->form_validation->set_rules('education', $this->lang->line('Highest Educational Attainment'), 'trim|required');  
         $this->form_validation->set_rules('fund_source[]', $this->lang->line('Fund Source'), 'trim|required');          
@@ -217,7 +233,8 @@ class Beekeeper extends Admin_Controller
                 'address' => $this->input->post('address'),
                 'region_id' => $this->input->post('region'),
                 'province_id' => $this->input->post('province'),
-                'municipality_id' => $this->input->post('lgu'),
+                'municipality_id' => $this->input->post('municipality'),
+                'barangay_id' => $this->input->post('barangay'),
                 'beekeeper_name' => $this->input->post('beekeeper_name'),
                 'beekeeper_register_id' => $this->input->post('beekeeper_register_id'),
                 'email' => $this->input->post('email'),         
@@ -237,8 +254,8 @@ class Beekeeper extends Admin_Controller
             $update = $this->model_beekeeper->update($data, $beekeeper_id);
 
             if($update == true) {
-                //$msg_error = $this->lang->line('Successfully updated'); 
-                //$this->session->set_flashdata('success', $msg_error);
+                $msg_success = $this->lang->line('Successfully updated'); 
+                $this->session->set_flashdata('success', $msg_success);
                 redirect('beekeeper/update/'.$beekeeper_id."?tab=beekeeper", 'refresh');
             } else {
                 $msg_error = $this->lang->line('Error occurred'); 
@@ -259,8 +276,9 @@ class Beekeeper extends Admin_Controller
         //$beekeeper_data = $this->model_beekeeper->getBeekeeperData($beekeeper_id);
 
         
-        $this->data['province'] = $this->model_province->getProvinceDataByRegionId($beekeeper_data['region_id']); 
-        $this->data['lgu'] = $this->model_municipality->getMunicipalityDataByProvinceId($beekeeper_data['province_id']); 
+        $this->data['province'] = $this->model_province->getProvinceByRegionId($beekeeper_data['region_id']); 
+        $this->data['municipality'] = $this->model_municipality->getMunicipalityByProvinceId($beekeeper_data['province_id']); 
+        $this->data['barangay'] = $this->model_barangay->getBarangayByMunicipalityId($beekeeper_data['municipality_id']); 
         $this->data['beekeeper_data'] = $beekeeper_data;
         $this->render_template('beekeeper/edit', $this->data); 
          
@@ -332,10 +350,19 @@ class Beekeeper extends Admin_Controller
             }           
   
             $result['data'][$key] = array(
-                $value['name'],
-                $doc_link,
-                $value['doc_size'],
-                $buttons
+                'id' => $value['id'],
+                'type_name' => $value['name'],
+                'doc_name' => $value['doc_name'],
+                'doc_size' => $value['doc_size'],
+                'doc_type' => $value['doc_type'],
+                'doc_link' => $link,
+                'view_link' => $doc_link,
+                'buttons' => $buttons,
+                // Backward compatibility for standard DataTable if needed
+                0 => $value['name'],
+                1 => $doc_link,
+                2 => $value['doc_size'],
+                3 => $buttons
             );
         } // /foreach
 
@@ -347,8 +374,15 @@ class Beekeeper extends Admin_Controller
     //-->  This function is invoked from another function to upload the documents into the assets folder
     //     of the beekeeper
 
-    public function uploadDocument()
+    public function uploadDocument($beekeeper_id = null)
     {
+        if(!$beekeeper_id) {
+            $beekeeper_id = $this->session->beekeeper_id;
+        }
+
+        if(!$beekeeper_id) {
+            redirect('beekeeper/', 'refresh');
+        }
 
         if(!in_array('updateDocument', $this->permission)) {
             redirect('dashboard', 'refresh');
@@ -356,26 +390,34 @@ class Beekeeper extends Admin_Controller
 
 
 
-        $directory = $this->session->directory;
+        $directory = "upload/documents/".$beekeeper_id;
         $config['upload_path'] = './'.$directory;
         $config['allowed_types'] = 'gif|jpg|png|pdf|xls|xlsx|docx|doc|pptx';
-        $config['max_size'] = '4000';        
+        $config['max_size'] = '4000';
+
+        if(!is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0755, TRUE);
+        }
 
         $this->load->library('upload', $config);
         
         if ( ! $this->upload->do_upload('beekeeper_document')) {
-            $msg_error = $this->lang->line('This type of document is not allowed or the document is too large.'); 
+            $msg_error = $this->upload->display_errors('', ''); 
             $this->session->set_flashdata('warning', $msg_error);
-            redirect('beekeeper/update/'.$this->session->beekeeper_id."?tab=document", 'refresh');
+            redirect('beekeeper/update/'.$beekeeper_id."?tab=document", 'refresh');
             }
         else
             {
             //---> Create the document in the table document
            
-            $doc_link = $directory.$this->upload->data('file_name');
+            // Ensure directory has trailing slash for link building if needed
+            $directory_link = "upload/documents/".$beekeeper_id."/";
+            $doc_link = $directory_link.$this->upload->data('file_name');
 
             $data = array(
-                'beekeeper_id' => $this->session->beekeeper_id, 
+                'beekeeper_id' => $beekeeper_id, 
+                'apiary_id' => null,
+                'colony_id' => null,
                 'doc_size' => $this->upload->data('file_size'),
                 'doc_type' => $this->upload->data('file_type'),
                 'doc_name' => $this->upload->data('file_name'),
@@ -388,7 +430,9 @@ class Beekeeper extends Admin_Controller
             if($create == true) {
                 //--->  Upload the document
                 $data = array('upload_data' => $this->upload->data());
-                redirect('beekeeper/update/'.$this->session->beekeeper_id."?tab=document", 'refresh');
+                $msg_success = $this->lang->line('Successfully uploaded'); 
+                $this->session->set_flashdata('success', $msg_success);
+                redirect('beekeeper/update/'.$beekeeper_id."?tab=document", 'refresh');
             } else {
                 $msg_error = $this->lang->line('Error occurred'); 
                 $this->session->set_flashdata('error', $msg_error);

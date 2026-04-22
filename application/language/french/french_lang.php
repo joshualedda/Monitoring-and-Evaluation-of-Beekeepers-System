@@ -207,6 +207,7 @@ $lang['Map'] = 'Carte';
 $lang['Menu'] = 'Menu';
 $lang['Mobile'] = 'Mobil';
 $lang['Barangay'] = 'Municipalité';
+$lang['Municipality'] = 'Municipalité';
 $lang['More info'] = 'Plus d\'information';
 $lang['My Profile'] = 'Mon Profil';
 $lang['My User'] = 'Mon usager';

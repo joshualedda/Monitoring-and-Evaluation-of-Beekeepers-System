@@ -33,6 +33,17 @@ class Model_province extends CI_Model
 		return $output;
 	}
 
+	public function getProvinceByRegionId($region_id)
+	{
+        $this->load->model('model_region');
+        $region = $this->model_region->getRegionData($region_id);
+        $regCode = $region['regCode'] ?? '';
+        
+		$sql = "SELECT *, provDesc as name FROM province WHERE regCode = ? ORDER BY provDesc ASC";
+		$query = $this->db->query($sql, array($regCode));
+		return $query->result_array();
+	}
+
 	//--> Get the data
 	public function getProvinceData($id = null)
 	{

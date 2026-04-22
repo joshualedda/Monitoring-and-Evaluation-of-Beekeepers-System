@@ -52,26 +52,7 @@
         };
 
         // Check for flash data and show toast
-        <?php if ($this->session->flashdata('toast_message')): ?>
-            var message = '<?= $this->session->flashdata('toast_message') ?>';
-            var type = '<?= $this->session->flashdata('toast_type') ?: 'info' ?>';
-
-            switch (type) {
-                case 'success':
-                    toastr.success(message);
-                    break;
-                case 'error':
-                    toastr.error(message);
-                    break;
-                case 'warning':
-                    toastr.warning(message);
-                    break;
-                case 'info':
-                default:
-                    toastr.info(message);
-                    break;
-            }
-        <?php endif; ?>
+        <?php $this->load->view('templates/alert'); ?>
     });
 </script>
 
@@ -217,6 +198,8 @@
         }
     });
 </script>
+
+<?php $this->load->view('templates/chatbot_widget'); ?>
 </body>
 
 </html>

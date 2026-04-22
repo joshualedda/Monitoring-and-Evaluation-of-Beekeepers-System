@@ -121,7 +121,7 @@
                           <select class="form-select select_group" id="region" name="region">
                             <option value="">Select Region</option> 
                             <?php foreach ($region as $k => $v): ?>
-                              <option value="<?php echo $v['id'] ?>" <?php echo set_select('region', $v['id']); ?>><?php echo $v['name'] ?></option>
+                              <option value="<?php echo $v['region_id'] ?>" <?php echo set_select('region', $v['region_id']); ?>><?php echo $v['name'] ?></option>
                             <?php endforeach ?>
                           </select>
                         </div>
@@ -130,19 +130,30 @@
                           <select class="form-select select_group" id="province" name="province">
                             <option value="">Select Province</option> 
                             <?php foreach ($province as $k => $v): ?>
-                              <?php if($v['region_id']==$_POST["region"]){ ?>
-                                <option value="<?php echo $v['id'] ?>" <?php echo set_select('province', $v['id']); ?>><?php echo $v['name'] ?></option>
-                              <?php }?>
+                              <?php if(isset($_POST["region"]) && $v['regCode']==$this->model_region->getRegionData($_POST["region"])['regCode']){ ?>
+                                <option value="<?php echo $v['province_id'] ?>" <?php echo set_select('province', $v['province_id']); ?>><?php echo $v['name'] ?></option>
+                              <?php } ?>
                             <?php endforeach ?>
                           </select>
                         </div>
                         <div class="col-md-4">
-                          <label for="lgu" class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Lgu'); ?> <font color="red">*</font></label>
-                          <select class="form-select select_group" id="lgu" name="lgu">
+                          <label for="municipality" class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Municipality'); ?> <font color="red">*</font></label>
+                          <select class="form-select select_group" id="municipality" name="municipality">
                             <option value="">Select Municipality</option> 
-                            <?php foreach ($lgu as $k => $v): ?>
-                              <?php if($v['province_id']==$_POST["province"]){ ?>
-                                <option value="<?php echo $v['id'] ?>" <?php echo set_select('lgu', $v['id']); ?>><?php echo $v['name'] ?></option>
+                            <?php foreach ($municipality as $k => $v): ?>
+                              <?php if(isset($_POST["province"]) && $v['provCode']==$this->model_province->getProvinceData($_POST["province"])['provCode']){ ?>
+                                <option value="<?php echo $v['municipality_id'] ?>" <?php echo set_select('municipality', $v['municipality_id']); ?>><?php echo $v['name'] ?></option>
+                              <?php } ?>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                        <div class="col-md-12">
+                          <label for="barangay" class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Barangay'); ?> <font color="red">*</font></label>
+                          <select class="form-select select_group" id="barangay" name="barangay">
+                            <option value="">Select Barangay</option> 
+                            <?php foreach ($barangay as $k => $v): ?>
+                              <?php if(isset($_POST["municipality"]) && $v['citymunCode']==$this->model_municipality->getMunicipalityData($_POST["municipality"])['citymunCode']){ ?>
+                                <option value="<?php echo $v['barangay_id'] ?>" <?php echo set_select('barangay', $v['barangay_id']); ?>><?php echo $v['name'] ?></option>
                               <?php } ?>
                             <?php endforeach ?>
                           </select>
@@ -283,10 +294,11 @@
           data:{region_id:region_id},
           success:function(data) {
             $('#province').html('<option value="" hidden selected disabled>Select Province</option>');
-            $('#lgu').html('<option value="" hidden selected disabled>Select LGU</option>');
+            $('#municipality').html('<option value="" hidden selected disabled>Select Municipality</option>');
+            $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
             $('#province').html(data); 
             // Trigger select2 update
-            $('#province, #lgu').trigger('change');
+            $('#province, #municipality, #barangay').trigger('change');
           }
         });
       }
@@ -296,20 +308,37 @@
       var province_id = $('#province').val();
       if(province_id != '') {
         $.ajax({
-          url: base_url + 'lgu/fetchLguDataByProvince',
+          url: base_url + 'municipality/fetchMunicipalityDataByProvince',
           method:"POST",
           data:{province_id:province_id},
           success:function(data) {
-            $('#lgu').html('<option value="" hidden selected disabled>Select LGU</option>');
-            $('#lgu').html(data); 
-            $('#lgu').trigger('change');
+            $('#municipality').html('<option value="" hidden selected disabled>Select Municipality</option>');
+            $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
+            $('#municipality').html(data); 
+            $('#municipality, #barangay').trigger('change');
+          }
+        });
+      }
+    });
+
+    $('#municipality').change(function(){
+      var municipality_id = $('#municipality').val();
+      if(municipality_id != '') {
+        $.ajax({
+          url: base_url + 'barangay/fetchBarangayDataByMunicipality',
+          method:"POST",
+          data:{municipality_id:municipality_id},
+          success:function(data) {
+            $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
+            $('#barangay').html(data); 
+            $('#barangay').trigger('change');
           }
         });
       }
     });
 
     // Init Select2 — single selects with placeholder
-    $('#gender, #education, #region, #province, #lgu, #category, #association').select2({
+    $('#gender, #education, #region, #province, #municipality, #barangay, #category, #association').select2({
         width: '100%',
         placeholder: 'Select an option',
         allowClear: true

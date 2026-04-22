@@ -146,7 +146,7 @@
                           <select class="form-select select_group" id="region" name="region">
                             <option value="">Select Region</option>
                             <?php foreach ($region as $k => $v): ?>
-                            <option value="<?php echo $v['id'] ?>" <?php if(set_value('region', $beekeeper_data['region_id']) == $v['id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                            <option value="<?php echo $v['region_id'] ?>" <?php if(set_value('region', $beekeeper_data['region_id']) == $v['region_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
                             <?php endforeach ?>
                           </select>
                         </div>
@@ -155,16 +155,25 @@
                           <select class="form-select select_group" id="province" name="province">
                             <option value="">Select Province</option>
                             <?php foreach ($province as $k => $v): ?>
-                                <option value="<?php echo $v['id'] ?>" <?php if(set_value('province', $beekeeper_data['province_id']) == $v['id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                                <option value="<?php echo $v['province_id'] ?>" <?php if(set_value('province', $beekeeper_data['province_id']) == $v['province_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
                             <?php endforeach ?>
                           </select>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Lgu'); ?> <font color="red">*</font></label>
-                          <select class="form-select select_group" id="lgu" name="lgu">
+                          <label class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Municipality'); ?> <font color="red">*</font></label>
+                          <select class="form-select select_group" id="municipality" name="municipality">
                             <option value="">Select Municipality</option>
-                            <?php foreach ($lgu as $k => $v): ?>
-                                <option value="<?php echo $v['id'] ?>" <?php if(set_value('lgu', $beekeeper_data['municipality_id']) == $v['id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                            <?php foreach ($municipality as $k => $v): ?>
+                                <option value="<?php echo $v['municipality_id'] ?>" <?php if(set_value('municipality', $beekeeper_data['municipality_id']) == $v['municipality_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
+                            <?php endforeach ?>
+                          </select>
+                        </div>
+                        <div class="col-md-12">
+                          <label class="form-label fw-semibold text-secondary small text-uppercase"><?php echo $this->lang->line('Barangay'); ?> <font color="red">*</font></label>
+                          <select class="form-select select_group" id="barangay" name="barangay">
+                            <option value="">Select Barangay</option>
+                            <?php foreach ($barangay as $k => $v): ?>
+                                <option value="<?php echo $v['barangay_id'] ?>" <?php if(set_value('barangay', $beekeeper_data['barangay_id']) == $v['barangay_id']) { echo "selected"; } ?>><?php echo $v['name'] ?></option>
                             <?php endforeach ?>
                           </select>
                         </div>
@@ -345,7 +354,7 @@
                     <h6 class="fw-bold text-dark mb-4 small text-uppercase text-muted border-bottom border-light pb-2">
                         <i class="ph ph-upload-simple me-2"></i>Upload New File
                     </h6>
-                    <?php echo form_open_multipart('beekeeper/uploadDocument/', 'class="row g-3 align-items-end"') ?>
+                    <?php echo form_open_multipart('beekeeper/uploadDocument/' . $beekeeper_data['id'], 'class="row g-3 align-items-end"') ?>
                         <div class="col-md-5">
                             <label class="form-label text-secondary small fw-bold">Type of document <span class="text-danger">*</span></label>
                             <select class="form-control select_group" name="document_type" required>
@@ -368,17 +377,13 @@
                 </div>
                 <?php endif; ?>
 
-                <div class="table-responsive datatable-wrapper">
-                    <table id="manageTableDocument" class="table align-middle w-100 mb-0 border-top border-light">
-                        <thead>
-                            <tr>
-                                <th class="text-uppercase text-secondary small fw-bold"><?php echo $this->lang->line('Type'); ?></th>
-                                <th class="text-uppercase text-secondary small fw-bold"><?php echo $this->lang->line('Document'); ?></th>
-                                <th class="text-uppercase text-secondary small fw-bold"><?php echo $this->lang->line('Size'); ?></th>
-                                <th class="text-uppercase text-secondary small fw-bold text-end pe-3"><?php echo $this->lang->line('Action'); ?></th>                                    
-                            </tr>
-                        </thead>
-                    </table>  
+                <!-- Modern Card Gallery -->
+                <div id="documentGallery" class="row g-3 px-3 pb-4 mt-1">
+                    <!-- Cards will be rendered here by JS -->
+                    <div class="col-12 text-center py-5 text-muted small">
+                        <div class="ph-duotone ph-file-dashed fs-1 mb-2 opacity-50"></div>
+                        <p>No documents found</p>
+                    </div>
                 </div>
             </div>
           </div>
@@ -554,7 +559,8 @@
           data:{region_id:region_id},
           success:function(data) {
             $('#province').html('<option value="" hidden selected disabled>Select Province</option>');
-            $('#lgu').html('<option value="" hidden selected disabled>Select LGU</option>');
+            $('#municipality').html('<option value="" hidden selected disabled>Select Municipality</option>');
+            $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
             $('#province').html(data).trigger('change');
           }
         });
@@ -565,19 +571,35 @@
       var province_id = $(this).val();
       if(province_id != '') {
         $.ajax({
-          url: base_url + 'lgu/fetchLguDataByProvince',
+          url: base_url + 'municipality/fetchMunicipalityDataByProvince',
           method:"POST",
           data:{province_id:province_id},
           success:function(data) {
-            $('#lgu').html('<option value="" hidden selected disabled>Select LGU</option>');
-            $('#lgu').html(data).trigger('change');
+            $('#municipality').html('<option value="" hidden selected disabled>Select Municipality</option>');
+            $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
+            $('#municipality').html(data).trigger('change');
+          }
+        });
+      }
+    });
+
+    $('#municipality').change(function(){
+      var municipality_id = $(this).val();
+      if(municipality_id != '') {
+        $.ajax({
+          url: base_url + 'barangay/fetchBarangayDataByMunicipality',
+          method:"POST",
+          data:{municipality_id:municipality_id},
+          success:function(data) {
+            $('#barangay').html('<option value="" hidden selected disabled>Select Barangay</option>');
+            $('#barangay').html(data).trigger('change');
           }
         });
       }
     });
 
     // Init Select2 — single selects with placeholder
-    $('#gender, #education, #region, #province, #lgu, #category, #association').select2({
+    $('#gender, #education, #region, #province, #municipality, #barangay, #category, #association').select2({
         width: '100%',
         placeholder: 'Select an option',
         allowClear: true
@@ -622,16 +644,69 @@
       'columnDefs': [{ targets: -1, className: 'text-end pe-3' }]
     });
 
-    manageTableDocument = $('#manageTableDocument').DataTable({
-      'ajax': {
+    // Replaced DataTable with Card Gallery
+    function renderDocuments() {
+      $.ajax({
         url: base_url + 'beekeeper/fetchBeekeeperDocument/',
         type: 'POST',
         data: {document_beekeeper_id: '<?php echo $beekeeper_data['id']; ?>'},
-      },			  
-      'language': {'url': "<?php echo $this->session->link_language; ?>"}, 
-      'order': [[0, "asc"]],
-      'dom': 'rt<"px-3 pb-3 d-flex justify-content-between align-items-center"ip>',
-      'columnDefs': [{ targets: -1, className: 'text-end pe-3' }]
+        dataType: 'json',
+        success: function(response) {
+          var gallery = $('#documentGallery');
+          gallery.empty();
+          
+          if(response.data.length === 0) {
+            gallery.append('<div class="col-12 text-center py-5 text-muted small"><div class="ph-duotone ph-file-dashed fs-1 mb-2 opacity-50"></div><p>No documents found</p></div>');
+            return;
+          }
+
+          response.data.forEach(function(doc) {
+            var iconClass = 'ph-file';
+            var colorClass = 'text-primary';
+            var ext = doc.doc_name.split('.').pop().toLowerCase();
+            
+            if(['pdf'].includes(ext)) { iconClass = 'ph-file-pdf'; colorClass = 'text-danger'; }
+            else if(['doc', 'docx'].includes(ext)) { iconClass = 'ph-file-doc'; colorClass = 'text-primary'; }
+            else if(['xls', 'xlsx'].includes(ext)) { iconClass = 'ph-file-xls'; colorClass = 'text-success'; }
+            else if(['jpg', 'jpeg', 'png', 'gif'].includes(ext)) { iconClass = 'ph-file-image'; colorClass = 'text-warning'; }
+            else if(['pptx', 'ppt'].includes(ext)) { iconClass = 'ph-file-ppt'; colorClass = 'text-orange'; }
+
+            var card = `
+              <div class="col-md-4 col-lg-3">
+                <div class="card h-100 border border-light shadow-sm hover-shadow transition-all rounded-4 overflow-hidden">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center mb-3">
+                      <div class="p-2 bg-light rounded-3 me-3">
+                        <i class="ph-duotone ${iconClass} fs-3 ${colorClass}"></i>
+                      </div>
+                      <div class="overflow-hidden">
+                        <h6 class="mb-0 text-dark fw-bold text-truncate small" title="${doc.doc_name}">${doc.doc_name}</h6>
+                        <span class="badge bg-primary bg-opacity-10 text-primary fw-normal py-1 px-2 rounded-2 mt-1" style="font-size: 0.65rem;">
+                          ${doc.type_name}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top border-light">
+                      <span class="text-muted small">${doc.doc_size} KB</span>
+                      <div class="d-flex gap-1">
+                        <a href="${doc.doc_link}" target="_blank" class="btn btn-sm btn-light border-0 rounded-3 text-primary shadow-none" title="View">
+                          <i class="ph ph-eye"></i>
+                        </a>
+                        <button type="button" class="btn btn-sm btn-light border-0 rounded-3 text-danger shadow-none" title="Delete" onclick="removeDocument(${doc.id})" data-bs-toggle="modal" data-bs-target="#removeDocumentModal">
+                          <i class="ph ph-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+            gallery.append(card);
+          });
+        }
+      });
+    }
+
+    renderDocuments();
     });
 
     // Inquiry Dropdown Loaders
@@ -787,7 +862,7 @@
             dataType: 'json',
             success:function(res) {
                 $("#removeDocumentModal").modal('hide');
-                manageTableDocument.ajax.reload(null, false);
+                renderDocuments();
             }
         });
     });
