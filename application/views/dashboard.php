@@ -88,22 +88,22 @@
         </div>
       </div>
 
-      <!-- Card 4: Total Colonies (Replacing Honey Production) -->
+      <!-- Card 4: Total Production -->
       <div class="col-12 col-md-6 col-xl-3">
-        <div class="premium-stat-card" style="--card-accent: #6c5ce7; --card-bg: #f0ebff; --card-shadow: rgba(108,92,231,.15);">
+        <div class="premium-stat-card" style="--card-accent: #e1b12c; --card-bg: #fcf6e6; --card-shadow: rgba(225,177,44,.15);">
           <div class="premium-stat-header">
             <div class="premium-stat-icon">
-              <i class="ph ph-hexagon"></i>
+              <i class="ph ph-factory"></i>
             </div>
-            <span class="premium-stat-badge">Local</span>
+            <span class="premium-stat-badge">Yield</span>
           </div>
           <div class="mt-3">
-            <div class="premium-stat-value"><?php echo $total_colony_province ?></div>
-            <div class="premium-stat-label">Provincial Colonies</div>
+            <div class="premium-stat-value"><?php echo number_format($total_production, 2) ?> <small class="text-muted fs-6">kg</small></div>
+            <div class="premium-stat-label"><?php echo $this->lang->line('Total Production'); ?></div>
           </div>
           <div class="premium-stat-footer">
-            <a href="<?php echo base_url('colony/') ?>" class="premium-stat-link">
-              View Regional Data <i class="ph ph-arrow-right"></i>
+            <a href="<?php echo base_url('production') ?>" class="premium-stat-link">
+              View Production Records <i class="ph ph-arrow-right"></i>
             </a>
           </div>
         </div>
@@ -117,7 +117,7 @@
         <div class="premium-map-card">
           <div class="premium-map-header">
             <div>
-              <div class="premium-map-title">🗺️ Apiary Locations Map</div>
+              <div class="premium-map-title">Apiary Locations Map</div>
               <p class="premium-map-subtitle">Click any pin for details &amp; live weather.</p>
             </div>
             <div class="d-flex align-items-center gap-3">
@@ -162,7 +162,7 @@
       <div class="col-lg-6 mb-4">
         <div class="card border-0 shadow-sm rounded-4 h-100">
           <div class="card-header bg-white border-0 py-4 px-4">
-            <h5 class="fw-bold mb-0">👨‍🌾 Beekeepers Overview</h5>
+            <h5 class="fw-bold mb-0">Beekeepers Overview</h5>
             <p class="text-muted small mb-0">Colonies managed per beekeeper</p>
           </div>
           <div class="card-body p-4">
@@ -174,7 +174,7 @@
       <div class="col-lg-6 mb-4">
         <div class="card border-0 shadow-sm rounded-4 h-100">
           <div class="card-header bg-white border-0 py-4 px-4">
-            <h5 class="fw-bold mb-0">🐝 Colonies per Apiary</h5>
+            <h5 class="fw-bold mb-0">Colonies per Apiary</h5>
             <p class="text-muted small mb-0">Active vs Inactive breakdown</p>
           </div>
           <div class="card-body p-4">

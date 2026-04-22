@@ -491,7 +491,7 @@ $(document).ready(function() {
 
   // initialize the datatable 
   manageTableProduction = $('#manageTableProduction').DataTable({
-    'ajax': base_url+'production/fetchProductionBeekeeper/'+<?php echo $colony_data['id']; ?>,
+    'ajax': base_url+'production/fetchProductionColony/'+<?php echo $colony_data['id']; ?>,
     'language': {'url': "<?php echo $this->session->link_language; ?>"}, 
     'order': [[0, 'desc']]
   });

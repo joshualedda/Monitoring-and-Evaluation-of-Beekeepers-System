@@ -259,8 +259,8 @@ class Apiary extends Admin_Controller
             $update = $this->model_apiary->update($data, $apiary_id);
 
             if($update == true) {
-                //$msg_error = $this->lang->line('Successfully updated'); 
-                //$this->session->set_flashdata('success', $msg_error);
+                $msg_success = $this->lang->line('Successfully updated'); 
+                $this->session->set_flashdata('success', $msg_success);
                 redirect('apiary/update/'.$apiary_id."?tab=apiary", 'refresh');
             } else {
                 $msg_error = $this->lang->line('Error occurred'); 

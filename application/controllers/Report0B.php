@@ -103,7 +103,7 @@ class Report0B extends Admin_Controller
 			$cell1 = array('data' => '<strong>'.$this->lang->line('Region').':&nbsp;&nbsp;</strong>'.$rs->region_name, 'width' => '50%');	
 			$cell2 = array('data' => '<strong>'.$this->lang->line('Province').':&nbsp;&nbsp;</strong>'.$rs->province_name, 'width' => '50%');	
 			$this->table->add_row($cell1, $cell2);
-			$cell1 = array('data' => '<strong>'.$this->lang->line('Lgu').':&nbsp;&nbsp;</strong>'.$rs->lgu_name, 'width' => '50%');
+			$cell1 = array('data' => '<strong>'.$this->lang->line('Municipality').':&nbsp;&nbsp;</strong>'.$rs->municipality_name, 'width' => '50%');
 			$cell2 = array('data' => '<strong>'.$this->lang->line('Barangay').':&nbsp;&nbsp;</strong>'.$rs->barangay_name, 'width' => '50%');				
 			$this->table->add_row($cell1, $cell2);
 
@@ -173,7 +173,7 @@ class Report0B extends Admin_Controller
 			$cell3 = array('data' => $this->lang->line('Province').':&nbsp;&nbsp;'.$rs->province_name, 'width' => '46.5%');
 			$this->table->add_row($cell1,$cell2,$cell3);
 			$cell1 = array('data' => '', 'width' => '7%');
-			$cell2 = array('data' => $this->lang->line('Lgu').':&nbsp;&nbsp;'.$rs->lgu_name, 'width' => '46.5%');
+			$cell2 = array('data' => $this->lang->line('Municipality').':&nbsp;&nbsp;'.$rs->municipality_name, 'width' => '46.5%');
 			$cell3 = array('data' => $this->lang->line('Barangay').':&nbsp;&nbsp;'.$rs->barangay_name, 'width' => '46.5%');
 			$this->table->add_row($cell1,$cell2,$cell3);;	
 

@@ -532,3 +532,4 @@ function removeDocument(id) {
   }
 }
 </script>
+<?php $this->load->view('templates/alert'); ?>

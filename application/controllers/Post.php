@@ -136,14 +136,107 @@ class Post extends Admin_Controller
                 $this->session->set_flashdata('error', $msg_error);
                 redirect('post/create', 'refresh');}
             else {
-                //The create return the beekeeper_id created if it's successful
+                if ($this->input->post('send_email') == 1) {
+                    $this->load->model('model_beekeeper');
+                    $this->load->model('model_post_category');
+                    
+                    $beekeepers = $this->model_beekeeper->getActiveBeekeeperData();
+                    $title = $this->input->post('post_title');
+                    $post_text = $this->input->post('post_text');
+                    $category_id = $this->input->post('post_category');
+                    $date_from = $this->input->post('date_from');
+                    
+                    $category_data = $this->model_post_category->getPostCategoryData($category_id);
+                    $category_name = ($category_data) ? $category_data['name'] : 'News';
+                    
+                    $this->load->library('email');
+
+                    // Standardize the HTML template
+                    $html_message = '
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    </head>
+                    <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8f9fa; padding: 40px 20px;">
+                            <tr>
+                                <td align="center">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e9ecef; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                                        <!-- Header Decor -->
+                                        <tr>
+                                            <td height="8" style="background: linear-gradient(to right, #0d6efd, #6610f2);"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 40px 30px;">
+                                                <!-- Category Badge -->
+                                                <div style="display: inline-block; padding: 6px 14px; background-color: #e7f1ff; color: #0d6efd; border-radius: 50px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px;">
+                                                    ' . $category_name . '
+                                                </div>
+                                                
+                                                <!-- Title -->
+                                                <h1 style="margin: 0 0 10px 0; color: #212529; font-size: 28px; font-weight: 800; line-height: 1.2;">
+                                                    ' . $title . '
+                                                </h1>
+                                                
+                                                <!-- Date -->
+                                                <div style="color: #6c757d; font-size: 14px; margin-bottom: 30px; display: flex; align-items: center;">
+                                                    <span style="display: inline-block; margin-right: 5px;">📅</span> Published on ' . date('F j, Y', strtotime($date_from)) . '
+                                                </div>
+                                                
+                                                <!-- Divider -->
+                                                <div style="height: 1px; background-color: #eee; margin-bottom: 30px;"></div>
+                                                
+                                                <!-- Content -->
+                                                <div style="color: #495057; font-size: 16px; line-height: 1.7; word-wrap: break-word;">
+                                                    ' . $post_text . '
+                                                </div>
+                                                
+                                                <!-- Footer -->
+                                                <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee; text-align: center;">
+                                                    <p style="margin: 0; color: #adb5bd; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+                                                        DMMMSU-NARTDI NEWS DISPATCH
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                    <!-- External Footer -->
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin-top: 20px;">
+                                        <tr>
+                                            <td align="center" style="color: #adb5bd; font-size: 12px; padding: 0 20px;">
+                                                This is an automated notification. Please do not reply to this email.<br>
+                                                &copy; ' . date('Y') . ' DMMMSU Monitoring and Evaluation of Beekeepers System
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </body>
+                    </html>';
+
+                    foreach($beekeepers as $bk) {
+                        $email_address = $bk['email'] ?? null;
+                        
+                        if (!empty($email_address)) {
+                            $this->email->clear();
+                            $this->email->set_mailtype("html"); // Ensure HTML mode
+                            $this->email->from('kirarara550@gmail.com', 'DMMMSU-NARTDI Dispatch');
+                            $this->email->to($email_address);
+                            $this->email->subject('[NEWS] ' . $title);
+                            $this->email->message($html_message);
+                            $this->email->send();
+                        }
+                    }
+                }
                 $post_id = $create;
                 redirect('post/update/'.$post_id, 'refresh');}
 
         }
         else {
-            //--> false case, we are preparing the drop-down list for the encoding of the post 
-            //    and opening the insert page
         	
             $this->data['post_category'] = $this->model_post_category->getActivePostCategory();     	
 
@@ -151,12 +244,6 @@ class Post extends Admin_Controller
         }	
 	}
 
-    
-
-    
-    //--> If the validation is not true (not valid), then it redirects to the edit post page 
-    //    If the validation is true (valid) then it updates the data into the database 
-    //    and it sends the operation message into the session flashdata and display on the manage post page
    
 	public function update($post_id)
 	{      

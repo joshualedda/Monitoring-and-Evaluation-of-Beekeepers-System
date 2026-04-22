@@ -11,78 +11,56 @@ class Production extends Admin_Controller
 		$this->not_logged_in();
 
 		$this->data['page_title'] = $this->lang->line('Production');
-
+        $this->load->model('model_production');
+        $this->load->model('model_colony');
+        $this->load->model('model_product');
 	}
 
 	public function index()
 	{
-		if(!in_array('viewProduction', $this->permission)) {
-			redirect('dashboard', 'refresh');
-		}
-
-		$product_data = $this->model_product->getProductData();
-		$this->data['product_name'] = $product_data;
+        if(!in_array('viewProduction', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
 
 		$this->render_template('production/index', $this->data);	
 	}
 
-	public function fetchProductData() 
+	public function fetchProductionData()
 	{
-		$data = $this->model_product->getProductData();
-		echo json_encode($data);
+		$result = array('data' => array());
 
-	}
+        $data = $this->model_production->getProductionData();
 
-	public function fetchProductDataById($id)
-	{	
-		if($id) {
-			$data = $this->model_product->getProductData($id);
-			echo json_encode($data);
-		}
-	}
-	
-    //--> It fetches the production data from the production table 
-    //    This function is called from the datatable ajax function
-    
-    public function fetchProductionBeekeeper($id)
-    {
-        $result = array('data' => array());
-
-        $data = $this->model_production->getProductionBeekeeper($id);  
-
-        foreach ($data as $key => $value) {
-
-        	$product_data = $this->model_product->getProductData($value['product_id']);
+		foreach ($data as $key => $value) {
 
             $buttons = '';
 
             if(in_array('updateProduction', $this->permission)) {
-               $buttons .= '<button type="button" class="btn btn-default" onclick="editProduction('.$value['id'].')" data-toggle="modal" data-target="#editModalProduction"><i class="fa fa-pencil"></i></button>';
+                $buttons .= '<a href="'.base_url('production/update/'.$value['id']).'" class="btn-dt btn-dt-edit" title="Edit"><i class="ph ph-pencil-simple"></i></a>';
             }
-
             if(in_array('deleteProduction', $this->permission)) { 
-                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeProduction('.$value['id'].')" data-toggle="modal" data-target="#removeModalProduction"><i class="fa fa-trash"></i></button>';
+                $buttons .= ' <button type="button" class="btn-dt btn-dt-delete" title="Delete" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="ph ph-trash"></i></button>';
             }
-  
-            $result['data'][$key] = array(
-                $product_data['name'],                             
+           
+			$result['data'][$key] = array(				
+				$value['colony_number'],
+                $value['product_name'],
                 $value['total_production'],
-                $value['gross_income'],
-                $value['cost'],
-                $value['net_income'],                      
-                $value['production_date'],                
-                $buttons
-            );
-        } // /foreach
+				$value['production_date'],
+				$buttons
+			);
+		} // /foreach
 
-        echo json_encode($result);
-    }
+		echo json_encode($result);
+	}	
 
-	
-	//--> It retrieves the specific production information via a production id
-	//   and returns the data in json format
-	
-	public function fetchProductionDataById($id) 
+	public function fetchProductData()
+	{
+		$data = $this->model_product->getActiveProduct();
+		echo json_encode($data);
+	}
+
+	public function fetchProductionDataById($id)
 	{
 		if($id) {
 			$data = $this->model_production->getProductionData($id);
@@ -90,143 +68,155 @@ class Production extends Admin_Controller
 		}
 	}
 
+	public function fetchProductionColony($colony_id)
+	{
+		$result = array('data' => array());
 
+        $data = $this->model_production->getProductionColony($colony_id);
 
-	//--> If the validation is not true (not valid), then it provides the validation error on the json format
-    //    If the validation for each input is valid then it creates the data into the database and 
-    //    returns an appropriate message in the json format.
+		foreach ($data as $key => $value) {
+
+            $buttons = '';
+
+            if(in_array('updateProduction', $this->permission)) {
+                $buttons .= '<a href="javascript:void(0);" onclick="editProduction('.$value['id'].')" class="btn-dt btn-dt-edit" title="Edit" data-toggle="modal" data-target="#editModalProduction"><i class="ph ph-pencil-simple"></i></a>';
+            }
+            if(in_array('deleteProduction', $this->permission)) { 
+                $buttons .= ' <button type="button" class="btn-dt btn-dt-delete" title="Delete" onclick="removeProduction('.$value['id'].')" data-toggle="modal" data-target="#removeModalProduction"><i class="ph ph-trash"></i></button>';
+            }
+           
+			$result['data'][$key] = array(				
+                $value['product_name'],
+                $value['total_production'],
+                $value['gross_income'],
+                $value['cost'],
+                $value['net_income'],
+				$value['production_date'],
+				$buttons
+			);
+		}
+
+		echo json_encode($result);
+	}
 
 	public function create()
 	{
-		if(!in_array('createProduction', $this->permission)) {redirect('dashboard', 'refresh');}
 
-		$response = array();
+		if(!in_array('createProduction', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
 
-		$this->form_validation->set_rules('product', $this->lang->line('Product'), 'trim|required');
-		$this->form_validation->set_rules('production_income', $this->lang->line('Production Income'), 'trim|required');
-		$this->form_validation->set_rules('production_cost', $this->lang->line('Production Cost'), 'trim|required');
-		$this->form_validation->set_rules('production_net', $this->lang->line('Net Income'), 'trim|required');
-		$this->form_validation->set_rules('production_date', $this->lang->line('Product Date'), 'trim|required');
-		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+		$this->form_validation->set_rules('colony_id', $this->lang->line('Colony'), 'trim|required');
+        $this->form_validation->set_rules('product_id', $this->lang->line('Product'), 'trim|required');
+        $this->form_validation->set_rules('year', $this->lang->line('Year'), 'trim|required');
+        
+        $this->form_validation->set_error_delimiters('<p class="alert alert-warning">','</p>');
 
         if ($this->form_validation->run() == TRUE) {
-        	$data = array(
-        		'colony_id' => $this->input->post('colony_id'),
-        		'product_id' => $this->input->post('product'),
-        		'total_production' => $this->input->post('total_production'),
-        		'gross_income' => $this->input->post('production_income'),
-        		'cost' => $this->input->post('production_cost'),
-        		'net_income' => $this->input->post('production_net'),        		
-        		'production_date' => $this->input->post('production_date'),
-        		    		
+          	$data = array(
+				'colony_id' => $this->input->post('colony_id'),
+			    'product_id' => $this->input->post('product_id'),
+                'cost' => $this->input->post('cost'),
+				'gross_income' => $this->input->post('gross_income'),
+				'net_income' => $this->input->post('net_income'),                
+                'production_date' => $this->input->post('production_date'),                
+                'total_production' => $this->input->post('total_production'),
+                'year' => $this->input->post('year')      		
         	);
 
         	$create = $this->model_production->create($data);
 
-        	if($create == true) 
-        		{$response['success'] = true;
-        		$response['messages'] = $this->lang->line('Successfully created');}
-        	else 
-        		{$response['success'] = false;
-        		$response['messages'] = $this->lang->line('Error in the database while creating the information');}			
-        	
-        }
-        else {
-        	$response['success'] = false;
-        	foreach ($_POST as $key => $value) {
-        		$response['messages'][$key] = form_error($key);
-        	}
+        	if($create == false) {
+                $msg_error = $this->lang->line('Error occurred'); 
+                $this->session->set_flashdata('error', $msg_error);
+                redirect('production/create', 'refresh');
+            } else {
+                $msg_success = $this->lang->line('Successfully created'); 
+                $this->session->set_flashdata('success', $msg_success);
+                redirect('production', 'refresh');
+            }
         }
 
-        echo json_encode($response);
-	}
-              
+        $this->data['colonies'] = $this->model_colony->getColonyData(); 
+		$this->data['products'] = $this->model_product->getActiveProduct();  
 
-	//--> If the validation is not true (not valid), then it provides the validation error on the json format
-    //    If the validation for each input is valid then it updates the data into the database and 
-    //    returns an appropriate message in the json format.
-
-	public function update($id)
-	{
-		if(!in_array('updateProduction', $this->permission)) {redirect('dashboard', 'refresh');}
-
-		$response = array();
-
-		if($id) {
-
-			$this->form_validation->set_rules('edit_product', $this->lang->line('Product'), 'trim|required');
-					$this->form_validation->set_rules('edit_production_income', $this->lang->line('Production Income'), 'trim|required');
-		$this->form_validation->set_rules('edit_production_cost', $this->lang->line('Production Cost'), 'trim|required');
-		$this->form_validation->set_rules('edit_production_net', $this->lang->line('Net Income'), 'trim|required');
-
-			$this->form_validation->set_rules('edit_production_date', $this->lang->line('Product date'), 'trim|required');
-			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
-
-	        if ($this->form_validation->run() == TRUE) {
-	        	
-				$data = array(
-					'colony_id' => $this->input->post('colony_id'),
-        			'product_id' => $this->input->post('edit_product'),
-        			'total_production' => $this->input->post('edit_total_production'),
-        			'gross_income' => $this->input->post('edit_production_income'),
-        			'cost' => $this->input->post('edit_production_cost'),
-        			'net_income' => $this->input->post('edit_production_net'),           		
-        			'production_date' => $this->input->post('edit_production_date'),	        		    
-				);
-
-		        $update = $this->model_production->update($data, $id);	
-	        	
-	        	if($update == true) 
-	        		{$response['success'] = true;
-	        		$response['messages'] = $this->lang->line('Successfully updated');}
-	        	else 
-	        		{$response['success'] = false;
-	        		$response['messages'] = $this->lang->line('Error in the database while updating the information');}			
-	        	}  //end form validation is true
-	        else   //form validation is false
-	        	{$response['successa'] = false;
-	        	foreach ($_POST as $key => $value) {$response['messages'][$key] = form_error($key);}
-	            }
-		}  //else no id
-		else {
-			$response['successb'] = false;
-    		$response['messages'] = $this->lang->line('Error please refresh the page again');
-		}
-
-		echo json_encode($response);
+        $this->render_template('production/create', $this->data);
 	}
 
+	public function update($production_id = null)
+	{      
+        if(!in_array('updateProduction', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
 
+        if(!$production_id) {
+            redirect('dashboard', 'refresh');
+        }
 
+        $this->form_validation->set_rules('colony_id', $this->lang->line('Colony'), 'trim|required');
+        $this->form_validation->set_rules('product_id', $this->lang->line('Product'), 'trim|required');
+        $this->form_validation->set_rules('year', $this->lang->line('Year'), 'trim|required');
+        
+        $this->form_validation->set_error_delimiters('<p class="alert alert-warning">','</p>');
+
+        if ($this->form_validation->run() == TRUE) {
+            $data = array(
+                'colony_id' => $this->input->post('colony_id'),
+			    'product_id' => $this->input->post('product_id'),
+                'cost' => $this->input->post('cost'),
+				'gross_income' => $this->input->post('gross_income'),
+				'net_income' => $this->input->post('net_income'),                
+                'production_date' => $this->input->post('production_date'),                
+                'total_production' => $this->input->post('total_production'),
+                'year' => $this->input->post('year')
+            );
+            
+            $update = $this->model_production->update($data, $production_id);
+
+            if($update == true) {
+                $msg_success = $this->lang->line('Successfully updated'); 
+                $this->session->set_flashdata('success', $msg_success);
+                redirect('production', 'refresh');
+            } else {
+                $msg_error = $this->lang->line('Error occurred'); 
+                $this->session->set_flashdata('error', $msg_error);
+                redirect('production/update/'.$production_id, 'refresh');
+            }
+        }
+
+        $this->data['production_data'] = $this->model_production->getProductionData($production_id);
+        $this->data['colonies'] = $this->model_colony->getColonyData(); 
+		$this->data['products'] = $this->model_product->getActiveProduct();  
+
+        $this->render_template('production/edit', $this->data); 
+	}
 
 	public function remove()
 	{
-		if(!in_array('deleteProduction', $this->permission)) {
-			redirect('dashboard', 'refresh');
-		}
-		
-		$production_id = $this->input->post('production_id');
+        if(!in_array('deleteProduction', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+        
+        $production_id = $this->input->post('production_id');
 
-		$response = '';
-		$response = array();
-		
-		if($production_id) {			
-			$delete = $this->model_production->remove($production_id);
-			if($delete == true) {
-				$response['success'] = true;
-				$response['messages'] = $this->lang->line('Successfully deleted');}
-			else {
-				$response['success'] = false;
-				$response['messages'] = $this->lang->line('Error in the database while deleting the information');
-			}
-		}
-		else {
-			$response['success'] = false;
-			$response['messages'] = $this->lang->line('Refresh the page again');
-		}
+        $response = array();
 
-		echo json_encode($response);
+        if($production_id) {
+            $delete = $this->model_production->remove($production_id);
+            if($delete == true) {
+                $response['success'] = true;
+                $response['messages'] = $this->lang->line('Successfully deleted'); 
+            }
+            else {
+                $response['success'] = false;
+                $response['messages'] = $this->lang->line('Error in the database while deleting the information');
+            }
+        }
+        else {
+            $response['success'] = false;
+            $response['messages'] = $this->lang->line('Refresh the page again');
+        }
+
+        echo json_encode($response); 
 	}
-
-
 }

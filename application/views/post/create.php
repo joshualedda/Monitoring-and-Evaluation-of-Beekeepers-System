@@ -128,6 +128,25 @@
                         </div>
                     </div>  
                 </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card border border-danger bg-danger bg-opacity-10 rounded-3 shadow-sm">
+                            <div class="card-body py-3 px-4">
+                                <div class="form-check form-switch d-flex align-items-center mb-0">
+                                    <input class="form-check-input me-3 fs-5" type="checkbox" role="switch" id="send_email" name="send_email" value="1">
+                                    <label class="form-check-label fw-bold text-danger mb-0" style="cursor: pointer;" for="send_email">
+                                        <i class="ph ph-google-logo me-2"></i> Also send a Gmail notification to all Beekeepers
+                                    </label>
+                                </div>
+                                <p class="text-danger opacity-75 small mt-2 ms-5 mb-0" style="margin-left: 2.75rem !important;">
+                                    When checked, an email notification will be sent immediately to the registered Gmail/Email address of all active beekeepers.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
               </div> <!-- /.card-body -->
 
               <div class="card-footer bg-transparent border-top border-light py-4 px-4 d-flex gap-2 justify-content-end">

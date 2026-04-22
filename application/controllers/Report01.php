@@ -60,7 +60,7 @@ class Report01 extends Admin_Controller
 			                      '<th width="25%" height="28"><strong>'.$this->lang->line('Beekeeper Name').'</strong></th>',
 			                      '<th width="19%" height="28"><strong>'.$this->lang->line('Address').'</strong></th>',
 			                      '<th width="10%" height="28"><strong>'.$this->lang->line('Province').'</strong></th>',
-			                  	  '<th width="13%" height="28"><strong>'.$this->lang->line('Lgu').'</strong></th>',
+			                  	  '<th width="13%" height="28"><strong>'.$this->lang->line('Municipality'); if(empty($this->lang->line('Municipality'))) echo 'Municipality'; echo '</strong></th>',
 			                  	  '<th width="10%" height="28"><strong>'.$this->lang->line('Association').'</strong></th>',
 			                  	  '<th width="13%" height="28"><strong>'.$this->lang->line('Category').'</strong></th>');
   	
@@ -77,7 +77,7 @@ class Report01 extends Admin_Controller
 				$cell2 = array('data' => $rs->beekeeper_name, 'width' => '25%');
 				$cell3 = array('data' => $rs->address, 'width' => '19%');
 				$cell4 = array('data' => $rs->province_name, 'width' => '10%');
-				$cell5 = array('data' => $rs->lgu_name, 'width' => '13%');
+				$cell5 = array('data' => $rs->municipality_name, 'width' => '13%');
 				$cell6 = array('data' => $rs->association_name, 'width' => '10%');
 				$cell7 = array('data' => $rs->category_name, 'width' => '13%');
 				$this->table->add_row($cell1, $cell2, $cell3, $cell4, $cell5, $cell6, $cell7);

@@ -10,6 +10,23 @@ class Report extends Admin_Controller
 
 		$this->not_logged_in();
 
+		$this->load->model('model_municipality');
+		$this->load->model('model_province');
+		$this->load->model('model_region');
+		$this->load->model('model_barangay');
+		$this->load->model('model_beekeeper');
+		$this->load->model('model_colony');
+		$this->load->model('model_report');
+		$this->load->model('model_species');
+		$this->load->model('model_nationality');
+		$this->load->model('model_phase');
+		$this->load->model('model_association');
+		$this->load->model('model_inquiry_type');
+		$this->load->model('model_support_type');
+		$this->load->model('model_source');
+		$this->load->model('model_topography');
+		$this->load->model('model_category');
+
 		$this->data['page_title'] = $this->lang->line('Reports');
 	}
 
@@ -31,7 +48,7 @@ class Report extends Admin_Controller
 			$this->session->set_flashdata('printREP01', 'yes'); 
 			$this->session->set_flashdata('printdoc', 'yes');
 			$this->session->set_flashdata('province', $this->input->post('province'));  
-		    $this->session->set_flashdata('lgu', $this->input->post('lgu'));  
+		    $this->session->set_flashdata('municipality', $this->input->post('municipality'));  
 		    $this->session->set_flashdata('category', $this->input->post('category'));  
 		}
 
@@ -46,7 +63,7 @@ class Report extends Admin_Controller
 		else if($this->input->post('report') == 'REP03') {
 			$this->session->set_flashdata('printREP03', 'yes'); 
 			$this->session->set_flashdata('printdoc', 'yes');  
-		    $this->session->set_flashdata('lgu', $this->input->post('lgu'));  
+		    $this->session->set_flashdata('municipality', $this->input->post('municipality'));  
 		    $this->session->set_flashdata('year', $this->input->post('year')); 
 		}
 		else if($this->input->post('report') == 'REP04') {
@@ -66,7 +83,7 @@ class Report extends Admin_Controller
 
 		$this->data['region'] = $this->model_region->getActiveRegion();   				
 		$this->data['province'] = $this->model_province->getActiveProvince();  
-		// $this->data['lgu'] = $this->model_lgu->getActiveLgu();  
+		$this->data['municipality'] = $this->model_municipality->getActiveMunicipality();  
 		$this->data['barangay'] = $this->model_barangay->getActiveBarangay();             
 		$this->data['beekeeper'] = $this->model_beekeeper->getActiveBeekeeperData(); 
 		$this->data['inquiry_type'] = $this->model_inquiry_type->getActiveInquiryType();

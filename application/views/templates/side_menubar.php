@@ -93,6 +93,17 @@
               <?php endif; ?>
         <?php endif; ?>
 
+        <?php if(in_array('createProduction', $user_permission) || in_array('updateProduction', $user_permission) || in_array('viewProduction', $user_permission) || in_array('deleteProduction', $user_permission)): ?>
+             <?php if(in_array('updateProduction', $user_permission) || in_array('viewProduction', $user_permission) || in_array('deleteProduction', $user_permission)): ?>
+              <li class="sidebar-item">
+                <a class="sidebar-link <?= $isActive(['Production', 'Production*']) ?>" href="<?php echo base_url('Production') ?>">
+                  <i class="ph ph-factory"></i>
+                  <span class="hide-menu"><?php echo $this->lang->line('Production'); ?></span>
+                </a>
+              </li>
+              <?php endif; ?>
+        <?php endif; ?>
+
         <!-- Section: Office / Admin Tools -->
         <li class="nav-small-cap"><span>Tools & Options</span></li>
 

@@ -274,15 +274,15 @@ public function getReport07()
 			$province_to = $province;
 		}
 
-		//--> Criteria Lgu
-		$lgu = $this->session->lgu;
-        if ($lgu == 'all') {
-        	$lgu_from = 0;
-			$lgu_to = 999;
+		//--> Criteria Municipality
+		$municipality = $this->session->municipality;
+        if ($municipality == 'all') {
+        	$municipality_from = 0;
+			$municipality_to = 999999;
         }
         else {
-			$lgu_from = $lgu;
-			$lgu_to = $lgu;
+			$municipality_from = $municipality;
+			$municipality_to = $municipality;
 		}
 
 		//--> Criteria Category
@@ -296,15 +296,15 @@ public function getReport07()
 			$category_to = $category;		}
 
 
-		$sql = "SELECT beekeeper.*,lgu.name AS 'lgu_name',
-			province.name AS 'province_name',association_name,
+		$sql = "SELECT beekeeper.*,municipality.citymunDesc AS 'municipality_name',
+			province.provDesc AS 'province_name',association_name,
 			category.name AS 'category_name'
 		FROM beekeeper 
-			 LEFT JOIN lgu ON beekeeper.lgu_id = lgu.id
-			 JOIN province ON beekeeper.province_id = province.id
+			 LEFT JOIN municipality ON beekeeper.lgu_id = municipality.municipality_id
+			 JOIN province ON beekeeper.province_id = province.province_id
 			 JOIN association ON beekeeper.association_id = association.id
 			 JOIN category ON beekeeper.category_id = category.id
-		WHERE beekeeper.lgu_id BETWEEN $lgu_from AND $lgu_to
+		WHERE beekeeper.lgu_id BETWEEN $municipality_from AND $municipality_to
 		    AND beekeeper.province_id BETWEEN $province_from AND $province_to 
 			AND beekeeper.category_id BETWEEN $category_from AND $category_to  
 		ORDER BY beekeeper_name";
@@ -391,15 +391,15 @@ public function getReport07()
 
 	public function get_REP03()
 	{
-		//--> Criteria Lgu
-		$lgu = $this->session->lgu;
-        if ($lgu == 'all') {
-        	$lgu_from = 0;
-			$lgu_to = 999;
+		//--> Criteria Municipality
+		$municipality = $this->session->municipality;
+        if ($municipality == 'all') {
+        	$municipality_from = 0;
+			$municipality_to = 999999;
         }
         else {
-			$lgu_from = $lgu;
-			$lgu_to = $lgu;
+			$municipality_from = $municipality;
+			$municipality_to = $municipality;
 		}
 
 		$year = $this->session->year;
@@ -407,8 +407,8 @@ public function getReport07()
 		$sql = "SELECT production.*,beekeeper_name,beekeeper_register_id
 		FROM production 
 			 JOIN beekeeper ON production.beekeeper_id = beekeeper.id
-		WHERE lgu_id BETWEEN $lgu_from AND $lgu_to
-		    AND year = $year
+		WHERE beekeeper.lgu_id BETWEEN $municipality_from AND $municipality_to
+		    AND production.year = $year
 		ORDER BY beekeeper_name";
 		
 		$query = $this->db->query($sql, array());
