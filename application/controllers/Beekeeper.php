@@ -65,15 +65,11 @@ class Beekeeper extends Admin_Controller
 				$buttons
 			);
 
-            // For conversion only, to delete after conversion
-            // This will create directory for all companies     
-            $path = "./upload/documents/".$value['beekeeper_register_id'];
-            if(!is_dir($path))  {mkdir($path,0755,TRUE);}            
-
 		} // /foreach
 
-        header('Content-Type: application/json');
-		echo json_encode($result);
+        $this->output
+             ->set_content_type('application/json')
+             ->set_output(json_encode($result));
 	}
 
 

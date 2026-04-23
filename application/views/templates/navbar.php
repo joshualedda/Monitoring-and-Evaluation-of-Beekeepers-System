@@ -2,15 +2,21 @@
 
 <?php
   // User session data
-  $user = $this->session->userdata('user_data') ?? [
-    'first_name' => 'Admin',
-    'last_name'  => 'User',
-    'role_id'    => 1,
-    'email'      => 'admin@gmail.com'
-  ];
-  $initials   = strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1));
-  $role_label = ($user['role_id'] == 1) ? 'Administrator' : 'Officer';
-  $full_name  = htmlspecialchars($user['first_name'] . ' ' . $user['last_name']);
+  $user_data = $this->session->userdata('user_data') ?? [];
+  $sess_name = $this->session->userdata('name') ?? 'Admin User';
+  
+  $first_name = $user_data['first_name'] ?? '';
+  $last_name  = $user_data['last_name'] ?? '';
+  
+  if (empty($first_name) && empty($last_name)) {
+      $parts = explode(' ', $sess_name);
+      $first_name = $parts[0] ?? 'Admin';
+      $last_name  = $parts[1] ?? 'User';
+  }
+
+  $initials   = strtoupper(substr($first_name, 0, 1) . substr($last_name, 0, 1));
+  $role_label = (($user_data['role_id'] ?? 0) == 1) ? 'Administrator' : 'Officer';
+  $full_name  = htmlspecialchars($sess_name);
 ?>
 
 <div class="body-wrapper">
@@ -65,7 +71,7 @@
               <div class="nb-dropdown-avatar"><?= $initials ?></div>
               <p class="nb-dropdown-name"><?= $full_name ?></p>
               <p class="nb-dropdown-role"><?= $role_label ?></p>
-              <p class="nb-dropdown-email"><?= htmlspecialchars($user['email']) ?></p>
+              <p class="nb-dropdown-email"><?= htmlspecialchars($user_data['email'] ?? '') ?></p>
             </div>
 
             <!-- Actions -->

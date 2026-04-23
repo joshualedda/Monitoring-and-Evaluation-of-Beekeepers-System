@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="<?= base_url('assets/css/datatable.css'); ?>" />
   <!-- Reusable Form widget styles -->
   <link rel="stylesheet" href="<?= base_url('assets/css/forms.css'); ?>" />
+  <link rel="stylesheet" href="<?= base_url('assets/css/auth.css'); ?>" />
+
 
 
   <!-- End Test -->

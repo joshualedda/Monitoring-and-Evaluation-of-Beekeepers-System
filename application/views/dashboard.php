@@ -271,7 +271,7 @@
         </div>
 
         <!-- ── Analytics Side Panel ── -->
-        <div id="analyticsPanel" style="width:420px;height:100%;overflow-y:auto;background:#f4f6fb;border-left:2px solid #e0e6f0;flex-shrink:0;display:none;">
+        <div id="analyticsPanel" style="width:600px;max-width:45vw;height:100%;overflow-y:auto;background:#f4f6fb;border-left:2px solid #e0e6f0;flex-shrink:0;display:none;">
 
           <!-- Panel Header -->
           <div style="background:#1a4b9c;padding:16px 20px 12px;position:sticky;top:0;z-index:5;">
@@ -414,7 +414,7 @@
      ============================================================ -->
 <!-- APIARY DETAIL + WEATHER MODAL -->
 <div class="modal fade" id="apiaryWeatherModal" tabindex="-1" role="dialog" style="z-index:1060;">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document" style="max-width:1020px;">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document" style="max-width:1200px;">
     <div class="modal-content border-0 rounded-4 overflow-hidden" style="box-shadow:0 32px 80px rgba(0,0,0,.28);">
 
       <!-- ── Apiary Modal Hero Header ── -->
@@ -425,8 +425,8 @@
             <div class="d-flex align-items-center gap-4">
               <div class="awm-hero-icon">🏡</div>
               <div>
-                <h4 class="fw-bold mb-1 text-white" id="awm-name" style="font-size:1.35rem;letter-spacing:-.02em;">Apiary Name</h4>
-                <p class="mb-2" id="awm-address" style="font-size:.85rem;color:rgba(255,255,255,.7);">Loading location...</p>
+                <h4 class="fw-bold mb-1 text-white" id="awm-hero-title" style="font-size:1.35rem;letter-spacing:-.02em;">Apiary Site</h4>
+                <p class="mb-2" id="awm-address" style="font-size:.85rem;color:rgba(255,255,255,.9);">Loading location...</p>
                 <span id="awm-accuracy-badge" class="badge rounded-pill px-3 py-1" style="font-size:.72rem;"></span>
               </div>
             </div>
@@ -434,22 +434,24 @@
           </div>
 
           <!-- Weather Block -->
-          <div class="awm-hero-weather mt-4">
-            <div class="awm-hero-temp-block">
-              <div id="awm-weather-icon" style="font-size:2.8rem;line-height:1;">⏳</div>
-              <div class="ms-3">
-                <div class="awm-hero-temp" id="awm-temp">--°C</div>
-                <div id="awm-desc" style="font-size:.85rem;color:rgba(255,255,255,.8);margin-top:2px;">Fetching weather...</div>
+          <div class="awm-hero-weather mt-4 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <div class="awm-hero-temp-block">
+                <div id="awm-weather-icon" style="font-size:2.8rem;line-height:1;">⏳</div>
+                <div class="ms-3">
+                  <div class="awm-hero-temp" id="awm-temp">--°C</div>
+                  <div id="awm-desc" style="font-size:.85rem;color:rgba(255,255,255,.8);margin-top:2px;">Fetching weather...</div>
+                </div>
+              </div>
+              <div class="awm-hero-stats ms-4 d-none d-md-flex">
+                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Feels Like</div><div class="awm-hero-stat-val" id="awm-feels">--</div></div>
+                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Humidity</div><div class="awm-hero-stat-val" id="awm-humidity">--</div></div>
+                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Wind</div><div class="awm-hero-stat-val" id="awm-wind">--</div></div>
+                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Rainfall</div><div class="awm-hero-stat-val" id="awm-rain">--</div></div>
+                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Cloud</div><div class="awm-hero-stat-val" id="awm-cloud">--</div></div>
               </div>
             </div>
-            <div class="awm-hero-stats">
-              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Feels Like</div><div class="awm-hero-stat-val" id="awm-feels">--</div></div>
-              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Humidity</div><div class="awm-hero-stat-val" id="awm-humidity">--</div></div>
-              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Wind</div><div class="awm-hero-stat-val" id="awm-wind">--</div></div>
-              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Rainfall</div><div class="awm-hero-stat-val" id="awm-rain">--</div></div>
-              <div class="awm-hero-stat"><div class="awm-hero-stat-label">Cloud Cover</div><div class="awm-hero-stat-val" id="awm-cloud">--</div></div>
-            </div>
-            <div style="font-size:.68rem;color:rgba(255,255,255,.55);white-space:nowrap;margin-top:4px;" id="awm-timestamp"></div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.55);text-align:right;" id="awm-timestamp"></div>
           </div>
         </div>
       </div>
@@ -462,15 +464,38 @@
           <div class="col-lg-5">
             <div class="awm-info-card h-100">
               <div class="awm-info-header"><i class="ph ph-house me-2"></i>Apiary Details</div>
-              <?php foreach([
-                ['awm-beekeeper','👤 Beekeeper'],['awm-barangay','📍 Barangay'],['awm-municipality','🏛️ Municipality'],
-                ['awm-province','🗺️ Province'],['awm-area','📐 Area Size'],['awm-topo','🏔️ Topography'],['awm-source','🌸 Honey Sources']
-              ] as [$id,$label]): ?>
               <div class="awm-info-row">
-                <span class="awm-info-lbl"><?php echo $label ?></span>
-                <span class="awm-info-val" id="<?php echo $id ?>" >--</span>
+                <span class="awm-info-lbl">👤 Beekeeper</span>
+                <span class="awm-info-val" id="awm-beekeeper">--</span>
               </div>
-              <?php endforeach; ?>
+              <div class="awm-info-row">
+                <span class="awm-info-lbl">🌍 Region</span>
+                <span class="awm-info-val fw-bold text-primary" id="awm-region">--</span>
+              </div>
+              <div class="awm-info-row">
+                <span class="awm-info-lbl">🗺️ Province</span>
+                <span class="awm-info-val fw-bold text-primary" id="awm-province">--</span>
+              </div>
+              <div class="awm-info-row">
+                <span class="awm-info-lbl">🏛️ Municipality</span>
+                <span class="awm-info-val fw-bold text-primary" id="awm-municipality">--</span>
+              </div>
+              <div class="awm-info-row">
+                <span class="awm-info-lbl">📍 Barangay</span>
+                <span class="awm-info-val fw-bold text-primary" id="awm-barangay">--</span>
+              </div>
+              <div class="awm-info-row">
+                <span class="awm-info-lbl">📐 Area Size</span>
+                <span class="awm-info-val" id="awm-area">--</span>
+              </div>
+              <div class="awm-info-row">
+                <span class="awm-info-lbl">🏔️ Topography</span>
+                <span class="awm-info-val" id="awm-topo">--</span>
+              </div>
+              <div class="awm-info-row">
+                <span class="awm-info-lbl">🌸 Honey Sources</span>
+                <span class="awm-info-val" id="awm-source">--</span>
+              </div>
               <div class="awm-info-row" style="border-bottom:none;">
                 <span class="awm-info-lbl">🐝 Total Colonies</span>
                 <span class="badge text-white rounded-pill px-3 py-1" id="awm-colonies" style="background:#1a4b9c;font-size:.82rem;">--</span>
@@ -502,7 +527,7 @@
               <div id="awm-plants-loading" style="font-size:.82rem;color:#94a3b8;margin-top:8px;display:flex;align-items:center;gap:6px;">
                 <i class="ph ph-circle-notch"></i> Fetching nearby flora...
               </div>
-              <div id="awm-plants-list" class="d-flex flex-column gap-2 mt-2"></div>
+              <div id="awm-plants-list" class="d-flex flex-column gap-2 mt-2" style="max-height:300px; overflow-y:auto; padding-right:8px;"></div>
               <div id="awm-plants-empty" style="display:none;font-size:.82rem;color:#94a3b8;">No plant observations found nearby.</div>
             </div>
 
@@ -810,6 +835,7 @@ apiaries.push({
     name:         "<?php echo addslashes($v['location']) ?>",
     beekeeper:    "<?php echo addslashes($v['beekeeper_name']) ?>",
     address:      "<?php echo addslashes($v['barangay_name'].', '.$v['municipality_name'].', '.$v['province_name']) ?>",
+    region:       "<?php echo addslashes($v['region_name'] ?? '--') ?>",
     barangay:     "<?php echo addslashes($v['barangay_name']) ?>",
     municipality: "<?php echo addslashes($v['municipality_name']) ?>",
     province:     "<?php echo addslashes($v['province_name']) ?>",
@@ -1233,9 +1259,10 @@ window.openApiaryModal = function(apiary, lat, lng) {
   if (typeof apiary === 'string') { try { apiary = JSON.parse(apiary); } catch(e){} }
   lat = parseFloat(lat); lng = parseFloat(lng);
 
-  $('#awm-name').text(apiary.name);
-  $('#awm-address').text(apiary.address);
+  $('#awm-hero-title').text(apiary.barangay + ', ' + apiary.municipality);
+  $('#awm-address').text(apiary.province + ', ' + apiary.region);
   $('#awm-beekeeper').text(apiary.beekeeper || '--');
+  $('#awm-region').text(apiary.region || '--');
   $('#awm-barangay').text(apiary.barangay || '--');
   $('#awm-municipality').text(apiary.municipality || '--');
   $('#awm-province').text(apiary.province || '--');

@@ -697,3 +697,150 @@ body {
   }
 }
 
+/* ================================================================
+   DATA TABLES (Premium Look)
+   ================================================================ */
+.dt-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid var(--db-border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.dt-card-header {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--db-border);
+  background: #fdfdfe;
+}
+
+.dt-card-header h5 {
+  font-weight: 700;
+  color: var(--db-text-dark);
+  font-size: 1.05rem;
+}
+
+.btn-dt-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--db-primary);
+  color: #fff !important;
+  padding: 8px 16px;
+  border-radius: 9px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px var(--db-primary-shadow);
+}
+.btn-dt-add:hover {
+  background: #143b7a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px var(--db-primary-shadow);
+}
+
+.datatable-wrapper {
+  padding: 0;
+}
+
+/* Table styling */
+.table.dataTable {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+}
+
+.table.dataTable thead th {
+  background: #f8fafc;
+  color: var(--db-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--db-border);
+}
+
+.table.dataTable tbody td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.88rem;
+  color: var(--db-text-dark);
+}
+
+.table.dataTable tbody tr:hover {
+  background-color: #fcfdfe;
+}
+
+/* Status Badges */
+.dt-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.dt-badge-success { background: #ecfdf5; color: #059669; }
+.dt-badge-warning { background: #fffbeb; color: #d97706; }
+.dt-badge-danger  { background: #fef2f2; color: #dc2626; }
+
+/* Action Buttons */
+.btn-dt {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  margin-right: 4px;
+}
+
+.btn-dt:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.06); }
+
+.btn-dt-view:hover { color: var(--db-primary); border-color: var(--db-primary); background: #eff6ff; }
+.btn-dt-edit:hover { color: #0ea5e9; border-color: #0ea5e9; background: #f0f9ff; }
+.btn-dt-delete:hover { color: #ef4444; border-color: #ef4444; background: #fef2f2; }
+.btn-dt-print:hover { color: #8b5cf6; border-color: #8b5cf6; background: #f5f3ff; }
+
+/* DataTables pagination & info */
+.dataTables_wrapper .dataTables_info {
+  padding: 20px;
+  font-size: 0.8rem;
+  color: var(--db-text-muted);
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  padding: 15px 20px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  padding: 20px 24px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid var(--db-border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: var(--db-primary);
+  box-shadow: 0 0 0 3px var(--db-primary-shadow);
+}

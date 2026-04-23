@@ -37,10 +37,11 @@ class Auth extends Admin_Controller
            				'user_id' => $login['id'],
 				        'profile_id' => $login['profile_id'],
 				        'username' => $login['username'],
+				        'name' => $login['name'],
 				        'logged_in' => TRUE,
                         'user_data' => [
-                            'first_name' => $login['firstname'] ?? '',
-                            'last_name'  => $login['lastname'] ?? '',
+                            'first_name' => $login['firstname'] ?? explode(' ', $login['name'])[0] ?? '',
+                            'last_name'  => $login['lastname'] ?? explode(' ', $login['name'])[1] ?? '',
                             'email'      => $login['email'] ?? '',
                             'role_id'    => $login['profile_id'] ?? 0
                         ]

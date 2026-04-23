@@ -1,155 +1,116 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 
-<!-- Shared Auth Stylesheet -->
-<link rel="stylesheet" href="<?= base_url('assets/css/auth.css'); ?>">
-
-<style>
-  /* Page specific background logic */
-  .auth-full-page {
-    background-image: url("<?= base_url('beekeeping_bg_1776865892735.png'); ?>");
-  }
-</style>
-
-<div class="auth-full-page">
-  <div class="auth-centered-content">
-    <div class="glass-card">
-      
-      <!-- Logo -->
-      <div class="text-center">
-        <img src="<?= base_url('assets/images/meb.png'); ?>" alt="MEB Logo" class="auth-logo-modern">
-      </div>
-
-      <!-- Header -->
-      <div class="text-center mb-4">
-        <h1 class="auth-title-modern">Monitoring and Evaluation <span class="highlight-gold">of Beekeepers</span></h1>
-        <p class="auth-subtitle-modern">Sign in to access your administrative dashboard</p>
-      </div>
-
-      <!-- Error -->
-      <?php if (!empty($errors)) : ?>
-        <div class="alert alert-danger auth-alert d-flex align-items-center gap-2 py-2 mb-4" role="alert">
-          <i class="bi bi-exclamation-circle-fill"></i>
-          <span><?= $errors ?></span>
-        </div>
-      <?php endif; ?>
-
-      <form id="loginForm" method="post" action="<?= base_url('auth/login') ?>" novalidate>
-        <?php if (isset($this->security)): ?>
-          <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
-        <?php endif; ?>
-
-        <!-- Username -->
-        <div class="auth-input-group-glass">
-          <label for="loginUsername" class="auth-label">Username</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input
-              name="username"
-              type="text"
-              class="form-control"
-              id="loginUsername"
-              placeholder="Enter your username"
-              autocomplete="username"
-              value="<?= htmlspecialchars($remembered_username ?? '') ?>"
-            >
-          </div>
-          <?= form_error('username', '<div class="text-danger mt-1" style="font-size:0.8rem;">', '</div>') ?>
+<body>
+  <main class="page-main">
+    <div class="login-container">
+      <div class="login-card">
+        <!-- Header -->
+        <div class="login-card-header">
+          <img src="<?= base_url('assets/images/meb.png') ?>" alt="MEB Logo" class="login-logo-img">
+          <h2>Monitoring & Evaluation<br>of Beekeepers</h2>
+          <p>National Apiculture Research, Training & Development Institute</p>
         </div>
 
-        <!-- Password -->
-        <div class="auth-input-group-glass">
-          <label for="loginPassword" class="auth-label">Password</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input
-              name="password"
-              type="password"
-              class="form-control"
-              id="loginPassword"
-              placeholder="Enter your password"
-              autocomplete="current-password"
-            >
-            <button type="button" class="auth-toggle-pw" onclick="toggleLoginPassword()" title="Show/Hide password">
-              <i class="bi bi-eye" id="loginToggleIcon"></i>
+        <!-- Body -->
+        <div class="login-card-body">
+          <div class="section-label">Institutional Access</div>
+
+          <?php if (!empty($errors)) : ?>
+            <div class="meb-alert" role="alert">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <span><?= $errors ?></span>
+            </div>
+          <?php endif; ?>
+
+          <form id="loginForm" method="post" action="<?= base_url('auth/login') ?>" novalidate>
+            <?php if (isset($this->security)): ?>
+              <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
+            <?php endif; ?>
+
+            <!-- Username -->
+            <div class="field-wrap">
+              <label for="loginUsername" class="field-label">Username</label>
+              <div class="input-wrap">
+                <i class="bi bi-person-fill input-icon"></i>
+                <input name="username" type="text" class="form-control" id="loginUsername" placeholder="Enter your username" autocomplete="username" value="<?= htmlspecialchars($remembered_username ?? '') ?>">
+              </div>
+              <?= form_error('username', '<div class="field-error">', '</div>') ?>
+            </div>
+
+            <!-- Password -->
+            <div class="field-wrap">
+              <label for="loginPassword" class="field-label">Password</label>
+              <div class="input-wrap">
+                <i class="bi bi-shield-lock-fill input-icon"></i>
+                <input name="password" type="password" class="form-control" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+                <button type="button" class="pw-toggle" id="pwToggleBtn">
+                  <i class="bi bi-eye-fill" id="pwToggleIcon"></i>
+                </button>
+              </div>
+              <?= form_error('password', '<div class="field-error">', '</div>') ?>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me" <?= !empty($remembered_username) ? 'checked' : '' ?>>
+                <label class="form-check-label" for="rememberMe" style="font-size: 0.85rem; color: var(--text-mid);">Keep me signed in</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-login" id="loginBtn">
+              <span id="btnText">Sign In</span>
+              <div id="btnLoader" class="spinner-border spinner-border-sm d-none" role="status"></div>
             </button>
+          </form>
+
+          <div class="auth-footer-links">
+            Don't have an account? <a href="<?= base_url('register') ?>">Request Access</a>
           </div>
-          <?= form_error('password', '<div class="text-danger mt-1" style="font-size:0.8rem;">', '</div>') ?>
-        </div>
 
-        <!-- Remember Me -->
-        <div class="d-flex align-items-center justify-content-between mb-4">
-          <div class="form-check mb-0">
-            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me" style="border-radius:6px; cursor:pointer;" <?= !empty($remembered_username) ? 'checked' : '' ?>>
-            <label class="form-check-label" for="rememberMe" style="font-size:0.85rem; color:#64748b; cursor:pointer;">Keep me signed in</label>
+          <div class="notice-box">
+            <i class="bi bi-info-circle-fill"></i>
+            <span>Authorized personnel only. All access and activities are logged for security purposes.</span>
           </div>
         </div>
-
-        <!-- Sign In -->
-        <button type="submit" class="btn auth-btn-premium mb-4" id="loginBtn">
-          <span class="btn-auth-text"><i class="bi bi-door-open-fill me-2"></i>Sign In</span>
-          <span class="btn-auth-loader d-none"><span class="spinner-border spinner-border-sm me-2"></span>Authenticating...</span>
-        </button>
-
-        <p class="auth-footer-text m-0">
-          Not yet a member?
-          <a href="<?= base_url('register') ?>" class="link-green">Request Access</a>
-        </p>
-
-      </form>
+      </div>
     </div>
+  </main>
 
-    <!-- Small Footer -->
-    <div class="text-center mt-4">
-      <p class="small text-white-50 m-0">&copy; <?= date('Y') ?> NARTDI - National Apiculture Research, Training Development Institute</p>
-    </div>
-  </div>
-</div>
+  <footer class="page-footer">
+    <p>&copy; <?= date('Y') ?> NARTDI &mdash; MEB System</p>
+    <p style="font-size: 0.75rem; opacity: 0.6;">National Apiculture Research, Training and Development Institute</p>
+  </footer>
 
-<script>
-  function toggleLoginPassword() {
-    var input = document.getElementById('loginPassword');
-    var icon  = document.getElementById('loginToggleIcon');
-    if (!input) return;
-    if (input.type === 'password') {
-      input.type = 'text';
-      if (icon) { icon.classList.replace('bi-eye', 'bi-eye-slash'); }
-    } else {
-      input.type = 'password';
-      if (icon) { icon.classList.replace('bi-eye-slash', 'bi-eye'); }
-    }
-  }
+  <script>
+    // Password toggle
+    const pwBtn = document.getElementById('pwToggleBtn');
+    const pwInput = document.getElementById('loginPassword');
+    const pwIcon = document.getElementById('pwToggleIcon');
 
-  document.getElementById('loginForm').addEventListener('submit', function (e) {
-    var username = document.getElementById('loginUsername').value.trim();
-    var pass  = document.getElementById('loginPassword').value.trim();
+    pwBtn.addEventListener('click', () => {
+      const isHidden = pwInput.type === 'password';
+      pwInput.type = isHidden ? 'text' : 'password';
+      pwIcon.className = isHidden ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill';
+    });
 
-    document.querySelectorAll('.js-field-err').forEach(function(el){ el.remove(); });
-    document.querySelectorAll('.is-invalid-js').forEach(function(el){ el.classList.remove('is-invalid-js','border-danger'); });
+    // Form submit loading
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const btnText = document.getElementById('btnText');
+    const btnLoader = document.getElementById('btnLoader');
 
-    var ok = true;
-    function fieldErr(inputId, msg) {
-      var inp = document.getElementById(inputId);
-      var group = inp.closest('.input-group');
-      group.classList.add('border-danger');
-      var d = document.createElement('div');
-      d.className = 'js-field-err text-danger mt-2 ps-2';
-      d.style.fontSize = '0.8rem';
-      d.style.fontWeight = '600';
-      d.textContent = msg;
-      group.insertAdjacentElement('afterend', d);
-      ok = false;
-    }
-
-    if (!username) fieldErr('loginUsername', 'Username is required.');
-    if (!pass) fieldErr('loginPassword', 'Password is required.');
-
-    if (!ok) { e.preventDefault(); return; }
-
-    var btn = document.getElementById('loginBtn');
-    if (btn) {
-      btn.querySelector('.btn-auth-text').classList.add('d-none');
-      btn.querySelector('.btn-auth-loader').classList.remove('d-none');
-      btn.disabled = true;
-    }
-  });
-</script>
+    loginForm.addEventListener('submit', (e) => {
+      // Basic validation check to prevent loader on obviously empty fields
+      const username = document.getElementById('loginUsername').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+      
+      if (username && pass) {
+        btnText.style.display = 'none';
+        btnLoader.classList.remove('d-none');
+        loginBtn.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>
