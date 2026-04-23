@@ -4,8 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Chatbot extends Admin_Controller
 {
     // mAIN
-    // private $gemini_api_key = 'AIzaSyBVlEwAODwoYokC8PyPQClMFLXl527IJKM';
-    private $gemini_api_key = 'AIzaSyBAHR5F-Ciduf1EFbqYbynwQRGbx0jIm5o';
+    private $gemini_api_key = '';
 
     private $gemini_model   = 'gemini-3-flash-preview';
 
