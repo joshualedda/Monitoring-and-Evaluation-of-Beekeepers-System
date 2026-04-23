@@ -64,9 +64,9 @@
             </button>
           </form>
 
-          <div class="auth-footer-links">
+          <!-- <div class="auth-footer-links">
             Don't have an account? <a href="<?= base_url('register') ?>">Request Access</a>
-          </div>
+          </div> -->
 
           <div class="notice-box">
             <i class="bi bi-info-circle-fill"></i>

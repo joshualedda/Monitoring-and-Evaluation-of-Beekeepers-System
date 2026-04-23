@@ -110,6 +110,43 @@
       </div>
 
     </div>
+    
+    <!-- Automated Alerts Section -->
+    <?php if(!empty($automated_alerts)): ?>
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="background: #fffafa; border-left: 5px solid #ef4444 !important;">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-circle bg-danger bg-opacity-10 p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                  <i class="ph-bold ph-chart-line-up text-danger fs-5"></i>
+                </div>
+                <h5 class="fw-bold mb-0 text-dark">Predictive Analytics & Alerts</h5>
+              </div>
+              <span class="badge bg-danger rounded-pill px-3 py-1"><?php echo count($automated_alerts); ?> Critical Insights</span>
+            </div>
+            
+            <div class="row g-3">
+              <?php foreach($automated_alerts as $alert): ?>
+              <div class="col-12 col-md-6">
+                <div class="d-flex align-items-start gap-3 p-3 rounded-4 bg-white border border-opacity-10 shadow-sm hover-lift">
+                  <div class="flex-shrink-0 mt-1" style="color: <?php echo $alert['color']; ?>; font-size: 1.5rem;">
+                    <i class="<?php echo $alert['icon']; ?>"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-1" style="color: <?php echo $alert['color']; ?>;"><?php echo $alert['title']; ?></h6>
+                    <p class="small text-muted mb-0"><?php echo $alert['message']; ?></p>
+                  </div>
+                </div>
+              </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endif; ?>
 
     <!-- Map + Regional Focus -->
     <div class="row mt-4">
@@ -159,7 +196,7 @@
     <!-- Analytics Charts Row -->
     <div class="row mb-4">
       <!-- Beekeepers Overview -->
-      <div class="col-lg-6 mb-4">
+      <div class="col-lg-12 mb-4">
         <div class="card border-0 shadow-sm rounded-4 h-100">
           <div class="card-header bg-white border-0 py-4 px-4">
             <h5 class="fw-bold mb-0">Beekeepers Overview</h5>
@@ -167,18 +204,6 @@
           </div>
           <div class="card-body p-4">
             <div id="beekeeperChart" style="min-height: 350px;"></div>
-          </div>
-        </div>
-      </div>
-      <!-- Colonies per Apiary -->
-      <div class="col-lg-6 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-header bg-white border-0 py-4 px-4">
-            <h5 class="fw-bold mb-0">Colonies per Apiary</h5>
-            <p class="text-muted small mb-0">Active vs Inactive breakdown</p>
-          </div>
-          <div class="card-body p-4">
-            <div id="apiaryChart" style="min-height: 350px;"></div>
           </div>
         </div>
       </div>
@@ -418,40 +443,42 @@
     <div class="modal-content border-0 rounded-4 overflow-hidden" style="box-shadow:0 32px 80px rgba(0,0,0,.28);">
 
       <!-- ── Apiary Modal Hero Header ── -->
-      <div class="awm-hero">
-        <div class="awm-hero-bg"></div>
-        <div class="awm-hero-content">
-          <div class="d-flex align-items-start justify-content-between w-100">
-            <div class="d-flex align-items-center gap-4">
-              <div class="awm-hero-icon">🏡</div>
-              <div>
-                <h4 class="fw-bold mb-1 text-white" id="awm-hero-title" style="font-size:1.35rem;letter-spacing:-.02em;">Apiary Site</h4>
-                <p class="mb-2" id="awm-address" style="font-size:.85rem;color:rgba(255,255,255,.9);">Loading location...</p>
-                <span id="awm-accuracy-badge" class="badge rounded-pill px-3 py-1" style="font-size:.72rem;"></span>
-              </div>
-            </div>
-            <button type="button" class="btn-close btn-close-white ms-3" data-bs-dismiss="modal" style="opacity:.8;"></button>
-          </div>
-
-          <!-- Weather Block -->
-          <div class="awm-hero-weather mt-4 d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-              <div class="awm-hero-temp-block">
-                <div id="awm-weather-icon" style="font-size:2.8rem;line-height:1;">⏳</div>
-                <div class="ms-3">
-                  <div class="awm-hero-temp" id="awm-temp">--°C</div>
-                  <div id="awm-desc" style="font-size:.85rem;color:rgba(255,255,255,.8);margin-top:2px;">Fetching weather...</div>
+      <div class="modal-header p-0 border-0">
+        <div class="awm-hero w-100">
+          <div class="awm-hero-bg"></div>
+          <div class="awm-hero-content">
+            <div class="d-flex align-items-start justify-content-between w-100">
+              <div class="d-flex align-items-center gap-4">
+                <div class="awm-hero-icon">🏡</div>
+                <div>
+                  <h4 class="fw-bold mb-1 text-white" id="awm-hero-title" style="font-size:1.35rem;letter-spacing:-.02em;">Apiary Site</h4>
+                  <p class="mb-2" id="awm-address" style="font-size:.85rem;color:rgba(255,255,255,.9);">Loading location...</p>
+                  <span id="awm-accuracy-badge" class="badge rounded-pill px-3 py-1" style="font-size:.72rem;"></span>
                 </div>
               </div>
-              <div class="awm-hero-stats ms-4 d-none d-md-flex">
-                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Feels Like</div><div class="awm-hero-stat-val" id="awm-feels">--</div></div>
-                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Humidity</div><div class="awm-hero-stat-val" id="awm-humidity">--</div></div>
-                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Wind</div><div class="awm-hero-stat-val" id="awm-wind">--</div></div>
-                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Rainfall</div><div class="awm-hero-stat-val" id="awm-rain">--</div></div>
-                <div class="awm-hero-stat"><div class="awm-hero-stat-label">Cloud</div><div class="awm-hero-stat-val" id="awm-cloud">--</div></div>
-              </div>
+              <button type="button" class="btn-close btn-close-white ms-3" data-bs-dismiss="modal" style="opacity:.8;"></button>
             </div>
-            <div style="font-size:.68rem;color:rgba(255,255,255,.55);text-align:right;" id="awm-timestamp"></div>
+
+            <!-- Weather Block -->
+            <div class="awm-hero-weather d-flex align-items-center justify-content-between flex-wrap mb-4">
+              <div class="d-flex align-items-center flex-wrap gap-4">
+                <div class="awm-hero-temp-block">
+                  <div id="awm-weather-icon" style="font-size:3.5rem;line-height:1;filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">⏳</div>
+                  <div class="ms-3">
+                    <div class="awm-hero-temp" id="awm-temp">--°C</div>
+                    <div id="awm-desc" style="font-size:.95rem;color:#fff;font-weight:600;margin-top:2px;text-shadow: 0 1px 2px rgba(0,0,0,0.2);">Fetching weather...</div>
+                  </div>
+                </div>
+                <div class="awm-hero-stats">
+                  <div class="awm-hero-stat"><div class="awm-hero-stat-label">Feels Like</div><div class="awm-hero-stat-val" id="awm-feels">--</div></div>
+                  <div class="awm-hero-stat"><div class="awm-hero-stat-label">Humidity</div><div class="awm-hero-stat-val" id="awm-humidity">--</div></div>
+                  <div class="awm-hero-stat"><div class="awm-hero-stat-label">Wind</div><div class="awm-hero-stat-val" id="awm-wind">--</div></div>
+                  <div class="awm-hero-stat"><div class="awm-hero-stat-label">Rainfall</div><div class="awm-hero-stat-val" id="awm-rain">--</div></div>
+                  <div class="awm-hero-stat"><div class="awm-hero-stat-label">Cloud</div><div class="awm-hero-stat-val" id="awm-cloud">--</div></div>
+                </div>
+              </div>
+              <div style="font-size:.68rem;color:rgba(255,255,255,.55);text-align:right;" id="awm-timestamp"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -461,8 +488,8 @@
         <div class="row g-4">
 
           <!-- Left: Apiary Details -->
-          <div class="col-lg-5">
-            <div class="awm-info-card h-100">
+          <div class="col-lg-5 d-flex flex-column gap-4">
+            <div class="awm-info-card">
               <div class="awm-info-header"><i class="ph ph-house me-2"></i>Apiary Details</div>
               <div class="awm-info-row">
                 <span class="awm-info-lbl">👤 Beekeeper</span>
@@ -504,6 +531,20 @@
                 <div style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;"><i class="ph ph-map-pin"></i><span id="awm-coords">--</span></div>
               </div>
             </div>
+
+            <!-- Monitoring Logs Section -->
+            <div class="awm-info-card flex-grow-1">
+              <div class="awm-info-header"><i class="ph ph-activity me-2"></i>Recent Monitoring History</div>
+              <div id="awm-logs-loading" class="py-4 text-center">
+                <i class="ph ph-circle-notch fa-spin text-primary fs-4"></i>
+                <div class="small text-muted mt-2">Fetching activity logs...</div>
+              </div>
+              <div id="awm-logs-list" class="d-flex flex-column gap-3 mt-2" style="max-height:300px; overflow-y:auto; scrollbar-width: thin;"></div>
+              <div id="awm-logs-empty" class="py-4 text-center" style="display:none;">
+                <i class="ph ph-clipboard-text text-muted fs-3"></i>
+                <div class="small text-muted mt-2">No recent monitoring activities.</div>
+              </div>
+            </div>
           </div>
 
           <!-- Right: Outlook + Plants -->
@@ -512,9 +553,9 @@
             <!-- Bee Activity Outlook -->
             <div class="awm-info-card">
               <div class="awm-info-header"><i class="ph ph-sun me-2"></i>Bee Activity Outlook</div>
-              <div class="d-flex align-items-center gap-3 mt-2 p-3 rounded-3" id="awm-outlook-wrap" style="background:#f0f4ff;border:1.5px solid #d8e4ff;">
-                <div id="awm-rec-icon" style="font-size:2rem;flex-shrink:0;">⏳</div>
-                <div id="awm-recommendation" style="font-size:.88rem;color:#1e293b;line-height:1.6;font-weight:500;">Analyzing conditions...</div>
+              <div class="d-flex align-items-center gap-4 mt-2 p-4 rounded-4" id="awm-outlook-wrap" style="background:#f0f4ff;border:1.5px solid #d8e4ff;box-shadow: 0 4px 15px rgba(26,75,156,0.05);">
+                <div id="awm-rec-icon" style="font-size:2.5rem;flex-shrink:0;">⏳</div>
+                <div id="awm-recommendation" style="font-size:1rem;color:#1e293b;line-height:1.6;font-weight:600;">Analyzing conditions...</div>
               </div>
             </div>
 
@@ -524,10 +565,10 @@
                 <i class="ph ph-plant me-2"></i>Nearby Flowering Plants
                 <span style="font-size:.68rem;font-weight:400;color:#94a3b8;text-transform:none;margin-left:6px;">within 10 km · iNaturalist</span>
               </div>
-              <div id="awm-plants-loading" style="font-size:.82rem;color:#94a3b8;margin-top:8px;display:flex;align-items:center;gap:6px;">
-                <i class="ph ph-circle-notch"></i> Fetching nearby flora...
+              <div id="awm-plants-loading" style="font-size:.82rem;color:#94a3b8;margin-top:8px;display:flex;align-items:center;gap:10px;">
+                <i class="ph ph-circle-notch fa-spin"></i> Fetching nearby flora...
               </div>
-              <div id="awm-plants-list" class="d-flex flex-column gap-2 mt-2" style="max-height:300px; overflow-y:auto; padding-right:8px;"></div>
+              <div id="awm-plants-list" class="d-flex flex-column gap-3 mt-3" style="max-height:400px; overflow-y:auto; padding-right:8px; scrollbar-width: thin;"></div>
               <div id="awm-plants-empty" style="display:none;font-size:.82rem;color:#94a3b8;">No plant observations found nearby.</div>
             </div>
 
@@ -721,8 +762,8 @@
   /* Hero header */
   .awm-hero {
     position:relative;overflow:hidden;
-    padding:30px 28px 24px;
-    background:#1a4b9c;
+    padding:40px 32px 48px;
+    background: #1a4b9c;
   }
   .awm-hero-bg {
     display:none;
@@ -735,25 +776,32 @@
     flex-shrink:0;backdrop-filter:blur(8px);
   }
   .awm-hero-weather {
-    display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;
-    background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.15);
-    border-radius:14px;padding:16px 20px;
+    display:flex;align-items:center;gap:30px;flex-wrap:wrap;
+    background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2);
+    border-radius:16px;padding:20px 24px;
+    margin-top: 25px;
   }
-  .awm-hero-temp-block { display:flex;align-items:center;flex-shrink:0;min-width:130px; }
+  .awm-hero-temp-block { display:flex;align-items:center;flex-shrink:0;min-width:150px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px; }
   .awm-hero-temp {
-    font-size:2.4rem;font-weight:800;color:#fff;
+    font-size:2.8rem;font-weight:800;color:#fff;
     line-height:1;letter-spacing:-.03em;
   }
-  .awm-hero-stats { display:flex;gap:16px;flex-wrap:wrap;flex:1;min-width:0; }
-  .awm-hero-stat { text-align:center;min-width:56px; }
+  .awm-hero-stats { display:flex;gap:24px;flex-wrap:wrap;flex:1;min-width:0; }
+  .awm-hero-stat { text-align:center;min-width:70px; }
   .awm-hero-stat-label {
-    font-size:.62rem;color:rgba(255,255,255,.65);
-    font-weight:600;text-transform:uppercase;letter-spacing:.06em;
+    font-size:.7rem;color:rgba(255,255,255,.8);
+    font-weight:700;text-transform:uppercase;letter-spacing:.06em;
     white-space:nowrap;
+    margin-bottom: 4px;
   }
   .awm-hero-stat-val {
-    font-size:.9rem;font-weight:700;color:#fff;margin-top:3px;
+    font-size:1.05rem;font-weight:800;color:#fff;
     white-space:nowrap;
+  }
+
+  .modal-body {
+    min-height: 450px;
+    padding-bottom: 40px !important;
   }
 
   /* Modal body cards */
@@ -803,9 +851,37 @@
 <script type="text/javascript">
 /* ── PHP Data → JS ──────────────────────────────────────────── */
 var apiaries = [];
+var satelliteCenters = [];
 var analyticsData = [];
 var regionLabels = [<?php echo '"' . implode('","', array_column($beekeepers_by_region, 'name')) . '"'; ?>];
 var regionSeries = [<?php echo implode(',', array_column($beekeepers_by_region, 'total')); ?>];
+
+<?php foreach($satellite_locations as $s): 
+    $s_lat = null; $s_lng = null; $s_accuracy = 'approximate';
+    if(!empty($s['coordinate'])) {
+        $parts = explode(',', $s['coordinate']);
+        if(count($parts)==2 && is_numeric(trim($parts[0])) && is_numeric(trim($parts[1]))) {
+            $s_lat=(float)trim($parts[0]); $s_lng=(float)trim($parts[1]); $s_accuracy='precise';
+        }
+    }
+    if(($s_lat===null||$s_lng===null)&&!empty($s['map'])) {
+        if(preg_match('/!2d(-?\d+\.\d+)!3d(-?\d+\.\d+)/', $s['map'], $matches)) {
+            $s_lng=(float)$matches[1]; $s_lat=(float)$matches[2]; $s_accuracy='precise';
+        }
+    }
+?>
+satelliteCenters.push({
+    id: <?php echo intval($s['id']) ?>,
+    name: "<?php echo addslashes($s['satellite_name']) ?>",
+    address: "<?php echo addslashes($s['barangay_name'].', '.$s['municipality_name'].', '.$s['province_name']) ?>",
+    barangay: "<?php echo addslashes($s['barangay_name']) ?>",
+    municipality: "<?php echo addslashes($s['municipality_name']) ?>",
+    province: "<?php echo addslashes($s['province_name']) ?>",
+    lat: <?php echo $s_lat!==null ? $s_lat : 'null' ?>,
+    lng: <?php echo $s_lng!==null ? $s_lng : 'null' ?>,
+    accuracy: "<?php echo $s_accuracy ?>"
+});
+<?php endforeach; ?>
 
 var monthlyLabels = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 var monthlySeries = new Array(12).fill(0);
@@ -907,6 +983,7 @@ $(document).ready(function() {
 
   var preciseIcon = makeIcon('#1a4b9c',34,'📍');
   var approxIcon  = makeIcon('#f39c12',28,'📍');
+  var satIcon     = makeIcon('#1a8a4b',34,'📍');
 
   function makeIcon(bg,size,emoji) {
     return L.divIcon({
@@ -916,32 +993,106 @@ $(document).ready(function() {
     });
   }
 
-  var gcDelay = 0;
+  // Combine geocoding into a single queue
+  var geocodeQueue = [];
+  
+  // Add Apiaries needing geocode
   apiaries.forEach(function(a) {
     if (a.lat !== null && a.lng !== null) {
       placeMiniMarker(miniMap, a, a.lat, a.lng, preciseIcon, approxIcon);
     } else {
-      gcDelay += 700;
-      (function(apiary, delay) {
-        setTimeout(function() {
-          var q = apiary.barangay+', '+apiary.municipality+', '+apiary.province+', Philippines';
-          $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q), function(data) {
-            if(data&&data.length>0) {
-              apiary.lat = parseFloat(data[0].lat); apiary.lng = parseFloat(data[0].lon);
-              apiary.accuracy = 'approximate';
-              placeMiniMarker(miniMap, apiary, apiary.lat, apiary.lng, preciseIcon, approxIcon);
-            }
-          });
-        }, delay);
-      })(a, gcDelay);
+      geocodeQueue.push({ type: 'apiary', data: a });
     }
   });
+
+  // Add Satellite Centers needing geocode
+  satelliteCenters.forEach(function(s) {
+    if (s.lat !== null && s.lng !== null) {
+        // Immediate placement
+        var m = L.marker([s.lat, s.lng], {icon:satIcon}).addTo(miniMap);
+        m.bindPopup(
+            '<div class="apiary-popup-title" style="color:#1a8a4b;">'+s.name+'</div>'+
+            '<div class="apiary-popup-meta"><b>Satellite Center</b><br>'+s.address+'</div>'+
+            '<span class="apiary-popup-badge" style="background:#e8f8f0;color:#1a8a4b;">Center</span>',
+            {maxWidth:240}
+        );
+    } else {
+        geocodeQueue.push({ type: 'satellite', data: s });
+    }
+  });
+
+  console.log('Geocoding Queue Size:', geocodeQueue.length);
+
+  // Process queue sequentially
+  function processGeocodeQueue(index) {
+    if (index >= geocodeQueue.length) {
+        console.log('Geocoding finished.');
+        return;
+    }
+
+    var item = geocodeQueue[index];
+    var site = item.data;
+    var q = '';
+
+    // Build query: Barangay, Municipality, Province, Philippines
+    var addrParts = [site.barangay, site.municipality, site.province, 'Philippines'].filter(p => p && p.trim() !== '');
+    var qRaw = addrParts.join(', ');
+    
+    // Clean query: Remove text in parentheses and common problematic prefixes
+    var q = qRaw.replace(/\([^)]*\)/g, "")
+                .replace(/Bgy\. No\./gi, "")
+                .replace(/Bgy\./gi, "")
+                .replace(/\s+/g, ' ')
+                .trim();
+
+    console.log('Geocoding (' + (index+1) + '/' + geocodeQueue.length + '):', q);
+
+    $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q), function(data) {
+        if(data && data.length > 0) {
+            var lat = parseFloat(data[0].lat);
+            var lng = parseFloat(data[0].lon);
+            
+            if (item.type === 'apiary') {
+                site.lat = lat; site.lng = lng; site.accuracy = 'approximate';
+                placeMiniMarker(miniMap, site, lat, lng, preciseIcon, approxIcon);
+            } else {
+                // Satellite Marker
+                var m = L.marker([lat, lng], {icon:satIcon}).addTo(miniMap);
+                m.bindPopup(
+                  '<div class="apiary-popup-title" style="color:#1a8a4b;">'+site.name+'</div>'+
+                  '<div class="apiary-popup-meta"><b>Satellite Center</b><br>'+site.address+'</div>'+
+                  '<span class="apiary-popup-badge" style="background:#e8f8f0;color:#1a8a4b;">Center</span>',
+                  {maxWidth:240}
+                );
+            }
+        } else {
+            console.warn('Geocoding failed for ' + item.type + ':', q);
+        }
+        
+        // Wait 1.5s before next request
+        setTimeout(function() {
+            processGeocodeQueue(index + 1);
+        }, 1500);
+    }).fail(function() {
+        console.error('Geocoding request failed for:', q);
+        setTimeout(function() {
+            processGeocodeQueue(index + 1);
+        }, 3000); // Wait longer on failure
+    });
+  }
+
+  if (geocodeQueue.length > 0) {
+    processGeocodeQueue(0);
+  }
 
   var legend = L.control({position:'bottomright'});
   legend.onAdd = function() {
     var d = L.DomUtil.create('div','');
     d.style.cssText='background:#fff;padding:8px 12px;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.12);font-size:.76rem;line-height:1.9;';
-    d.innerHTML='<b style="font-size:.78rem;">Location</b><br><span style="color:#1a4b9c;">📍</span> Precise<br><span style="color:#f39c12;">📍</span> Approx.';
+    d.innerHTML='<b style="font-size:.78rem;">Legend</b><br>'+
+                '<span style="color:#1a4b9c;">📍</span> Precise Apiary<br>'+
+                '<span style="color:#f39c12;">📍</span> Approx. Apiary<br>'+
+                '<span style="color:#1a8a4b;">📍</span> Satellite Center';
     return d;
   };
   legend.addTo(miniMap);
@@ -995,19 +1146,89 @@ window.openFullMap = function() {
 function buildFullMarkers() {
   var pIcon = makeFullIcon('#1a4b9c',34,'📍');
   var aIcon = makeFullIcon('#f39c12',28,'📍');
+  var sIcon = makeFullIcon('#1a8a4b',34,'📍');
+  
+  var fullQueue = [];
+  
+  // Apiaries
   apiaries.forEach(function(a) {
     if (a.lat!==null && a.lng!==null) {
       addFullMarker(a, a.lat, a.lng, pIcon, aIcon);
     } else {
-      var q = a.barangay+', '+a.municipality+', '+a.province+', Philippines';
-      $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q), function(data) {
-        if(data&&data.length>0) {
-          a.lat=parseFloat(data[0].lat); a.lng=parseFloat(data[0].lon); a.accuracy='approximate';
-          addFullMarker(a, a.lat, a.lng, pIcon, aIcon);
-        }
-      });
+      fullQueue.push({ type: 'apiary', data: a });
     }
   });
+
+  // Satellite Centers
+  satelliteCenters.forEach(function(s) {
+    if (s.lat !== null && s.lng !== null) {
+      var m = L.marker([s.lat, s.lng], {icon:sIcon}).addTo(fullMap);
+      m.bindPopup(
+        '<div class="apiary-popup-title" style="color:#1a8a4b;">'+s.name+'</div>'+
+        '<div class="apiary-popup-meta"><b>Satellite Center</b><br>'+s.address+'</div>'+
+        '<span class="apiary-popup-badge" style="background:#e8f8f0;color:#1a8a4b;">Center</span>',
+        {maxWidth:240}
+      );
+      fullMarkers.push(m);
+    } else {
+      fullQueue.push({ type: 'satellite', data: s });
+    }
+  });
+
+  function processFullQueue(index) {
+    if (index >= fullQueue.length) {
+        console.log('Full map geocoding finished.');
+        return;
+    }
+
+    var item = fullQueue[index];
+    var site = item.data;
+    
+    var addrParts = [site.barangay, site.municipality, site.province, 'Philippines'].filter(p => p && p.trim() !== '');
+    var qRaw = addrParts.join(', ');
+    var q = qRaw.replace(/\([^)]*\)/g, "")
+                .replace(/Bgy\. No\./gi, "")
+                .replace(/Bgy\./gi, "")
+                .replace(/\s+/g, ' ')
+                .trim();
+
+    console.log('Full Map Geocoding (' + (index+1) + '/' + fullQueue.length + '):', q);
+
+    $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q), function(data) {
+        if(data && data.length > 0) {
+            var lat = parseFloat(data[0].lat);
+            var lng = parseFloat(data[0].lon);
+            if (item.type === 'apiary') {
+                site.lat = lat; site.lng = lng; site.accuracy = 'approximate';
+                addFullMarker(site, lat, lng, pIcon, aIcon);
+            } else {
+                var m = L.marker([lat, lng], {icon:sIcon}).addTo(fullMap);
+                m.bindPopup(
+                  '<div class="apiary-popup-title" style="color:#1a8a4b;">'+site.name+'</div>'+
+                  '<div class="apiary-popup-meta"><b>Satellite Center</b><br>'+site.address+'</div>'+
+                  '<span class="apiary-popup-badge" style="background:#e8f8f0;color:#1a8a4b;">Center</span>',
+                  {maxWidth:240}
+                );
+                fullMarkers.push(m);
+            }
+        } else {
+            console.warn('Full map geocoding failed for ' + item.type + ':', q);
+        }
+        
+        setTimeout(function() {
+            processFullQueue(index + 1);
+        }, 1500);
+    }).fail(function() {
+        console.error('Full map geocoding request failed for:', q);
+        setTimeout(function() {
+            processFullQueue(index + 1);
+        }, 3000);
+    });
+  }
+
+  if (fullQueue.length > 0) {
+    processFullQueue(0);
+  }
 }
 
 function addFullMarker(apiary, lat, lng, pIcon, aIcon) {
@@ -1289,7 +1510,35 @@ window.openApiaryModal = function(apiary, lat, lng) {
   $('#awm-plants-loading').show();
   $('#awm-plants-empty').hide();
 
+  $('#awm-logs-loading').show();
+  $('#awm-logs-list').hide().html('');
+  $('#awm-logs-empty').hide();
+
   $('#apiaryWeatherModal').modal('show');
+
+  /* Monitoring Logs */
+  $.getJSON('<?php echo base_url("monitoring/get_apiary_logs/") ?>'+apiary.id, function(logs) {
+    $('#awm-logs-loading').hide();
+    if (!logs || !logs.length) { $('#awm-logs-empty').show(); return; }
+    var html = '';
+    logs.forEach(function(l) {
+      var badgeClass = 'bg-secondary';
+      if(l.action == 'alert') badgeClass = 'bg-danger';
+      if(l.action == 'harvest') badgeClass = 'bg-success';
+      if(l.action == 'treat') badgeClass = 'bg-warning';
+      if(l.action == 'inspect') badgeClass = 'bg-info';
+      
+      html += '<div class="awm-log-item pb-3" style="border-bottom:1px solid #f1f5f9;">'+
+                '<div class="d-flex justify-content-between align-items-center mb-1">'+
+                  '<span class="badge '+badgeClass+' rounded-pill px-2 py-0" style="font-size:.65rem;text-transform:uppercase;">'+l.action_title+'</span>'+
+                  '<span class="text-muted" style="font-size:.68rem;">'+l.date_formatted+'</span>'+
+                '</div>'+
+                '<div class="small fw-semibold text-dark mb-1">'+(l.observation || 'No observation details.')+'</div>'+
+                (l.report ? '<div style="font-size:.72rem;color:#64748b;line-height:1.4;">'+l.report.substring(0,80)+(l.report.length > 80 ? '...' : '')+'</div>' : '')+
+              '</div>';
+    });
+    $('#awm-logs-list').html(html).show();
+  }).fail(function(){ $('#awm-logs-loading').hide(); $('#awm-logs-empty').text('Error loading logs.').show(); });
 
   /* Weather */
   $.getJSON('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+
@@ -1399,66 +1648,6 @@ document.addEventListener("DOMContentLoaded", function() {
     beekeeperChart.render();
   }
 
-  /* ══════════════════════════════════════════════════════════════
-     APEXCHARTS: Colonies per Apiary (Stacked)
-     ══════════════════════════════════════════════════════════════ */
-  var apiaryLabels = [];
-  var activeSeries = [];
-  var inactiveSeries = [];
-
-  analyticsData.forEach(function(a) {
-    apiaryLabels.push(a.name);
-    activeSeries.push(a.active_colonies);
-    inactiveSeries.push(a.inactive_colonies);
-  });
-
-  var apiaryOptions = {
-    series: [{
-      name: 'Active Colonies',
-      data: activeSeries
-    }, {
-      name: 'Inactive/Weak Colonies',
-      data: inactiveSeries
-    }],
-    chart: {
-      type: 'bar',
-      height: Math.max(350, apiaryLabels.length * 40), // Auto-adjust height based on number of apiaries
-      stacked: true,
-      toolbar: { show: false },
-      fontFamily: 'inherit'
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 4,
-        horizontal: true,
-        barHeight: '60%',
-      },
-    },
-    dataLabels: {
-      enabled: true,
-      style: { colors: ['#fff'] }
-    },
-    stroke: { show: true, width: 1, colors: ['#fff'] },
-    xaxis: {
-      title: { text: 'Number of Colonies' },
-      labels: { style: { colors: '#64748b' } }
-    },
-    yaxis: {
-      categories: apiaryLabels,
-      labels: { style: { colors: '#1e293b', fontWeight: 600 } }
-    },
-    fill: { opacity: 1 },
-    colors: ['#1a8a4b', '#dc3545'],
-    legend: {
-      position: 'top',
-      horizontalAlign: 'left'
-    }
-  };
-
-  if (document.querySelector("#apiaryChart")) {
-    var apiaryChart = new ApexCharts(document.querySelector("#apiaryChart"), apiaryOptions);
-    apiaryChart.render();
-  }
 
   /* ══════════════════════════════════════════════════════════════
      APEXCHARTS: Regional Distribution (Pie)

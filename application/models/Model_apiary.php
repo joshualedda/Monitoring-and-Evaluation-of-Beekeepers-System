@@ -28,7 +28,7 @@ class Model_apiary extends CI_Model
 	{
 		$sql = "SELECT apiary.*,location,beekeeper_name 
 		        FROM apiary 
-		        JOIN beekeeper ON apiary.beekeeper_id = beekeeper_id
+		        JOIN beekeeper ON apiary.beekeeper_id = beekeeper.id
 		        ORDER BY beekeeper_name, location DESC";
 		$query = $this->db->query($sql, array());
 		return $query->result_array();

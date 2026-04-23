@@ -68,6 +68,13 @@
                   <span class="hide-menu"><?php echo $this->lang->line('Beekeepers'); ?></span>
                 </a>
               </li>
+
+              <li class="sidebar-item">
+                <a id="satelliteCentersNav" class="sidebar-link <?= $isActive(['satellite_centers', 'satellite_centers*']) ?>" href="<?php echo base_url('satellite_centers') ?>">
+                  <i class="ph ph-buildings"></i>
+                  <span class="hide-menu">Satellite Centers</span>
+                </a>
+              </li>
               <?php endif; ?>
         <?php endif; ?>
 
@@ -91,6 +98,15 @@
                 </a>
               </li>
               <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if(in_array('viewMonitoring', $user_permission) || (isset($_SESSION['profile_id']) && $_SESSION['profile_id'] == 2)): ?>
+          <li class="sidebar-item">
+            <a id="mainMonitoringNav" class="sidebar-link <?= $isActive(['Monitoring', 'Monitoring*']) ?>" href="<?php echo base_url('Monitoring') ?>">
+              <i class="ph ph-activity"></i>
+              <span class="hide-menu">Monitoring</span>
+            </a>
+          </li>
         <?php endif; ?>
 
         <?php if(in_array('createProduction', $user_permission) || in_array('updateProduction', $user_permission) || in_array('viewProduction', $user_permission) || in_array('deleteProduction', $user_permission)): ?>

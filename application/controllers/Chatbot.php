@@ -3,7 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Chatbot extends Admin_Controller
 {
-    private $gemini_api_key = 'AIzaSyD48l7_KbiCcDJyhnB0pPnLVkdJBqEkdN4';
+    // mAIN
+    // private $gemini_api_key = 'AIzaSyBVlEwAODwoYokC8PyPQClMFLXl527IJKM';
+    private $gemini_api_key = 'AIzaSyBAHR5F-Ciduf1EFbqYbynwQRGbx0jIm5o';
+
     private $gemini_model   = 'gemini-3-flash-preview';
 
     public function __construct()
@@ -243,6 +246,42 @@ class Chatbot extends Admin_Controller
 
         $r = $this->db->query("SELECT COALESCE(SUM(total_production),0) AS t FROM production")->row_array();
         $ctx[] = "All-time honey production: " . number_format((float)$r['t'], 2) . " kg";
+
+        // Satellite Centers
+        $r = $this->db->query("SELECT COUNT(*) AS cnt FROM satellite_centers")->row_array();
+        $ctx[] = "Total satellite centers: " . intval($r['cnt']);
+
+        $rows = $this->db->query(
+            "SELECT sc.satellite_name, mu.citymunDesc AS municipality, pr.provDesc AS province
+             FROM satellite_centers sc
+             LEFT JOIN municipality mu ON sc.municipality_id = mu.municipality_id
+             LEFT JOIN province pr     ON sc.province_id     = pr.province_id
+             ORDER BY sc.id DESC"
+        )->result_array();
+        if ($rows) {
+            $lines = [];
+            foreach ($rows as $row) { $lines[] = "  - {$row['satellite_name']} | {$row['municipality']}, {$row['province']}"; }
+            $ctx[] = "Satellite Centers:\n" . implode("\n", $lines);
+        }
+
+        // Monitoring
+        $r = $this->db->query("SELECT COUNT(*) AS cnt FROM monitoring")->row_array();
+        $ctx[] = "Total monitoring logs: " . intval($r['cnt']);
+
+        $rows = $this->db->query(
+            "SELECT m.action, m.observation, m.monitoring_date, a.location
+             FROM monitoring m
+             JOIN apiary a ON m.apiary_id = a.id
+             ORDER BY m.monitoring_date DESC, m.id DESC LIMIT 15"
+        )->result_array();
+        if ($rows) {
+            $lines = [];
+            foreach ($rows as $row) { 
+                $d = !empty($row['monitoring_date']) ? date('M d, Y', strtotime($row['monitoring_date'])) : 'Unknown Date';
+                $lines[] = "  - [{$d}] {$row['location']} | Action: ".ucfirst($row['action'])." | Observation: {$row['observation']}"; 
+            }
+            $ctx[] = "Recent Monitoring Activities:\n" . implode("\n", $lines);
+        }
 
         // Top beekeepers
         $rows = $this->db->query(
